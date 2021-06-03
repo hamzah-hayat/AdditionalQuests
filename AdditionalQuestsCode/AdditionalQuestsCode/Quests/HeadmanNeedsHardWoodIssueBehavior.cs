@@ -680,7 +680,7 @@ namespace AdditionalQuestsCode.Quests
                 textObject.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                 textObject2.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(textObject, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("{=Zsn6kpjt}Have you brought {GRAIN_AMOUNT} bushels of grain?", null), null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {GRAIN_AMOUNT} bushels of grain?", null), null, null).Condition(delegate
                 {
                     MBTextManager.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
