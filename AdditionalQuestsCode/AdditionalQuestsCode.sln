@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1169
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdditionalQuests", "AdditionalQuests\AdditionalQuests.csproj", "{476B6B44-B52F-413B-A83A-7F52629F6C38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdditionalQuestsCode", "AdditionalQuestsCode\AdditionalQuestsCode.csproj", "{11789C38-6818-4ACA-B768-3632DF7E2036}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{476B6B44-B52F-413B-A83A-7F52629F6C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{476B6B44-B52F-413B-A83A-7F52629F6C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{476B6B44-B52F-413B-A83A-7F52629F6C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{476B6B44-B52F-413B-A83A-7F52629F6C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11789C38-6818-4ACA-B768-3632DF7E2036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11789C38-6818-4ACA-B768-3632DF7E2036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11789C38-6818-4ACA-B768-3632DF7E2036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11789C38-6818-4ACA-B768-3632DF7E2036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6CDC8063-F470-46BD-B15D-036027D14996}
+		SolutionGuid = {B745EFEA-5322-4CA3-9D12-B8B47229FAA6}
 	EndGlobalSection
 EndGlobal

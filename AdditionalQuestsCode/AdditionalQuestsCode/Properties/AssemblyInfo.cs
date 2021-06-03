@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AdditionalQuests")]
+[assembly: AssemblyTitle("AdditionalQuestsCode")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AdditionalQuests")]
+[assembly: AssemblyProduct("AdditionalQuestsCode")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("476b6b44-b52f-413b-a83a-7f52629f6c38")]
+[assembly: Guid("11789c38-6818-4aca-b768-3632df7e2036")]
 
 // Version information for an assembly consists of the following four values:
 //
