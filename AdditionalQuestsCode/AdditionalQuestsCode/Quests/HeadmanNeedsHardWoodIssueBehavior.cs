@@ -13,46 +13,27 @@ namespace AdditionalQuestsCode.Quests
 {
     public class HeadmanNeedsHardWoodIssueBehavior : CampaignBehaviorBase
     {
-        // Token: 0x17000B99 RID: 2969
-        // (get) Token: 0x060037D4 RID: 14292 RVA: 0x0010A3E0 File Offset: 0x001085E0
-        internal static int AverageGrainPriceInCalradia
-        {
-            get
-            {
-                return Campaign.Current.GetCampaignBehavior<HeadmanNeedsHardWoodIssueBehavior>()._averageGrainPriceInCalradia;
-            }
-        }
+        // Quest Variables
+        private const IssueBase.IssueFrequency HeadmanNeedsHardWoodIssueFrequency = IssueBase.IssueFrequency.VeryCommon;
 
-        // Token: 0x060037D5 RID: 14293 RVA: 0x0010A3F4 File Offset: 0x001085F4
-        public override void RegisterEvents()
-        {
-            CampaignEvents.OnCheckForIssueEvent.AddNonSerializedListener(this, new Action<Hero>(this.OnCheckForIssue));
-            CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, new Action(this.WeeklyTick));
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(this.OnSessionLaunched));
-        }
-
-        // Token: 0x060037D7 RID: 14295 RVA: 0x0010A448 File Offset: 0x00108648
+        // First, Start with our Conditions for this Quest to be selected
+        // These Conditions are what set whether this Quest can be "Activated"
         private bool ConditionsHold(Hero issueGiver)
         {
-            if (issueGiver.CurrentSettlement == null || !issueGiver.IsNotable || !issueGiver.CurrentSettlement.IsVillage || !issueGiver.CurrentSettlement.Village.Bound.IsTown)
+            if (issueGiver.CurrentSettlement == null || !issueGiver.IsNotable || !issueGiver.CurrentSettlement.IsVillage)
             {
                 return false;
             }
+            if(issueGiver.CurrentSettlement.Village.GetProsperityLevel() < SettlementComponent.ProsperityLevel.Mid)
+            {
+                return true;
+            }
 
-            //bool flag = false;
-            //foreach (ItemRosterElement itemRosterElement in issueGiver.CurrentSettlement.Village.Bound.ItemRoster)
-            //{
-            //    if (itemRosterElement.EquipmentElement.Item == DefaultItems.HardWood && itemRosterElement.Amount < 50)
-            //    {
-            //        flag = true;
-            //        break;
-            //    }
-            //}
-
-            return issueGiver.IsHeadman;
+            return false;
         }
 
-        // Token: 0x060037D8 RID: 14296 RVA: 0x0010A548 File Offset: 0x00108748
+        // If the conditions hold, start this quest, otherwise just add it as a possible quest
+        // Not sure why we add quests to every hero instead of just the ones that can do it
         public void OnCheckForIssue(Hero hero)
         {
             if (this.ConditionsHold(hero))
@@ -63,25 +44,41 @@ namespace AdditionalQuestsCode.Quests
             Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), IssueBase.IssueFrequency.VeryCommon));
         }
 
-        // Token: 0x060037D9 RID: 14297 RVA: 0x0010A5AC File Offset: 0x001087AC
         private IssueBase OnSelected(in PotentialIssueData pid, Hero issueOwner)
         {
             return new HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue(issueOwner);
         }
 
-        // Token: 0x060037DA RID: 14298 RVA: 0x0010A5B4 File Offset: 0x001087B4
+
+
+
+
+
+        internal static int AverageGrainPriceInCalradia
+        {
+            get
+            {
+                return Campaign.Current.GetCampaignBehavior<HeadmanNeedsHardWoodIssueBehavior>()._averageGrainPriceInCalradia;
+            }
+        }
+
+        public override void RegisterEvents()
+        {
+            CampaignEvents.OnCheckForIssueEvent.AddNonSerializedListener(this, new Action<Hero>(this.OnCheckForIssue));
+            CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, new Action(this.WeeklyTick));
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(this.OnSessionLaunched));
+        }
+
         private void WeeklyTick()
         {
             this.CacheGrainPrice();
         }
 
-        // Token: 0x060037DB RID: 14299 RVA: 0x0010A5BC File Offset: 0x001087BC
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             this.CacheGrainPrice();
         }
 
-        // Token: 0x060037DC RID: 14300 RVA: 0x0010A5C4 File Offset: 0x001087C4
         private void CacheGrainPrice()
         {
             int num = 0;
@@ -102,20 +99,10 @@ namespace AdditionalQuestsCode.Quests
             this._averageGrainPriceInCalradia = num2 / num;
         }
 
-        public override void SyncData(IDataStore dataStore)
-        {
-        }
-
-        // Token: 0x0400110D RID: 4365
-        private const IssueBase.IssueFrequency HeadmanNeedsHardWoodIssueFrequency = IssueBase.IssueFrequency.VeryCommon;
-
-        // Token: 0x0400110E RID: 4366
         private const int NearbyTownMarketGrainLimit = 50;
 
-        // Token: 0x0400110F RID: 4367
         private int _averageGrainPriceInCalradia;
 
-        // Token: 0x020006AB RID: 1707
         internal class HeadmanNeedsHardWoodIssue : IssueBase
         {
             // Token: 0x06004926 RID: 18726 RVA: 0x00134339 File Offset: 0x00132539
@@ -413,7 +400,7 @@ namespace AdditionalQuestsCode.Quests
                 TextObject textObject = new TextObject("You gave {DENAR}{GOLD_ICON} to companion to buy {GRAIN_AMOUNT} units of grain for the {ISSUE_OWNER.NAME}.", null);
                 textObject.SetTextVariable("GRAIN_AMOUNT", this.NeededGrainAmount);
                 textObject.SetTextVariable("DENAR", this.AlternativeSolutionNeededGold);
-                textObject.SetTextVariable("GOLD_ICON", "{=!}<img src=\"Icons\\Coin@2x\" extend=\"8\">");
+                textObject.SetTextVariable("GOLD_ICON", "<img src=\"Icons\\Coin@2x\" extend=\"8\">");
                 StringHelpers.SetCharacterProperties("ISSUE_OWNER", base.IssueOwner.CharacterObject, textObject);
                 InformationManager.AddQuickInformation(textObject, 0, null, "");
             }
@@ -493,7 +480,6 @@ namespace AdditionalQuestsCode.Quests
             private const int AlternativeSolutionSuccessProsperityBonus = 50;
         }
 
-        // Token: 0x020006AC RID: 1708
         internal class HeadmanNeedsHardWoodIssueQuest : QuestBase
         {
             // Token: 0x0600494A RID: 18762 RVA: 0x0013480B File Offset: 0x00132A0B
@@ -848,7 +834,6 @@ namespace AdditionalQuestsCode.Quests
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
             }
 
-            // Token: 0x0600496B RID: 18795 RVA: 0x00134FD8 File Offset: 0x001331D8
             private void Fail()
             {
                 base.QuestGiver.AddPower(-5f);
@@ -898,20 +883,24 @@ namespace AdditionalQuestsCode.Quests
             private JournalLog _playerHasNeededGrainsLog;
         }
 
-        // Token: 0x020006AD RID: 1709
+        // Save data goes into this class
         public class HeadmanNeedsHardWoodIssueTypeDefiner : SaveableTypeDefiner
         {
-            // Token: 0x0600496F RID: 18799 RVA: 0x00135081 File Offset: 0x00133281
-            public HeadmanNeedsHardWoodIssueTypeDefiner() : base(440000)
+            public HeadmanNeedsHardWoodIssueTypeDefiner() : base(1000500)
             {
             }
 
-            // Token: 0x06004970 RID: 18800 RVA: 0x0013508E File Offset: 0x0013328E
             protected override void DefineClassTypes()
             {
                 base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), 1);
                 base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest), 2);
             }
+        }
+
+        // No idea what this does but we override it anyway to fulfil base class
+        // Maybe Multiplayer related?
+        public override void SyncData(IDataStore dataStore)
+        {
         }
     }
 }
