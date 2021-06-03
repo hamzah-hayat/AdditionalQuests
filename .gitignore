@@ -18,9 +18,12 @@
 x64/
 x86/
 bld/
-[Bb]in/
+[Bb]in/Win64_Shipping_Client/*
 [Oo]bj/
 [Ll]og/
+
+# Dont Ignore our specific AdditionalQuestsCode.dll file
+!bin/Win64_Shipping_Client/AdditionalQuestsCode.dll
 
 # Visual Studio 2015 cache/options directory
 .vs/

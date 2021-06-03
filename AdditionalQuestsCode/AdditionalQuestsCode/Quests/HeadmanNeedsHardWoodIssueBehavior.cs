@@ -1,0 +1,917 @@
+﻿using System;
+using System.Collections.Generic;
+using Helpers;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
+using TaleWorlds.CampaignSystem.SandBox;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
+
+namespace AdditionalQuestsCode.Quests
+{
+    public class HeadmanNeedsHardWoodIssueBehavior : CampaignBehaviorBase
+    {
+        // Token: 0x17000B99 RID: 2969
+        // (get) Token: 0x060037D4 RID: 14292 RVA: 0x0010A3E0 File Offset: 0x001085E0
+        internal static int AverageGrainPriceInCalradia
+        {
+            get
+            {
+                return Campaign.Current.GetCampaignBehavior<HeadmanNeedsHardWoodIssueBehavior>()._averageGrainPriceInCalradia;
+            }
+        }
+
+        // Token: 0x060037D5 RID: 14293 RVA: 0x0010A3F4 File Offset: 0x001085F4
+        public override void RegisterEvents()
+        {
+            CampaignEvents.OnCheckForIssueEvent.AddNonSerializedListener(this, new Action<Hero>(this.OnCheckForIssue));
+            CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, new Action(this.WeeklyTick));
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(this.OnSessionLaunched));
+        }
+
+        // Token: 0x060037D7 RID: 14295 RVA: 0x0010A448 File Offset: 0x00108648
+        private bool ConditionsHold(Hero issueGiver)
+        {
+            if (issueGiver.CurrentSettlement == null || !issueGiver.IsNotable || !issueGiver.CurrentSettlement.IsVillage || !issueGiver.CurrentSettlement.Village.Bound.IsTown)
+            {
+                return false;
+            }
+
+            //bool flag = false;
+            //foreach (ItemRosterElement itemRosterElement in issueGiver.CurrentSettlement.Village.Bound.ItemRoster)
+            //{
+            //    if (itemRosterElement.EquipmentElement.Item == DefaultItems.HardWood && itemRosterElement.Amount < 50)
+            //    {
+            //        flag = true;
+            //        break;
+            //    }
+            //}
+
+            return issueGiver.IsHeadman;
+        }
+
+        // Token: 0x060037D8 RID: 14296 RVA: 0x0010A548 File Offset: 0x00108748
+        public void OnCheckForIssue(Hero hero)
+        {
+            if (this.ConditionsHold(hero))
+            {
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnSelected), typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), IssueBase.IssueFrequency.VeryCommon, null));
+                return;
+            }
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), IssueBase.IssueFrequency.VeryCommon));
+        }
+
+        // Token: 0x060037D9 RID: 14297 RVA: 0x0010A5AC File Offset: 0x001087AC
+        private IssueBase OnSelected(in PotentialIssueData pid, Hero issueOwner)
+        {
+            return new HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue(issueOwner);
+        }
+
+        // Token: 0x060037DA RID: 14298 RVA: 0x0010A5B4 File Offset: 0x001087B4
+        private void WeeklyTick()
+        {
+            this.CacheGrainPrice();
+        }
+
+        // Token: 0x060037DB RID: 14299 RVA: 0x0010A5BC File Offset: 0x001087BC
+        private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
+        {
+            this.CacheGrainPrice();
+        }
+
+        // Token: 0x060037DC RID: 14300 RVA: 0x0010A5C4 File Offset: 0x001087C4
+        private void CacheGrainPrice()
+        {
+            int num = 0;
+            int num2 = 0;
+            foreach (Settlement settlement in Settlement.All)
+            {
+                if (settlement.IsTown)
+                {
+                    num2 += settlement.Town.GetItemPrice(DefaultItems.Grain, null, false);
+                    num++;
+                }
+                else if (settlement.IsVillage)
+                {
+                    num2 += settlement.Village.GetItemPrice(DefaultItems.Grain, null, false);
+                    num++;
+                }
+            }
+            this._averageGrainPriceInCalradia = num2 / num;
+        }
+
+        public override void SyncData(IDataStore dataStore)
+        {
+        }
+
+        // Token: 0x0400110D RID: 4365
+        private const IssueBase.IssueFrequency HeadmanNeedsHardWoodIssueFrequency = IssueBase.IssueFrequency.VeryCommon;
+
+        // Token: 0x0400110E RID: 4366
+        private const int NearbyTownMarketGrainLimit = 50;
+
+        // Token: 0x0400110F RID: 4367
+        private int _averageGrainPriceInCalradia;
+
+        // Token: 0x020006AB RID: 1707
+        internal class HeadmanNeedsHardWoodIssue : IssueBase
+        {
+            // Token: 0x06004926 RID: 18726 RVA: 0x00134339 File Offset: 0x00132539
+            internal static void AutoGeneratedStaticCollectObjectsHeadmanNeedsHardWoodIssue(object o, List<object> collectedObjects)
+            {
+                ((HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue)o).AutoGeneratedInstanceCollectObjects(collectedObjects);
+            }
+
+            // Token: 0x06004927 RID: 18727 RVA: 0x00134347 File Offset: 0x00132547
+            protected override void AutoGeneratedInstanceCollectObjects(List<object> collectedObjects)
+            {
+                base.AutoGeneratedInstanceCollectObjects(collectedObjects);
+            }
+
+            // Token: 0x17000F4C RID: 3916
+            // (get) Token: 0x06004928 RID: 18728 RVA: 0x00134350 File Offset: 0x00132550
+            private int NeededGrainAmount
+            {
+                get
+                {
+                    return (int)(30f + 50f * base.IssueDifficultyMultiplier);
+                }
+            }
+
+            // Token: 0x17000F4D RID: 3917
+            // (get) Token: 0x06004929 RID: 18729 RVA: 0x00134365 File Offset: 0x00132565
+            private int AlternativeSolutionNeededGold
+            {
+                get
+                {
+                    return this.NeededGrainAmount * HeadmanNeedsHardWoodIssueBehavior.AverageGrainPriceInCalradia;
+                }
+            }
+
+            // Token: 0x17000F4E RID: 3918
+            // (get) Token: 0x0600492A RID: 18730 RVA: 0x00134373 File Offset: 0x00132573
+            public override int AlternativeSolutionNeededMenCount
+            {
+                get
+                {
+                    return (int)(5f + 3f * base.IssueDifficultyMultiplier);
+                }
+            }
+
+            // Token: 0x17000F4F RID: 3919
+            // (get) Token: 0x0600492B RID: 18731 RVA: 0x00134388 File Offset: 0x00132588
+            protected override int AlternativeSolutionDurationInDays
+            {
+                get
+                {
+                    return (int)(10f + 7f * base.IssueDifficultyMultiplier);
+                }
+            }
+
+            // Token: 0x17000F50 RID: 3920
+            // (get) Token: 0x0600492C RID: 18732 RVA: 0x0013439D File Offset: 0x0013259D
+            protected override int RewardGold
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+
+            // Token: 0x17000F51 RID: 3921
+            // (get) Token: 0x0600492D RID: 18733 RVA: 0x001343A0 File Offset: 0x001325A0
+            private int CompanionTradeSkillLimit
+            {
+                get
+                {
+                    return (int)(150f * base.IssueDifficultyMultiplier);
+                }
+            }
+
+            // Token: 0x17000F52 RID: 3922
+            // (get) Token: 0x0600492E RID: 18734 RVA: 0x001343AF File Offset: 0x001325AF
+            public override TextObject Title
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} Needs HardWood", null);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F53 RID: 3923
+            // (get) Token: 0x0600492F RID: 18735 RVA: 0x001343D3 File Offset: 0x001325D3
+            public override TextObject Description
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("The headman of {ISSUE_SETTLEMENT} needs Hardwood to rebuild a broken barn.", null);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F54 RID: 3924
+            // (get) Token: 0x06004930 RID: 18736 RVA: 0x001343F7 File Offset: 0x001325F7
+            public override TextObject IssueBriefByIssueGiver
+            {
+                get
+                {
+                    return new TextObject("A barn has fallen down, thankfully no lives were lost but we will need to rebuild it for the coming harvest. Without a barn to store our food we will have trouble during the next winter.", null);
+                }
+            }
+
+            // Token: 0x17000F55 RID: 3925
+            // (get) Token: 0x06004931 RID: 18737 RVA: 0x00134404 File Offset: 0x00132604
+            public override TextObject IssueAcceptByPlayer
+            {
+                get
+                {
+                    return new TextObject("How can I help?", null);
+                }
+            }
+
+            // Token: 0x17000F56 RID: 3926
+            // (get) Token: 0x06004932 RID: 18738 RVA: 0x00134411 File Offset: 0x00132611
+            public override TextObject IssueQuestSolutionExplanationByIssueGiver
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("Hardwood will solve our problems. If we had {GRAIN_AMOUNT} bushels, we could use it to sow our fields. But I doubt that {NEARBY_TOWN} has so much to sell at this time of the year. {GRAIN_AMOUNT} bushels of grain costs around 1000 denars in the markets, and we don't have that!", null);
+                    textObject.SetTextVariable("NEARBY_TOWN", base.IssueSettlement.Village.Bound.Name);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this.NeededGrainAmount);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F57 RID: 3927
+            // (get) Token: 0x06004933 RID: 18739 RVA: 0x00134451 File Offset: 0x00132651
+            public override TextObject IssueAlternativeSolutionExplanationByIssueGiver
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=5NYPqKBj}I know you're busy, but maybe you can ask some of your men to find us that grain? {MEN_COUNT} men should do the job, and I'd reckon the whole affair should take two weeks. \nI'm desperate here, {?PLAYER.GENDER}madam{?}sir{\\?}... Don't let our children starve!", null);
+                    textObject.SetTextVariable("MEN_COUNT", this.AlternativeSolutionNeededMenCount);
+                    textObject.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F58 RID: 3928
+            // (get) Token: 0x06004934 RID: 18740 RVA: 0x00134485 File Offset: 0x00132685
+            public override TextObject IssueQuestSolutionAcceptByPlayer
+            {
+                get
+                {
+                    return new TextObject("{=ihfuqu2S}I will find that seed grain for you.", null);
+                }
+            }
+
+            // Token: 0x17000F59 RID: 3929
+            // (get) Token: 0x06004935 RID: 18741 RVA: 0x00134492 File Offset: 0x00132692
+            public override TextObject IssueAlternativeSolutionAcceptByPlayer
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=HCMsvAFv}I can order one of my companions and {MEN_COUNT} men to find grain for you.", null);
+                    textObject.SetTextVariable("MEN_COUNT", this.AlternativeSolutionNeededMenCount);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F5A RID: 3930
+            // (get) Token: 0x06004936 RID: 18742 RVA: 0x001344B4 File Offset: 0x001326B4
+            public override TextObject IssueAsRumorInSettlement
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=WVobv24n}Heaven save us if {QUEST_GIVER.NAME} can't get {?QUEST_GIVER.GENDER}her{?}his{\\?} hands on more grain.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F5B RID: 3931
+            // (get) Token: 0x06004937 RID: 18743 RVA: 0x001344E4 File Offset: 0x001326E4
+            public override TextObject IssueAlternativeSolutionResponseByIssueGiver
+            {
+                get
+                {
+                    return new TextObject("{=k63ZKmXX}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! You are a saviour.", null);
+                }
+            }
+
+            // Token: 0x17000F5C RID: 3932
+            // (get) Token: 0x06004938 RID: 18744 RVA: 0x001344F1 File Offset: 0x001326F1
+            public override bool IsThereAlternativeSolution
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            // Token: 0x17000F5D RID: 3933
+            // (get) Token: 0x06004939 RID: 18745 RVA: 0x001344F4 File Offset: 0x001326F4
+            public override bool IsThereLordSolution
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            // Token: 0x17000F5E RID: 3934
+            // (get) Token: 0x0600493A RID: 18746 RVA: 0x001344F8 File Offset: 0x001326F8
+            protected override TextObject AlternativeSolutionStartLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=a0UTO8tW}{ISSUE_OWNER.LINK}, the headman of {ISSUE_SETTLEMENT}, asked you to deliver {GRAIN_AMOUNT} bushels of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise the peasants cannot sow their fields and starve in the coming season. You have agreed to send your companion {COMPANION.NAME} along with {MEN_COUNT} men to find some grain and return to the village. Your men should return in {RETURN_DAYS} days.", null);
+                    StringHelpers.SetCharacterProperties("ISSUE_OWNER", base.IssueOwner.CharacterObject, textObject);
+                    StringHelpers.SetCharacterProperties("COMPANION", base.AlternativeSolutionHero.CharacterObject, textObject);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this.NeededGrainAmount);
+                    textObject.SetTextVariable("RETURN_DAYS", this.AlternativeSolutionDurationInDays);
+                    textObject.SetTextVariable("MEN_COUNT", this.AlternativeSolutionSentTroops.TotalManCount - 1);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F5F RID: 3935
+            // (get) Token: 0x0600493B RID: 18747 RVA: 0x00134592 File Offset: 0x00132792
+            protected override ValueTuple<SkillObject, int> CompanionSkillAndRewardXP
+            {
+                get
+                {
+                    return new ValueTuple<SkillObject, int>(DefaultSkills.Trade, (int)(500f + 700f * base.IssueDifficultyMultiplier));
+                }
+            }
+
+            // Token: 0x0600493C RID: 18748 RVA: 0x001345B1 File Offset: 0x001327B1
+            public HeadmanNeedsHardWoodIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(30f))
+            {
+            }
+
+            // Token: 0x0600493D RID: 18749 RVA: 0x001345C4 File Offset: 0x001327C4
+            protected override Dictionary<IssueEffect, float> GetIssueEffectsAndAmountInternal()
+            {
+                return new Dictionary<IssueEffect, float>
+                {
+                    {
+                        DefaultIssueEffects.SettlementProsperity,
+                        -0.2f
+                    },
+                    {
+                        DefaultIssueEffects.SettlementLoyalty,
+                        -0.5f
+                    }
+                };
+            }
+
+            // Token: 0x0600493E RID: 18750 RVA: 0x001345EB File Offset: 0x001327EB
+            public override bool DoTroopsSatisfyAlternativeSolution(TroopRoster troopRoster, out TextObject explanation)
+            {
+                explanation = TextObject.Empty;
+                return QuestHelper.CheckRosterForAlternativeSolution(troopRoster, this.AlternativeSolutionNeededMenCount, ref explanation, 0, false);
+            }
+
+            // Token: 0x0600493F RID: 18751 RVA: 0x00134603 File Offset: 0x00132803
+            public override bool CompanionOrFamilyMemberClickableCondition(Hero companion, out TextObject explanation)
+            {
+                explanation = TextObject.Empty;
+                return QuestHelper.CheckCompanionForAlternativeSolution(companion.CharacterObject, ref explanation, this.GetAlternativeSolutionRequiredCompanionSkills(), null);
+            }
+
+            // Token: 0x06004940 RID: 18752 RVA: 0x0013461F File Offset: 0x0013281F
+            private Dictionary<SkillObject, int> GetAlternativeSolutionRequiredCompanionSkills()
+            {
+                return new Dictionary<SkillObject, int>
+                {
+                    {
+                        DefaultSkills.Trade,
+                        this.CompanionTradeSkillLimit
+                    }
+                };
+            }
+
+            // Token: 0x06004941 RID: 18753 RVA: 0x00134638 File Offset: 0x00132838
+            public override bool AlternativeSolutionCondition(out TextObject explanation)
+            {
+                Dictionary<SkillObject, int> alternativeSolutionRequiredCompanionSkills = this.GetAlternativeSolutionRequiredCompanionSkills();
+                explanation = TextObject.Empty;
+                return QuestHelper.CheckAllCompanionsCondition(MobileParty.MainParty.MemberRoster, ref explanation, alternativeSolutionRequiredCompanionSkills, null) && QuestHelper.CheckRosterForAlternativeSolution(MobileParty.MainParty.MemberRoster, this.AlternativeSolutionNeededMenCount, ref explanation, 0, false) && QuestHelper.CheckGoldForAlternativeSolution(this.AlternativeSolutionNeededGold, ref explanation);
+            }
+
+            // Token: 0x06004942 RID: 18754 RVA: 0x00134690 File Offset: 0x00132890
+            public override void AlternativeSolutionStartConsequence()
+            {
+                GiveGoldAction.ApplyForCharacterToParty(Hero.MainHero, base.IssueSettlement.Party, this.AlternativeSolutionNeededGold, false);
+                TextObject textObject = new TextObject("{=ex6ZhAAv}You gave {DENAR}{GOLD_ICON} to companion to buy {GRAIN_AMOUNT} units of grain for the {ISSUE_OWNER.NAME}.", null);
+                textObject.SetTextVariable("GRAIN_AMOUNT", this.NeededGrainAmount);
+                textObject.SetTextVariable("DENAR", this.AlternativeSolutionNeededGold);
+                textObject.SetTextVariable("GOLD_ICON", "{=!}<img src=\"Icons\\Coin@2x\" extend=\"8\">");
+                StringHelpers.SetCharacterProperties("ISSUE_OWNER", base.IssueOwner.CharacterObject, textObject);
+                InformationManager.AddQuickInformation(textObject, 0, null, "");
+            }
+
+            // Token: 0x06004943 RID: 18755 RVA: 0x00134720 File Offset: 0x00132920
+            protected override void AlternativeSolutionEndConsequence()
+            {
+                TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(base.IssueOwner, new Tuple<TraitObject, int>[]
+                {
+                    new Tuple<TraitObject, int>(DefaultTraits.Generosity, 20)
+                });
+                base.IssueOwner.AddPower(10f);
+                base.IssueSettlement.Prosperity += 50f;
+                this.RelationshipChangeWithIssueOwner = 6;
+            }
+
+            // Token: 0x06004944 RID: 18756 RVA: 0x0013477B File Offset: 0x0013297B
+            public override IssueBase.IssueFrequency GetFrequency()
+            {
+                return IssueBase.IssueFrequency.VeryCommon;
+            }
+
+            // Token: 0x06004945 RID: 18757 RVA: 0x0013477E File Offset: 0x0013297E
+            public override bool IssueStayAliveConditions()
+            {
+                return (float)base.IssueOwner.CurrentSettlement.Village.GetItemPrice(DefaultItems.Grain, null, false) > (float)HeadmanNeedsHardWoodIssueBehavior.AverageGrainPriceInCalradia * 1.05f;
+            }
+
+            // Token: 0x06004946 RID: 18758 RVA: 0x001347AB File Offset: 0x001329AB
+            protected override void CompleteIssueWithTimedOutConsequences()
+            {
+            }
+
+            // Token: 0x06004947 RID: 18759 RVA: 0x001347AD File Offset: 0x001329AD
+            protected override void OnGameLoad()
+            {
+            }
+
+            // Token: 0x06004948 RID: 18760 RVA: 0x001347AF File Offset: 0x001329AF
+            protected override QuestBase GenerateIssueQuest(string questId)
+            {
+                return new HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(10f), base.IssueDifficultyMultiplier, this.RewardGold, this.NeededGrainAmount);
+            }
+
+            // Token: 0x06004949 RID: 18761 RVA: 0x001347DC File Offset: 0x001329DC
+            protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out IssueBase.PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
+            {
+                bool flag2 = issueGiver.GetRelationWithPlayer() >= -10f;
+                flag = (flag2 ? IssueBase.PreconditionFlags.None : IssueBase.PreconditionFlags.Relation);
+                relationHero = issueGiver;
+                skill = null;
+                return flag2;
+            }
+
+            // Token: 0x04001B24 RID: 6948
+            private const int BaseReturnDays = 10;
+
+            // Token: 0x04001B25 RID: 6949
+            private const int AlternativeSolutionBaseMenCount = 5;
+
+            // Token: 0x04001B26 RID: 6950
+            private const int IssueDuration = 30;
+
+            // Token: 0x04001B27 RID: 6951
+            private const int AlternativeSolutionSuccessGenerosityBonus = 20;
+
+            // Token: 0x04001B28 RID: 6952
+            private const int QuestTimeLimit = 10;
+
+            // Token: 0x04001B29 RID: 6953
+            private const int AlternativeSolutionSuccessPowerBonus = 10;
+
+            // Token: 0x04001B2A RID: 6954
+            private const int AlternativeSolutionSuccessRelationBonus = 6;
+
+            // Token: 0x04001B2B RID: 6955
+            private const int AlternativeSolutionSuccessProsperityBonus = 50;
+        }
+
+        // Token: 0x020006AC RID: 1708
+        internal class HeadmanNeedsHardWoodIssueQuest : QuestBase
+        {
+            // Token: 0x0600494A RID: 18762 RVA: 0x0013480B File Offset: 0x00132A0B
+            internal static void AutoGeneratedStaticCollectObjectsHeadmanNeedsHardWoodIssueQuest(object o, List<object> collectedObjects)
+            {
+                ((HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest)o).AutoGeneratedInstanceCollectObjects(collectedObjects);
+            }
+
+            // Token: 0x0600494B RID: 18763 RVA: 0x00134819 File Offset: 0x00132A19
+            protected override void AutoGeneratedInstanceCollectObjects(List<object> collectedObjects)
+            {
+                base.AutoGeneratedInstanceCollectObjects(collectedObjects);
+                collectedObjects.Add(this._playerAcceptedQuestLog);
+                collectedObjects.Add(this._playerHasNeededGrainsLog);
+            }
+
+            // Token: 0x0600494C RID: 18764 RVA: 0x0013483A File Offset: 0x00132A3A
+            internal static object AutoGeneratedGetMemberValue_neededGrainAmount(object o)
+            {
+                return ((HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest)o)._neededGrainAmount;
+            }
+
+            // Token: 0x0600494D RID: 18765 RVA: 0x0013484C File Offset: 0x00132A4C
+            internal static object AutoGeneratedGetMemberValue_rewardGold(object o)
+            {
+                return ((HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest)o)._rewardGold;
+            }
+
+            // Token: 0x0600494E RID: 18766 RVA: 0x0013485E File Offset: 0x00132A5E
+            internal static object AutoGeneratedGetMemberValue_playerAcceptedQuestLog(object o)
+            {
+                return ((HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest)o)._playerAcceptedQuestLog;
+            }
+
+            // Token: 0x0600494F RID: 18767 RVA: 0x0013486B File Offset: 0x00132A6B
+            internal static object AutoGeneratedGetMemberValue_playerHasNeededGrainsLog(object o)
+            {
+                return ((HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest)o)._playerHasNeededGrainsLog;
+            }
+
+            // Token: 0x17000F60 RID: 3936
+            // (get) Token: 0x06004950 RID: 18768 RVA: 0x00134878 File Offset: 0x00132A78
+            public override TextObject Title
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=apr2dH0n}{ISSUE_SETTLEMENT} Needs Grain Seeds", null);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F61 RID: 3937
+            // (get) Token: 0x06004951 RID: 18769 RVA: 0x001348A1 File Offset: 0x00132AA1
+            public override bool IsRemainingTimeHidden
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            // Token: 0x17000F62 RID: 3938
+            // (get) Token: 0x06004952 RID: 18770 RVA: 0x001348A4 File Offset: 0x00132AA4
+            private TextObject _playerAcceptedQuestLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=5CokRxmL}{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {GRAIN_AMOUNT} units of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise peasants cannot sow their fields and starve in the coming season. \n \n You have agreed to bring them {GRAIN_AMOUNT} units of grain as soon as possible.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F63 RID: 3939
+            // (get) Token: 0x06004953 RID: 18771 RVA: 0x00134902 File Offset: 0x00132B02
+            private TextObject _playerHasNeededGrainsLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=vOHc5dxC}You now have enough grain seeds to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F64 RID: 3940
+            // (get) Token: 0x06004954 RID: 18772 RVA: 0x0013492B File Offset: 0x00132B2B
+            private TextObject _questTimeoutLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=brDw7ewN}You have failed to deliver {GRAIN_AMOUNT} units of grain to the villagers. They won't be able to sow them before the coming winter. The Headman and the villagers are doomed.", null);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F65 RID: 3941
+            // (get) Token: 0x06004955 RID: 18773 RVA: 0x0013494A File Offset: 0x00132B4A
+            private TextObject _successLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=GGTxzAtn}You have delivered {GRAIN_AMOUNT} units of grain to the villagers. They will be able to sow them before the coming winter. You have saved a lot of lives today. The Headman and the villagers are grateful.", null);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F66 RID: 3942
+            // (get) Token: 0x06004956 RID: 18774 RVA: 0x0013496C File Offset: 0x00132B6C
+            private TextObject _cancelLogOnWarDeclared
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=8Z4vlcib}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x17000F67 RID: 3943
+            // (get) Token: 0x06004957 RID: 18775 RVA: 0x0013499C File Offset: 0x00132B9C
+            private TextObject _cancelLogOnVillageRaided
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=PgFJLK85}{SETTLEMENT_NAME} is raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
+                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            // Token: 0x06004958 RID: 18776 RVA: 0x001349E8 File Offset: 0x00132BE8
+            public HeadmanNeedsHardWoodIssueQuest(string questId, Hero giverHero, CampaignTime duration, float difficultyMultiplier, int rewardGold, int neededGrainAmount) : base(questId, giverHero, duration, rewardGold)
+            {
+                this._neededGrainAmount = neededGrainAmount;
+                this._rewardGold = rewardGold;
+                this.SetDialogs();
+                base.InitializeQuestOnCreation();
+            }
+
+            // Token: 0x06004959 RID: 18777 RVA: 0x00134A11 File Offset: 0x00132C11
+            protected override void InitializeQuestOnGameLoad()
+            {
+                this.SetDialogs();
+            }
+
+            // Token: 0x0600495A RID: 18778 RVA: 0x00134A1C File Offset: 0x00132C1C
+            protected override void RegisterEvents()
+            {
+                CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
+                CampaignEvents.OnPartyConsumedFoodEvent.AddNonSerializedListener(this, new Action<MobileParty>(this.OnPartyConsumedFood));
+                CampaignEvents.OnHeroSharedFoodWithAnotherHeroEvent.AddNonSerializedListener(this, new Action<Hero, Hero, float>(this.OnHeroSharedFoodWithAnotherHero));
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
+                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
+                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum, MapEvent>(this.OnRaidCompleted));
+                CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
+            }
+
+            // Token: 0x0600495B RID: 18779 RVA: 0x00134AE1 File Offset: 0x00132CE1
+            private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
+            {
+                QuestHelper.CheckMinorMajorCoercionAndFailQuest(this, mapEvent, attackerParty);
+            }
+
+            // Token: 0x0600495C RID: 18780 RVA: 0x00134AEB File Offset: 0x00132CEB
+            protected override void OnTimedOut()
+            {
+                base.AddLog(this._questTimeoutLogText, false);
+                this.Fail();
+            }
+
+            // Token: 0x0600495D RID: 18781 RVA: 0x00134B04 File Offset: 0x00132D04
+            protected override void SetDialogs()
+            {
+                TextObject textObject = new TextObject("{=k63ZKmXX}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! You are a saviour.", null);
+                TextObject textObject2 = new TextObject("{=HeIIW3EH}We await your success, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                textObject.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+                textObject2.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(textObject, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("{=Zsn6kpjt}Have you brought {GRAIN_AMOUNT} bushels of grain?", null), null, null).Condition(delegate
+                {
+                    MBTextManager.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
+                }).BeginPlayerOptions().PlayerOption(new TextObject("{=9UABeRWO}Yes. Here is your grain.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnGrainsClickableConditions)).NpcLine(textObject, null, null).Consequence(delegate
+                {
+                    Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
+                }).CloseDialog().PlayerOption(new TextObject("{=PI6ikMsc}I'm working on it.", null), null).NpcLine(textObject2, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+            }
+
+            // Token: 0x0600495E RID: 18782 RVA: 0x00134C36 File Offset: 0x00132E36
+            private bool ReturnGrainsClickableConditions(out TextObject explanation)
+            {
+                if (this._playerAcceptedQuestLog.CurrentProgress >= this._neededGrainAmount)
+                {
+                    explanation = TextObject.Empty;
+                    return true;
+                }
+                explanation = new TextObject("{=mzabdwoh}You don't have enough grain.", null);
+                return false;
+            }
+
+            // Token: 0x0600495F RID: 18783 RVA: 0x00134C64 File Offset: 0x00132E64
+            private void QuestAcceptedConsequences()
+            {
+                base.StartQuest();
+                int requiredGrainCountOnPlayer = this.GetRequiredGrainCountOnPlayer();
+                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("{=eEwI880g}Collect Grain", null), requiredGrainCountOnPlayer, this._neededGrainAmount, null, false);
+            }
+
+            // Token: 0x06004960 RID: 18784 RVA: 0x00134CA4 File Offset: 0x00132EA4
+            private int GetRequiredGrainCountOnPlayer()
+            {
+                int itemNumber = PartyBase.MainParty.ItemRoster.GetItemNumber(DefaultItems.Grain);
+                if (itemNumber >= this._neededGrainAmount)
+                {
+                    TextObject textObject = new TextObject("{=Gtbfm10o}You have enough grain to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    InformationManager.AddQuickInformation(textObject, 0, null, "");
+                }
+                if (itemNumber <= this._neededGrainAmount)
+                {
+                    return itemNumber;
+                }
+                return this._neededGrainAmount;
+            }
+
+            // Token: 0x06004961 RID: 18785 RVA: 0x00134D14 File Offset: 0x00132F14
+            private void CheckIfPlayerReadyToReturnGrains()
+            {
+                if (this._playerHasNeededGrainsLog == null && this._playerAcceptedQuestLog.CurrentProgress >= this._neededGrainAmount)
+                {
+                    this._playerHasNeededGrainsLog = base.AddLog(this._playerHasNeededGrainsLogText, false);
+                    return;
+                }
+                if (this._playerHasNeededGrainsLog != null && this._playerAcceptedQuestLog.CurrentProgress < this._neededGrainAmount)
+                {
+                    base.RemoveLog(this._playerHasNeededGrainsLog);
+                    this._playerHasNeededGrainsLog = null;
+                }
+            }
+
+            // Token: 0x06004962 RID: 18786 RVA: 0x00134D80 File Offset: 0x00132F80
+            private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
+            {
+                bool flag = false;
+                foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
+                {
+                    ItemRosterElement item = valueTuple.Item1;
+                    if (item.EquipmentElement.Item == DefaultItems.Grain)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
+                    {
+                        ItemRosterElement item = valueTuple2.Item1;
+                        if (item.EquipmentElement.Item == DefaultItems.Grain)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if (flag)
+                {
+                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
+                    this.CheckIfPlayerReadyToReturnGrains();
+                }
+            }
+
+            // Token: 0x06004963 RID: 18787 RVA: 0x00134E64 File Offset: 0x00133064
+            private void OnPartyConsumedFood(MobileParty party)
+            {
+                if (party.IsMainParty)
+                {
+                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
+                    this.CheckIfPlayerReadyToReturnGrains();
+                }
+            }
+
+            // Token: 0x06004964 RID: 18788 RVA: 0x00134E85 File Offset: 0x00133085
+            private void OnHeroSharedFoodWithAnotherHero(Hero supporterHero, Hero supportedHero, float influence)
+            {
+                if (supporterHero == Hero.MainHero || supportedHero == Hero.MainHero)
+                {
+                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
+                    this.CheckIfPlayerReadyToReturnGrains();
+                }
+            }
+
+            // Token: 0x06004965 RID: 18789 RVA: 0x00134EAE File Offset: 0x001330AE
+            private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            // Token: 0x06004966 RID: 18790 RVA: 0x00134EB6 File Offset: 0x001330B6
+            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, bool byRebellion, bool showNotification = true)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            // Token: 0x06004967 RID: 18791 RVA: 0x00134EBE File Offset: 0x001330BE
+            private void OnWarDeclared(IFaction faction1, IFaction faction2)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            // Token: 0x06004968 RID: 18792 RVA: 0x00134EC6 File Offset: 0x001330C6
+            private void CheckWarDeclaration()
+            {
+                if (base.QuestGiver.CurrentSettlement.OwnerClan.IsAtWarWith(Clan.PlayerClan))
+                {
+                    base.CompleteQuestWithCancel(this._cancelLogOnWarDeclared);
+                }
+            }
+
+            // Token: 0x06004969 RID: 18793 RVA: 0x00134EF0 File Offset: 0x001330F0
+            private void OnRaidCompleted(BattleSideEnum battleSide, MapEvent mapEvent)
+            {
+                if (mapEvent.MapEventSettlement == base.QuestGiver.CurrentSettlement)
+                {
+                    base.CompleteQuestWithCancel(this._cancelLogOnVillageRaided);
+                }
+            }
+
+            // Token: 0x0600496A RID: 18794 RVA: 0x00134F14 File Offset: 0x00133114
+            private void Success()
+            {
+                base.CompleteQuestWithSuccess();
+                base.AddLog(this._successLog, false);
+                TraitLevelingHelper.OnIssueSolvedThroughQuest(base.QuestGiver, new Tuple<TraitObject, int>[]
+                {
+                    new Tuple<TraitObject, int>(DefaultTraits.Mercy, 50),
+                    new Tuple<TraitObject, int>(DefaultTraits.Generosity, 30)
+                });
+                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this._rewardGold, false);
+                GiveItemAction.ApplyForParties(PartyBase.MainParty, Settlement.CurrentSettlement.Party, DefaultItems.Grain, this._neededGrainAmount);
+                base.QuestGiver.AddPower(10f);
+                Settlement.CurrentSettlement.Prosperity += 50f;
+                this.RelationshipChangeWithQuestGiver = 8;
+                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+            }
+
+            // Token: 0x0600496B RID: 18795 RVA: 0x00134FD8 File Offset: 0x001331D8
+            private void Fail()
+            {
+                base.QuestGiver.AddPower(-5f);
+                base.QuestGiver.CurrentSettlement.Prosperity += -10f;
+                this.RelationshipChangeWithQuestGiver = -5;
+                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+            }
+
+            // Token: 0x04001B2C RID: 6956
+            private const int SuccessMercyBonus = 50;
+
+            // Token: 0x04001B2D RID: 6957
+            private const int SuccessGenerosityBonus = 30;
+
+            // Token: 0x04001B2E RID: 6958
+            private const int SuccessRelationBonus = 8;
+
+            // Token: 0x04001B2F RID: 6959
+            private const int SuccessPowerBonus = 10;
+
+            // Token: 0x04001B30 RID: 6960
+            private const int SuccessProsperityBonus = 50;
+
+            // Token: 0x04001B31 RID: 6961
+            private const int FailRelationPenalty = -5;
+
+            // Token: 0x04001B32 RID: 6962
+            private const int TimeOutProsperityPenalty = -10;
+
+            // Token: 0x04001B33 RID: 6963
+            private const int TimeOutPowerPenalty = -5;
+
+            // Token: 0x04001B34 RID: 6964
+            [SaveableField(10)]
+            private readonly int _neededGrainAmount;
+
+            // Token: 0x04001B35 RID: 6965
+            [SaveableField(20)]
+            private int _rewardGold;
+
+            // Token: 0x04001B36 RID: 6966
+            [SaveableField(30)]
+            private JournalLog _playerAcceptedQuestLog;
+
+            // Token: 0x04001B37 RID: 6967
+            [SaveableField(40)]
+            private JournalLog _playerHasNeededGrainsLog;
+        }
+
+        // Token: 0x020006AD RID: 1709
+        public class HeadmanNeedsHardWoodIssueTypeDefiner : SaveableTypeDefiner
+        {
+            // Token: 0x0600496F RID: 18799 RVA: 0x00135081 File Offset: 0x00133281
+            public HeadmanNeedsHardWoodIssueTypeDefiner() : base(440000)
+            {
+            }
+
+            // Token: 0x06004970 RID: 18800 RVA: 0x0013508E File Offset: 0x0013328E
+            protected override void DefineClassTypes()
+            {
+                base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), 1);
+                base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest), 2);
+            }
+        }
+    }
+}
