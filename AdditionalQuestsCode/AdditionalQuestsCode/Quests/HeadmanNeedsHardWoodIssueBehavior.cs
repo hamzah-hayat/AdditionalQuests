@@ -253,7 +253,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=5NYPqKBj}I know you're busy, but maybe you can ask some of your men to find us that grain? {MEN_COUNT} men should do the job, and I'd reckon the whole affair should take two weeks. \nI'm desperate here, {?PLAYER.GENDER}madam{?}sir{\\?}... Don't let our children starve!", null);
+                    TextObject textObject = new TextObject("I know you're busy, but maybe you can ask some of your men to find us that grain? {MEN_COUNT} men should do the job, and I'd reckon the whole affair should take two weeks. \nI'm desperate here, {?PLAYER.GENDER}madam{?}sir{\\?}... Don't let our children starve!", null);
                     textObject.SetTextVariable("MEN_COUNT", this.AlternativeSolutionNeededMenCount);
                     textObject.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                     return textObject;
@@ -266,7 +266,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=ihfuqu2S}I will find that seed grain for you.", null);
+                    return new TextObject("I will find that seed grain for you.", null);
                 }
             }
 
@@ -276,7 +276,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=HCMsvAFv}I can order one of my companions and {MEN_COUNT} men to find grain for you.", null);
+                    TextObject textObject = new TextObject("I can order one of my companions and {MEN_COUNT} men to find grain for you.", null);
                     textObject.SetTextVariable("MEN_COUNT", this.AlternativeSolutionNeededMenCount);
                     return textObject;
                 }
@@ -288,7 +288,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=WVobv24n}Heaven save us if {QUEST_GIVER.NAME} can't get {?QUEST_GIVER.GENDER}her{?}his{\\?} hands on more grain.", null);
+                    TextObject textObject = new TextObject("Heaven save us if {QUEST_GIVER.NAME} can't get {?QUEST_GIVER.GENDER}her{?}his{\\?} hands on more grain.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
                     return textObject;
                 }
@@ -300,7 +300,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=k63ZKmXX}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! You are a saviour.", null);
+                    return new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! You are a saviour.", null);
                 }
             }
 
@@ -330,7 +330,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=a0UTO8tW}{ISSUE_OWNER.LINK}, the headman of {ISSUE_SETTLEMENT}, asked you to deliver {GRAIN_AMOUNT} bushels of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise the peasants cannot sow their fields and starve in the coming season. You have agreed to send your companion {COMPANION.NAME} along with {MEN_COUNT} men to find some grain and return to the village. Your men should return in {RETURN_DAYS} days.", null);
+                    TextObject textObject = new TextObject("{ISSUE_OWNER.LINK}, the headman of {ISSUE_SETTLEMENT}, asked you to deliver {GRAIN_AMOUNT} bushels of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise the peasants cannot sow their fields and starve in the coming season. You have agreed to send your companion {COMPANION.NAME} along with {MEN_COUNT} men to find some grain and return to the village. Your men should return in {RETURN_DAYS} days.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_OWNER", base.IssueOwner.CharacterObject, textObject);
                     StringHelpers.SetCharacterProperties("COMPANION", base.AlternativeSolutionHero.CharacterObject, textObject);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
@@ -410,7 +410,7 @@ namespace AdditionalQuestsCode.Quests
             public override void AlternativeSolutionStartConsequence()
             {
                 GiveGoldAction.ApplyForCharacterToParty(Hero.MainHero, base.IssueSettlement.Party, this.AlternativeSolutionNeededGold, false);
-                TextObject textObject = new TextObject("{=ex6ZhAAv}You gave {DENAR}{GOLD_ICON} to companion to buy {GRAIN_AMOUNT} units of grain for the {ISSUE_OWNER.NAME}.", null);
+                TextObject textObject = new TextObject("You gave {DENAR}{GOLD_ICON} to companion to buy {GRAIN_AMOUNT} units of grain for the {ISSUE_OWNER.NAME}.", null);
                 textObject.SetTextVariable("GRAIN_AMOUNT", this.NeededGrainAmount);
                 textObject.SetTextVariable("DENAR", this.AlternativeSolutionNeededGold);
                 textObject.SetTextVariable("GOLD_ICON", "{=!}<img src=\"Icons\\Coin@2x\" extend=\"8\">");
@@ -540,7 +540,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=apr2dH0n}{ISSUE_SETTLEMENT} Needs Grain Seeds", null);
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} Needs Hardwood", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -562,7 +562,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=5CokRxmL}{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {GRAIN_AMOUNT} units of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise peasants cannot sow their fields and starve in the coming season. \n \n You have agreed to bring them {GRAIN_AMOUNT} units of grain as soon as possible.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {GRAIN_AMOUNT} units of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise peasants cannot sow their fields and starve in the coming season. \n \n You have agreed to bring them {GRAIN_AMOUNT} units of grain as soon as possible.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
@@ -576,7 +576,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=vOHc5dxC}You now have enough grain seeds to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    TextObject textObject = new TextObject("You now have enough Hardwood to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -588,7 +588,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=brDw7ewN}You have failed to deliver {GRAIN_AMOUNT} units of grain to the villagers. They won't be able to sow them before the coming winter. The Headman and the villagers are doomed.", null);
+                    TextObject textObject = new TextObject("You have failed to deliver {GRAIN_AMOUNT} units of grain to the villagers. They won't be able to sow them before the coming winter. The Headman and the villagers are doomed.", null);
                     textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
                     return textObject;
                 }
@@ -600,7 +600,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=GGTxzAtn}You have delivered {GRAIN_AMOUNT} units of grain to the villagers. They will be able to sow them before the coming winter. You have saved a lot of lives today. The Headman and the villagers are grateful.", null);
+                    TextObject textObject = new TextObject("You have delivered {GRAIN_AMOUNT} units of grain to the villagers. They will be able to sow them before the coming winter. You have saved a lot of lives today. The Headman and the villagers are grateful.", null);
                     textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
                     return textObject;
                 }
@@ -612,7 +612,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=8Z4vlcib}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -624,7 +624,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=PgFJLK85}{SETTLEMENT_NAME} is raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{SETTLEMENT_NAME} is raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
@@ -675,8 +675,8 @@ namespace AdditionalQuestsCode.Quests
             // Token: 0x0600495D RID: 18781 RVA: 0x00134B04 File Offset: 0x00132D04
             protected override void SetDialogs()
             {
-                TextObject textObject = new TextObject("{=k63ZKmXX}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! You are a saviour.", null);
-                TextObject textObject2 = new TextObject("{=HeIIW3EH}We await your success, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject textObject = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! You are a saviour.", null);
+                TextObject textObject2 = new TextObject("We await your success, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 textObject.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                 textObject2.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(textObject, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
@@ -684,10 +684,10 @@ namespace AdditionalQuestsCode.Quests
                 {
                     MBTextManager.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("{=9UABeRWO}Yes. Here is your grain.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnGrainsClickableConditions)).NpcLine(textObject, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here is your grain.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnGrainsClickableConditions)).NpcLine(textObject, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
-                }).CloseDialog().PlayerOption(new TextObject("{=PI6ikMsc}I'm working on it.", null), null).NpcLine(textObject2, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+                }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(textObject2, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
             // Token: 0x0600495E RID: 18782 RVA: 0x00134C36 File Offset: 0x00132E36
@@ -698,7 +698,7 @@ namespace AdditionalQuestsCode.Quests
                     explanation = TextObject.Empty;
                     return true;
                 }
-                explanation = new TextObject("{=mzabdwoh}You don't have enough grain.", null);
+                explanation = new TextObject("You don't have enough grain.", null);
                 return false;
             }
 
@@ -707,7 +707,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.StartQuest();
                 int requiredGrainCountOnPlayer = this.GetRequiredGrainCountOnPlayer();
-                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("{=eEwI880g}Collect Grain", null), requiredGrainCountOnPlayer, this._neededGrainAmount, null, false);
+                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("Collect Grain", null), requiredGrainCountOnPlayer, this._neededGrainAmount, null, false);
             }
 
             // Token: 0x06004960 RID: 18784 RVA: 0x00134CA4 File Offset: 0x00132EA4
@@ -716,7 +716,7 @@ namespace AdditionalQuestsCode.Quests
                 int itemNumber = PartyBase.MainParty.ItemRoster.GetItemNumber(DefaultItems.Grain);
                 if (itemNumber >= this._neededGrainAmount)
                 {
-                    TextObject textObject = new TextObject("{=Gtbfm10o}You have enough grain to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
+                    TextObject textObject = new TextObject("You have enough grain to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     InformationManager.AddQuickInformation(textObject, 0, null, "");
                 }
