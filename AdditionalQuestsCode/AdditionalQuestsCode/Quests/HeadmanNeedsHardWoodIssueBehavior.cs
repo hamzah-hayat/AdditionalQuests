@@ -309,7 +309,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                return true; // TODO
+                return base.IssueOwner.CurrentSettlement.Village.GetProsperityLevel() < SettlementComponent.ProsperityLevel.Mid;
             }
 
             protected override void CompleteIssueWithTimedOutConsequences()
@@ -357,7 +357,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} Needs Hardwood", null);
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} Needs Wood", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -378,12 +378,12 @@ namespace AdditionalQuestsCode.Quests
                     TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {GRAIN_AMOUNT} units of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise peasants cannot sow their fields and starve in the coming season. \n \n You have agreed to bring them {GRAIN_AMOUNT} units of grain as soon as possible.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
-                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededWoodAmount);
                     return textObject;
                 }
             }
 
-            private TextObject _playerHasNeededGrainsLogText
+            private TextObject _playerHasNeededWoodLogText
             {
                 get
                 {
@@ -398,7 +398,7 @@ namespace AdditionalQuestsCode.Quests
                 get
                 {
                     TextObject textObject = new TextObject("You have failed to deliver {GRAIN_AMOUNT} units of grain to the villagers. They won't be able to sow them before the coming winter. The Headman and the villagers are doomed.", null);
-                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededWoodAmount);
                     return textObject;
                 }
             }
@@ -408,7 +408,7 @@ namespace AdditionalQuestsCode.Quests
                 get
                 {
                     TextObject textObject = new TextObject("You have delivered {GRAIN_AMOUNT} units of grain to the villagers. They will be able to sow them before the coming winter. You have saved a lot of lives today. The Headman and the villagers are grateful.", null);
-                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededWoodAmount);
                     return textObject;
                 }
             }
@@ -434,9 +434,9 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            public HeadmanNeedsHardWoodIssueQuest(string questId, Hero giverHero, CampaignTime duration, float difficultyMultiplier, int rewardGold, int neededGrainAmount) : base(questId, giverHero, duration, rewardGold)
+            public HeadmanNeedsHardWoodIssueQuest(string questId, Hero giverHero, CampaignTime duration, float difficultyMultiplier, int rewardGold, int neededWoodAmount) : base(questId, giverHero, duration, rewardGold)
             {
-                this._neededGrainAmount = neededGrainAmount;
+                this._neededWoodAmount = neededWoodAmount;
                 this._rewardGold = rewardGold;
                 this.SetDialogs();
                 base.InitializeQuestOnCreation();
@@ -450,8 +450,6 @@ namespace AdditionalQuestsCode.Quests
             protected override void RegisterEvents()
             {
                 CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
-                CampaignEvents.OnPartyConsumedFoodEvent.AddNonSerializedListener(this, new Action<MobileParty>(this.OnPartyConsumedFood));
-                CampaignEvents.OnHeroSharedFoodWithAnotherHeroEvent.AddNonSerializedListener(this, new Action<Hero, Hero, float>(this.OnHeroSharedFoodWithAnotherHero));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
                 CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
@@ -477,24 +475,24 @@ namespace AdditionalQuestsCode.Quests
                 textObject.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                 textObject2.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(textObject, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {GRAIN_AMOUNT} bushels of grain?", null), null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {WOOD_AMOUNT} logs of wood?", null), null, null).Condition(delegate
                 {
-                    MBTextManager.SetTextVariable("GRAIN_AMOUNT", this._neededGrainAmount);
+                    MBTextManager.SetTextVariable("WOOD_AMOUNT", this._neededWoodAmount);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here is your grain.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnGrainsClickableConditions)).NpcLine(textObject, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here is your wood.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnWoodClickableConditions)).NpcLine(textObject, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
                 }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(textObject2, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
-            private bool ReturnGrainsClickableConditions(out TextObject explanation)
+            private bool ReturnWoodClickableConditions(out TextObject explanation)
             {
-                if (this._playerAcceptedQuestLog.CurrentProgress >= this._neededGrainAmount)
+                if (this._playerAcceptedQuestLog.CurrentProgress >= this._neededWoodAmount)
                 {
                     explanation = TextObject.Empty;
                     return true;
                 }
-                explanation = new TextObject("You don't have enough grain.", null);
+                explanation = new TextObject("You don't have enough wood.", null);
                 return false;
             }
 
@@ -502,36 +500,36 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.StartQuest();
                 int requiredGrainCountOnPlayer = this.GetRequiredGrainCountOnPlayer();
-                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("Collect Grain", null), requiredGrainCountOnPlayer, this._neededGrainAmount, null, false);
+                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("Collect Wood", null), requiredGrainCountOnPlayer, this._neededWoodAmount, null, false);
             }
 
             private int GetRequiredGrainCountOnPlayer()
             {
                 int itemNumber = PartyBase.MainParty.ItemRoster.GetItemNumber(DefaultItems.HardWood);
-                if (itemNumber >= this._neededGrainAmount)
+                if (itemNumber >= this._neededWoodAmount)
                 {
-                    TextObject textObject = new TextObject("You have enough grain to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
+                    TextObject textObject = new TextObject("You have enough wood to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     InformationManager.AddQuickInformation(textObject, 0, null, "");
                 }
-                if (itemNumber <= this._neededGrainAmount)
+                if (itemNumber <= this._neededWoodAmount)
                 {
                     return itemNumber;
                 }
-                return this._neededGrainAmount;
+                return this._neededWoodAmount;
             }
 
-            private void CheckIfPlayerReadyToReturnGrains()
+            private void CheckIfPlayerReadyToReturnWood()
             {
-                if (this._playerHasNeededGrainsLog == null && this._playerAcceptedQuestLog.CurrentProgress >= this._neededGrainAmount)
+                if (this._playerHasNeededWoodLog == null && this._playerAcceptedQuestLog.CurrentProgress >= this._neededWoodAmount)
                 {
-                    this._playerHasNeededGrainsLog = base.AddLog(this._playerHasNeededGrainsLogText, false);
+                    this._playerHasNeededWoodLog = base.AddLog(this._playerHasNeededWoodLogText, false);
                     return;
                 }
-                if (this._playerHasNeededGrainsLog != null && this._playerAcceptedQuestLog.CurrentProgress < this._neededGrainAmount)
+                if (this._playerHasNeededWoodLog != null && this._playerAcceptedQuestLog.CurrentProgress < this._neededWoodAmount)
                 {
-                    base.RemoveLog(this._playerHasNeededGrainsLog);
-                    this._playerHasNeededGrainsLog = null;
+                    base.RemoveLog(this._playerHasNeededWoodLog);
+                    this._playerHasNeededWoodLog = null;
                 }
             }
 
@@ -562,25 +560,7 @@ namespace AdditionalQuestsCode.Quests
                 if (flag)
                 {
                     this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnGrains();
-                }
-            }
-
-            private void OnPartyConsumedFood(MobileParty party)
-            {
-                if (party.IsMainParty)
-                {
-                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnGrains();
-                }
-            }
-
-            private void OnHeroSharedFoodWithAnotherHero(Hero supporterHero, Hero supportedHero, float influence)
-            {
-                if (supporterHero == Hero.MainHero || supportedHero == Hero.MainHero)
-                {
-                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnGrains();
+                    this.CheckIfPlayerReadyToReturnWood();
                 }
             }
 
@@ -625,7 +605,7 @@ namespace AdditionalQuestsCode.Quests
                     new Tuple<TraitObject, int>(DefaultTraits.Generosity, 30)
                 });
                 GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this._rewardGold, false);
-                GiveItemAction.ApplyForParties(PartyBase.MainParty, Settlement.CurrentSettlement.Party, DefaultItems.HardWood, this._neededGrainAmount);
+                GiveItemAction.ApplyForParties(PartyBase.MainParty, Settlement.CurrentSettlement.Party, DefaultItems.HardWood, this._neededWoodAmount);
                 base.QuestGiver.AddPower(10f);
                 Settlement.CurrentSettlement.Prosperity += 50f;
                 this.RelationshipChangeWithQuestGiver = 8;
@@ -657,7 +637,7 @@ namespace AdditionalQuestsCode.Quests
             private const int TimeOutPowerPenalty = -5;
 
             [SaveableField(10)]
-            private readonly int _neededGrainAmount;
+            private readonly int _neededWoodAmount;
 
             [SaveableField(20)]
             private int _rewardGold;
@@ -666,7 +646,7 @@ namespace AdditionalQuestsCode.Quests
             private JournalLog _playerAcceptedQuestLog;
 
             [SaveableField(40)]
-            private JournalLog _playerHasNeededGrainsLog;
+            private JournalLog _playerHasNeededWoodLog;
         }
 
         // Save data goes into this class
