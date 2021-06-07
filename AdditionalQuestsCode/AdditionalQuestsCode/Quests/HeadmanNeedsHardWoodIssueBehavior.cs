@@ -13,9 +13,6 @@ namespace AdditionalQuestsCode.Quests
 {
     public class HeadmanNeedsHardWoodIssueBehavior : CampaignBehaviorBase
     {
-        // Quest Variables
-        private const IssueBase.IssueFrequency HeadmanNeedsHardWoodIssueFrequency = IssueBase.IssueFrequency.VeryCommon;
-
         // First, Start with our Conditions for this Quest to be selected
         // These Conditions are what set whether this Quest can be "Activated"
         private bool ConditionsHold(Hero issueGiver)
@@ -34,7 +31,6 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // If the conditions hold, start this quest, otherwise just add it as a possible quest
-        // Not sure why we add quests to every hero instead of just the ones that can do it
         public void OnCheckForIssue(Hero hero)
         {
             if (this.ConditionsHold(hero))
@@ -333,22 +329,6 @@ namespace AdditionalQuestsCode.Quests
                 skill = null;
                 return flag2;
             }
-
-            private const int BaseReturnDays = 10;
-
-            private const int AlternativeSolutionBaseMenCount = 5;
-
-            private const int IssueDuration = 30;
-
-            private const int AlternativeSolutionSuccessGenerosityBonus = 20;
-
-            private const int QuestTimeLimit = 10;
-
-            private const int AlternativeSolutionSuccessPowerBonus = 10;
-
-            private const int AlternativeSolutionSuccessRelationBonus = 6;
-
-            private const int AlternativeSolutionSuccessProsperityBonus = 50;
         }
 
         internal class HeadmanNeedsHardWoodIssueQuest : QuestBase
@@ -375,10 +355,10 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {GRAIN_AMOUNT} units of grain to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as seeds. Otherwise peasants cannot sow their fields and starve in the coming season. \n \n You have agreed to bring them {GRAIN_AMOUNT} units of grain as soon as possible.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {HARDWOOD_AMOUNT} logs of wood to {?QUEST_GIVER.GENDER}her{?}him{\\?} to use as building material. Otherwise the peasants will have nowhere to store their food for the upcoming winter. \n \n You have agreed to bring them {HARDWOOD_AMOUNT} logs of wood as soon as possible.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
-                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededWoodAmount);
+                    textObject.SetTextVariable("HARDWOOD_AMOUNT", this._neededWoodAmount);
                     return textObject;
                 }
             }
@@ -397,8 +377,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have failed to deliver {GRAIN_AMOUNT} units of grain to the villagers. They won't be able to sow them before the coming winter. The Headman and the villagers are doomed.", null);
-                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededWoodAmount);
+                    TextObject textObject = new TextObject("You have failed to deliver {HARDWOOD_AMOUNT} logs of wood to the villagers. They won't be able to rebuild the barn before the coming winter. The Headman and the villagers are doomed.", null);
+                    textObject.SetTextVariable("HARDWOOD_AMOUNT", this._neededWoodAmount);
                     return textObject;
                 }
             }
@@ -407,8 +387,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have delivered {GRAIN_AMOUNT} units of grain to the villagers. They will be able to sow them before the coming winter. You have saved a lot of lives today. The Headman and the villagers are grateful.", null);
-                    textObject.SetTextVariable("GRAIN_AMOUNT", this._neededWoodAmount);
+                    TextObject textObject = new TextObject("You have delivered {HARDWOOD_AMOUNT} logs of wood to the villagers. They will be able to rebuild their barn before the coming winter. The Headman and the villagers are grateful.", null);
+                    textObject.SetTextVariable("HARDWOOD_AMOUNT", this._neededWoodAmount);
                     return textObject;
                 }
             }
@@ -499,11 +479,11 @@ namespace AdditionalQuestsCode.Quests
             private void QuestAcceptedConsequences()
             {
                 base.StartQuest();
-                int requiredGrainCountOnPlayer = this.GetRequiredGrainCountOnPlayer();
-                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("Collect Wood", null), requiredGrainCountOnPlayer, this._neededWoodAmount, null, false);
+                int requiredWoodCountOnPlayer = this.GetRequiredWoodCountOnPlayer();
+                this._playerAcceptedQuestLog = base.AddDiscreteLog(this._playerAcceptedQuestLogText, new TextObject("Collect Wood", null), requiredWoodCountOnPlayer, this._neededWoodAmount, null, false);
             }
 
-            private int GetRequiredGrainCountOnPlayer()
+            private int GetRequiredWoodCountOnPlayer()
             {
                 int itemNumber = PartyBase.MainParty.ItemRoster.GetItemNumber(DefaultItems.HardWood);
                 if (itemNumber >= this._neededWoodAmount)
@@ -559,7 +539,7 @@ namespace AdditionalQuestsCode.Quests
                 }
                 if (flag)
                 {
-                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredGrainCountOnPlayer());
+                    this._playerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredWoodCountOnPlayer());
                     this.CheckIfPlayerReadyToReturnWood();
                 }
             }
@@ -619,22 +599,6 @@ namespace AdditionalQuestsCode.Quests
                 this.RelationshipChangeWithQuestGiver = -5;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
             }
-
-            private const int SuccessMercyBonus = 50;
-
-            private const int SuccessGenerosityBonus = 30;
-
-            private const int SuccessRelationBonus = 8;
-
-            private const int SuccessPowerBonus = 10;
-
-            private const int SuccessProsperityBonus = 50;
-
-            private const int FailRelationPenalty = -5;
-
-            private const int TimeOutProsperityPenalty = -10;
-
-            private const int TimeOutPowerPenalty = -5;
 
             [SaveableField(10)]
             private readonly int _neededWoodAmount;

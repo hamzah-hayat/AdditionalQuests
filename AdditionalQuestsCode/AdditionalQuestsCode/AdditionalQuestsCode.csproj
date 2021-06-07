@@ -74,6 +74,13 @@
   <ItemGroup>
     <Compile Include="AdditionalQuestsSubModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quests\AdditionalQuestsHelperMethods.cs" />
+    <Compile Include="Quests\HeadmanNeedsMilitiaWeaponsIssueBehavior.cs" />
+    <Compile Include="Quests\TownUprisingIssueBehavior.cs" />
+    <Compile Include="Quests\StarvingTownNeedsFoodIssueBehavior.cs" />
+    <Compile Include="Quests\NobleWantsTrainingBattleIssueBehavior.cs" />
+    <Compile Include="Quests\NobleNeedsNewWeaponIssueBehavior.cs" />
+    <Compile Include="Quests\VillageBanditArmyRaidIssueBehavior.cs" />
     <Compile Include="Quests\HeadmanNeedsHardWoodIssueBehavior.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
