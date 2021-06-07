@@ -185,7 +185,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class VillageBanditArmyRaidIssueTypeDefiner : SaveableTypeDefiner
         {
-            public VillageBanditArmyRaidIssueTypeDefiner() : base(1000501)
+            public VillageBanditArmyRaidIssueTypeDefiner() : base(1000506)
             {
             }
 

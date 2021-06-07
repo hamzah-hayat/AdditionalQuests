@@ -155,9 +155,9 @@ namespace AdditionalQuestsCode.Quests
             }
         }
 
-        internal class HeadmanNeedsMilitiaWeaponsIssueQuest : QuestBase
+        internal class HeadmanNeedsMilitiaWeaponsQuest : QuestBase
         {
-            public HeadmanNeedsMilitiaWeaponsIssueQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
+            public HeadmanNeedsMilitiaWeaponsQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
             {
             }
 
@@ -185,8 +185,8 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), 1);
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidQuest), 2);
+                base.AddClassDefinition(typeof(HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsIssue), 1);
+                base.AddClassDefinition(typeof(HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest), 2);
             }
         }
 

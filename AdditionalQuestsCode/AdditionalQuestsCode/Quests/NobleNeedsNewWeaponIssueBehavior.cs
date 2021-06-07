@@ -176,16 +176,16 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
-        public class VillageBanditArmyRaidIssueTypeDefiner : SaveableTypeDefiner
+        public class NobleNeedsNewWeaponIssueTypeDefiner : SaveableTypeDefiner
         {
-            public VillageBanditArmyRaidIssueTypeDefiner() : base(1000501)
+            public NobleNeedsNewWeaponIssueTypeDefiner() : base(1000502)
             {
             }
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), 1);
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidQuest), 2);
+                base.AddClassDefinition(typeof(NobleNeedsNewWeaponIssueBehavior.NobleNeedsNewWeaponIssue), 1);
+                base.AddClassDefinition(typeof(NobleNeedsNewWeaponIssueBehavior.NobleNeedsNewWeaponQuest), 2);
             }
         }
 

@@ -318,7 +318,7 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                return new HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(10f), base.IssueDifficultyMultiplier, this.RewardGold, this.NeededHardWoodAmount);
+                return new HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(10f), base.IssueDifficultyMultiplier, this.RewardGold, this.NeededHardWoodAmount);
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out IssueBase.PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -331,7 +331,7 @@ namespace AdditionalQuestsCode.Quests
             }
         }
 
-        internal class HeadmanNeedsHardWoodIssueQuest : QuestBase
+        internal class HeadmanNeedsHardWoodQuest : QuestBase
         {
             public override TextObject Title
             {
@@ -414,7 +414,7 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            public HeadmanNeedsHardWoodIssueQuest(string questId, Hero giverHero, CampaignTime duration, float difficultyMultiplier, int rewardGold, int neededWoodAmount) : base(questId, giverHero, duration, rewardGold)
+            public HeadmanNeedsHardWoodQuest(string questId, Hero giverHero, CampaignTime duration, float difficultyMultiplier, int rewardGold, int neededWoodAmount) : base(questId, giverHero, duration, rewardGold)
             {
                 this._neededWoodAmount = neededWoodAmount;
                 this._rewardGold = rewardGold;
@@ -623,7 +623,7 @@ namespace AdditionalQuestsCode.Quests
             protected override void DefineClassTypes()
             {
                 base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), 1);
-                base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest), 2);
+                base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodQuest), 2);
             }
         }
 

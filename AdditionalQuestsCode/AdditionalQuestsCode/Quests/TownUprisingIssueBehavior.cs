@@ -46,7 +46,7 @@ namespace AdditionalQuestsCode.Quests
 
 
         // Now the Issue
-        internal class VillageBanditArmyRaidIssue : IssueBase
+        internal class TownUprisingIssue : IssueBase
         {
             public VillageBanditArmyRaidIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(20f))
             {
@@ -165,7 +165,7 @@ namespace AdditionalQuestsCode.Quests
             }
         }
 
-        internal class VillageBanditArmyRaidQuest : QuestBase
+        internal class TownUprisingQuest : QuestBase
         {
             public VillageBanditArmyRaidQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
             {
@@ -187,16 +187,16 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
-        public class VillageBanditArmyRaidIssueTypeDefiner : SaveableTypeDefiner
+        public class TownUprisingIssueTypeDefiner : SaveableTypeDefiner
         {
-            public VillageBanditArmyRaidIssueTypeDefiner() : base(1000501)
+            public TownUprisingIssueTypeDefiner() : base(1000505)
             {
             }
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), 1);
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidQuest), 2);
+                base.AddClassDefinition(typeof(TownUprisingIssueBehavior.TownUprisingIssue), 1);
+                base.AddClassDefinition(typeof(TownUprisingIssueBehavior.TownUprisingQuest), 2);
             }
         }
 
