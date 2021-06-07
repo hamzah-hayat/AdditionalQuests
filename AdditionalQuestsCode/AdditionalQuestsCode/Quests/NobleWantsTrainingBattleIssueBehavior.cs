@@ -144,7 +144,22 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                throw new NotImplementedException();
+                int recruits = 0;
+                if (IssueOwner.IsNoble && IssueOwner.IsCommander)
+                {
+                    foreach (var troop in IssueOwner.PartyBelongedTo.MemberRoster.GetTroopRoster())
+                    {
+                        if (troop.Character.Tier == 1)
+                        {
+                            recruits += troop.Number;
+                        }
+                    }
+                    if (recruits >= 10)
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -192,7 +207,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class NobleWantsTrainingBattleIssueTypeDefiner : SaveableTypeDefiner
         {
-            public NobleWantsTrainingBattleIssueTypeDefiner() : base(1000501)
+            public NobleWantsTrainingBattleIssueTypeDefiner() : base(1000503)
             {
             }
 

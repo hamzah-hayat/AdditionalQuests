@@ -131,7 +131,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                throw new NotImplementedException();
+                return IssueSettlement.Militia <= 20f;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)

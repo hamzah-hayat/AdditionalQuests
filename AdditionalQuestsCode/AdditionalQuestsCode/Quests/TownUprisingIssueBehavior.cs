@@ -41,14 +41,14 @@ namespace AdditionalQuestsCode.Quests
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
-            return new TownUprisingIssueBehavior.VillageBanditArmyRaidIssue(issueOwner);
+            return new TownUprisingIssueBehavior.TownUprisingIssue(issueOwner);
         }
 
 
         // Now the Issue
         internal class TownUprisingIssue : IssueBase
         {
-            public VillageBanditArmyRaidIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(20f))
+            public TownUprisingIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(20f))
             {
             }
 
@@ -141,7 +141,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                throw new NotImplementedException();
+                return IssueSettlement.Town.Loyalty <= 30 && IssueSettlement.Town.Security <= 30;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -167,7 +167,7 @@ namespace AdditionalQuestsCode.Quests
 
         internal class TownUprisingQuest : QuestBase
         {
-            public VillageBanditArmyRaidQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
+            public TownUprisingQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
             {
             }
 

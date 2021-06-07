@@ -125,12 +125,12 @@ namespace AdditionalQuestsCode.Quests
 
             public override IssueFrequency GetFrequency()
             {
-                return IssueBase.IssueFrequency.VeryCommon;
+                return IssueBase.IssueFrequency.Rare;
             }
 
             public override bool IssueStayAliveConditions()
             {
-                throw new NotImplementedException();
+                return true;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)

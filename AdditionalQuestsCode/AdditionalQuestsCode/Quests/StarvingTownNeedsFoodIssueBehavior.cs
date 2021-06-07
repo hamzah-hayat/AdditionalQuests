@@ -131,7 +131,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                throw new NotImplementedException();
+                return IssueSettlement.IsStarving;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -179,7 +179,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class StarvingTownNeedsFoodIssueTypeDefiner : SaveableTypeDefiner
         {
-            public StarvingTownNeedsFoodIssueTypeDefiner() : base(1000501)
+            public StarvingTownNeedsFoodIssueTypeDefiner() : base(1000504)
             {
             }
 

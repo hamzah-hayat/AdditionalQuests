@@ -19,10 +19,10 @@ namespace AdditionalQuestsCode
             gameStarter.AddBehavior(new HeadmanNeedsHardWoodIssueBehavior());
             gameStarter.AddBehavior(new HeadmanNeedsMilitiaWeaponsIssueBehavior());
             gameStarter.AddBehavior(new NobleNeedsNewWeaponIssueBehavior());
-            gameStarter.AddBehavior(new HeadmanNeedsHardWoodIssueBehavior());
-            gameStarter.AddBehavior(new HeadmanNeedsHardWoodIssueBehavior());
-            gameStarter.AddBehavior(new HeadmanNeedsHardWoodIssueBehavior());
-            gameStarter.AddBehavior(new HeadmanNeedsHardWoodIssueBehavior());
+            gameStarter.AddBehavior(new NobleWantsTrainingBattleIssueBehavior());
+            gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
+            gameStarter.AddBehavior(new TownUprisingIssueBehavior());
+            gameStarter.AddBehavior(new VillageBanditArmyRaidIssueBehavior());
         }
     }
 }
