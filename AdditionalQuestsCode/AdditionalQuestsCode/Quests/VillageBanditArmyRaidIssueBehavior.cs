@@ -142,12 +142,31 @@ namespace AdditionalQuestsCode.Quests
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
             {
-                throw new NotImplementedException();
+                relationHero = null;
+                flag = IssueBase.PreconditionFlags.None;
+                if (issueGiver.GetRelationWithPlayer() < -10f)
+                {
+                    flag |= IssueBase.PreconditionFlags.Relation;
+                    relationHero = issueGiver;
+                }
+                if (issueGiver.MapFaction.IsAtWarWith(Hero.MainHero.MapFaction))
+                {
+                    flag |= IssueBase.PreconditionFlags.AtWar;
+                }
+                if (Clan.PlayerClan.Tier < 1)
+                {
+                    flag |= IssueBase.PreconditionFlags.ClanTier;
+                }
+                if (MobileParty.MainParty.MemberRoster.TotalHealthyCount < 50)
+                {
+                    flag |= IssueBase.PreconditionFlags.NotEnoughTroops;
+                }
+                skill = null;
+                return flag == IssueBase.PreconditionFlags.None;
             }
 
             protected override void CompleteIssueWithTimedOutConsequences()
             {
-                throw new NotImplementedException();
             }
 
             protected override QuestBase GenerateIssueQuest(string questId)

@@ -323,11 +323,19 @@ namespace AdditionalQuestsCode.Quests
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out IssueBase.PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
             {
-                bool flag2 = issueGiver.GetRelationWithPlayer() >= -10f;
-                flag = (flag2 ? IssueBase.PreconditionFlags.None : IssueBase.PreconditionFlags.Relation);
-                relationHero = issueGiver;
+                relationHero = null;
+                flag = IssueBase.PreconditionFlags.None;
+                if (issueGiver.GetRelationWithPlayer() < -10f)
+                {
+                    flag |= IssueBase.PreconditionFlags.Relation;
+                    relationHero = issueGiver;
+                }
+                if (issueGiver.MapFaction.IsAtWarWith(Hero.MainHero.MapFaction))
+                {
+                    flag |= IssueBase.PreconditionFlags.AtWar;
+                }
                 skill = null;
-                return flag2;
+                return flag == IssueBase.PreconditionFlags.None;
             }
         }
 

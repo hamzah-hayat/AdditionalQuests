@@ -136,12 +136,23 @@ namespace AdditionalQuestsCode.Quests
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
             {
-                throw new NotImplementedException();
+                relationHero = null;
+                flag = IssueBase.PreconditionFlags.None;
+                if (issueGiver.GetRelationWithPlayer() < -10f)
+                {
+                    flag |= IssueBase.PreconditionFlags.Relation;
+                    relationHero = issueGiver;
+                }
+                if (issueGiver.MapFaction.IsAtWarWith(Hero.MainHero.MapFaction))
+                {
+                    flag |= IssueBase.PreconditionFlags.AtWar;
+                }
+                skill = null;
+                return flag == IssueBase.PreconditionFlags.None;
             }
 
             protected override void CompleteIssueWithTimedOutConsequences()
             {
-                throw new NotImplementedException();
             }
 
             protected override QuestBase GenerateIssueQuest(string questId)
@@ -151,7 +162,6 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void OnGameLoad()
             {
-                throw new NotImplementedException();
             }
         }
 
@@ -161,19 +171,105 @@ namespace AdditionalQuestsCode.Quests
             {
             }
 
-            public override TextObject Title => throw new NotImplementedException();
+            public override TextObject Title
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs spears for militia", null);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
 
-            public override bool IsRemainingTimeHidden => throw new NotImplementedException();
+            public override bool IsRemainingTimeHidden
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            private TextObject StageOnePlayerAcceptsQuestLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageTwoPlayerHasSpearsLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageTimeoutLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed.", null);
+                    textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageSuccessLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful.", null);
+                    textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageCancelDueToWarLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageCancelDueToRaidLog
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
+                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
 
             protected override void InitializeQuestOnGameLoad()
             {
-                throw new NotImplementedException();
+                this.SetDialogs();
             }
 
             protected override void SetDialogs()
             {
                 throw new NotImplementedException();
             }
+
+            [SaveableField(10)]
+            private readonly int NeededSpears;
+
+            [SaveableField(20)]
+            private JournalLog PlayerAcceptedQuestLog;
+
+            [SaveableField(30)]
+            private JournalLog PlayerHasNeededSpears;
         }
 
         // Save data goes into this class
