@@ -157,22 +157,33 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                throw new NotImplementedException();
+                return new HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold, 20);
             }
 
             protected override void OnGameLoad()
             {
             }
+
+            protected override int RewardGold
+            {
+                get
+                {
+                    return 500 + AdditionalQuestsHelperMethods.CalculateAveragePriceForWeaponClass(WeaponClass.OneHandedPolearm) * 20;
+                }
+            }
+
         }
 
         internal class HeadmanNeedsMilitiaWeaponsQuest : QuestBase
         {
+            // Constructor with basic vars and any vars about the quest
             public HeadmanNeedsMilitiaWeaponsQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold,int spearsNumNeeded) : base(questId, questGiver, duration, rewardGold)
             {
-                spearsNumNeeded = 20; //TEST
                 NeededSpears = spearsNumNeeded;
             }
 
+
+            // All of our text/logs
             public override TextObject Title
             {
                 get
@@ -180,14 +191,6 @@ namespace AdditionalQuestsCode.Quests
                     TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs spears for militia", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
-                }
-            }
-
-            public override bool IsRemainingTimeHidden
-            {
-                get
-                {
-                    return false;
                 }
             }
 
@@ -254,6 +257,95 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
+
+            // Register Events
+            protected override void RegisterEvents()
+            {
+                CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
+                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
+                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum, MapEvent>(this.OnRaidCompleted));
+                CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
+            }
+
+            private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
+            {
+                bool flag = false;
+                foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
+                {
+                    ItemRosterElement item = valueTuple.Item1;
+                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
+                    {
+                        ItemRosterElement item = valueTuple2.Item1;
+                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if (flag)
+                {
+                    this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredSpearsCountOnPlayer());
+                    this.CheckIfPlayerReadyToReturnSpears();
+                }
+            }
+
+            private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, bool byRebellion, bool showNotification = true)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void OnWarDeclared(IFaction faction1, IFaction faction2)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void CheckWarDeclaration()
+            {
+                if (base.QuestGiver.CurrentSettlement.OwnerClan.IsAtWarWith(Clan.PlayerClan))
+                {
+                    base.CompleteQuestWithCancel(this.StageCancelDueToWarLogText);
+                }
+            }
+
+            private void OnRaidCompleted(BattleSideEnum battleSide, MapEvent mapEvent)
+            {
+                if (mapEvent.MapEventSettlement == base.QuestGiver.CurrentSettlement)
+                {
+                    base.CompleteQuestWithCancel(this.StageCancelDueToRaidLogText);
+                }
+            }
+
+            private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
+            {
+                QuestHelper.CheckMinorMajorCoercionAndFailQuest(this, mapEvent, attackerParty);
+            }
+
+
+            // Quest logic, the dialogs and conditions for it be to success or failure
+            public override bool IsRemainingTimeHidden
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
             protected override void InitializeQuestOnGameLoad()
             {
                 this.SetDialogs();
@@ -272,7 +364,7 @@ namespace AdditionalQuestsCode.Quests
                 {
                     MBTextManager.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnWoodClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnSpearsClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
                 }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
@@ -289,11 +381,17 @@ namespace AdditionalQuestsCode.Quests
                 return false;
             }
 
+            protected override void OnTimedOut()
+            {
+                base.AddLog(this.StageTimeoutLogText, false);
+                this.Fail();
+            }
+
             private void QuestAcceptedConsequences()
             {
                 base.StartQuest();
                 int requiredSpearsCountOnPlayer = this.GetRequiredSpearsCountOnPlayer();
-                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("Collect Wood", null), requiredSpearsCountOnPlayer, this.NeededSpears, null, false);
+                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("Collect one handed polearms", null), requiredSpearsCountOnPlayer, this.NeededSpears, null, false);
             }
 
             private int GetRequiredSpearsCountOnPlayer()
@@ -349,83 +447,8 @@ namespace AdditionalQuestsCode.Quests
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
             }
 
-            protected override void RegisterEvents()
-            {
-                CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
-                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
-                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
-                CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
-                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum, MapEvent>(this.OnRaidCompleted));
-                CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
-            }
 
-            private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
-            {
-                bool flag = false;
-                foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
-                {
-                    ItemRosterElement item = valueTuple.Item1;
-                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag)
-                {
-                    foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
-                    {
-                        ItemRosterElement item = valueTuple2.Item1;
-                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
-                        {
-                            flag = true;
-                            break;
-                        }
-                    }
-                }
-                if (flag)
-                {
-                    this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredWoodCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnSpears();
-                }
-            }
-
-            private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)
-            {
-                this.CheckWarDeclaration();
-            }
-
-            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, bool byRebellion, bool showNotification = true)
-            {
-                this.CheckWarDeclaration();
-            }
-
-            private void OnWarDeclared(IFaction faction1, IFaction faction2)
-            {
-                this.CheckWarDeclaration();
-            }
-
-            private void CheckWarDeclaration()
-            {
-                if (base.QuestGiver.CurrentSettlement.OwnerClan.IsAtWarWith(Clan.PlayerClan))
-                {
-                    base.CompleteQuestWithCancel(this.StageCancelDueToWarLogText);
-                }
-            }
-
-            private void OnRaidCompleted(BattleSideEnum battleSide, MapEvent mapEvent)
-            {
-                if (mapEvent.MapEventSettlement == base.QuestGiver.CurrentSettlement)
-                {
-                    base.CompleteQuestWithCancel(this.StageCancelDueToRaidLogText);
-                }
-            }
-
-            private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
-            {
-                QuestHelper.CheckMinorMajorCoercionAndFailQuest(this, mapEvent, attackerParty);
-            }
-
+            // Saved vars/logs
             [SaveableField(10)]
             private readonly int NeededSpears;
 

@@ -156,7 +156,7 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                throw new NotImplementedException();
+                return new NobleNeedsNewWeaponQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(20f), this.RewardGold);
             }
 
             protected override void OnGameLoad()
@@ -167,23 +167,269 @@ namespace AdditionalQuestsCode.Quests
 
         internal class NobleNeedsNewWeaponQuest : QuestBase
         {
+            // Constructor with basic vars and any vars about the quest
             public NobleNeedsNewWeaponQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
             {
             }
 
-            public override TextObject Title => throw new NotImplementedException();
 
-            public override bool IsRemainingTimeHidden => throw new NotImplementedException();
+            // All of our text/logs
+            public override TextObject Title
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs spears for militia", null);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageOnePlayerAcceptsQuestLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageTwoPlayerHasSpearsLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageTimeoutLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed.", null);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageSuccessLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful.", null);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageCancelDueToWarLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageCancelDueToRaidLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
+                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+
+            // Register Events
+            protected override void RegisterEvents()
+            {
+                CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
+                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
+                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum, MapEvent>(this.OnRaidCompleted));
+                CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
+            }
+
+            private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
+            {
+                bool flag = false;
+                foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
+                {
+                    ItemRosterElement item = valueTuple.Item1;
+                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword && item.EquipmentElement.Item.Value >= 2000)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
+                    {
+                        ItemRosterElement item = valueTuple2.Item1;
+                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword && item.EquipmentElement.Item.Value >= 2000)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if (flag)
+                {
+                    this.CheckIfPlayerReadyToReturnWeapon();
+                }
+            }
+
+            private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, bool byRebellion, bool showNotification = true)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void OnWarDeclared(IFaction faction1, IFaction faction2)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void CheckWarDeclaration()
+            {
+                if (base.QuestGiver.CurrentSettlement.OwnerClan.IsAtWarWith(Clan.PlayerClan))
+                {
+                    base.CompleteQuestWithCancel(this.StageCancelDueToWarLogText);
+                }
+            }
+
+            private void OnRaidCompleted(BattleSideEnum battleSide, MapEvent mapEvent)
+            {
+                if (mapEvent.MapEventSettlement == base.QuestGiver.CurrentSettlement)
+                {
+                    base.CompleteQuestWithCancel(this.StageCancelDueToRaidLogText);
+                }
+            }
+
+            private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
+            {
+                QuestHelper.CheckMinorMajorCoercionAndFailQuest(this, mapEvent, attackerParty);
+            }
+
+
+            // Quest logic, the dialogs and conditions for it be to success or failure
+            public override bool IsRemainingTimeHidden
+            {
+                get
+                {
+                    return false;
+                }
+            }
 
             protected override void InitializeQuestOnGameLoad()
             {
-                throw new NotImplementedException();
+                this.SetDialogs();
             }
 
             protected override void SetDialogs()
             {
-                throw new NotImplementedException();
+                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these weapons.", null);
+                thankYouText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+                TextObject waitingText = new TextObject("We await those weapons, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+
+
+                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {SPEARS_AMOUNT} spears?", null), null, null).Condition(delegate
+                {
+                    return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
+                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.GiveWeaponClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
+                {
+                    Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
+                }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
+
+            private bool GiveWeaponClickableConditions(out TextObject explanation)
+            {
+                if (HasWeaponForQuest)
+                {
+                    explanation = TextObject.Empty;
+                    return true;
+                }
+                explanation = new TextObject("You don't have a weapon to give.", null);
+                return false;
+            }
+
+            protected override void OnTimedOut()
+            {
+                base.AddLog(this.StageTimeoutLogText, false);
+                this.Fail();
+            }
+
+            private void QuestAcceptedConsequences()
+            {
+                base.StartQuest();
+            }
+
+            private bool GetRequiredSpearsCountOnPlayer()
+            {
+                foreach (ItemRosterElement itemRosterElement in PartyBase.MainParty.ItemRoster)
+                {
+                    if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item.WeaponComponent != null && itemRosterElement.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword && itemRosterElement.EquipmentElement.Item.Value >= 2000)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            private void CheckIfPlayerReadyToReturnWeapon()
+            {
+                if (this.PlayerHasNeededWeaponLog == null && HasWeaponForQuest)
+                {
+                    this.PlayerHasNeededWeaponLog = base.AddLog(this.StageTwoPlayerHasSpearsLogText, false);
+                    return;
+                }
+                if (this.PlayerHasNeededWeaponLog != null && HasWeaponForQuest)
+                {
+                    base.RemoveLog(this.PlayerHasNeededWeaponLog);
+                    this.PlayerHasNeededWeaponLog = null;
+                }
+            }
+
+            private void Success()
+            {
+                base.CompleteQuestWithSuccess();
+                base.AddLog(this.StageSuccessLogText, false);
+                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this.RewardGold, false);
+                // Remove weapon
+
+                this.RelationshipChangeWithQuestGiver = 10;
+                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+            }
+
+            private void Fail()
+            {
+                this.RelationshipChangeWithQuestGiver = -5;
+                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+            }
+
+
+            // Saved vars/logs
+            [SaveableField(10)]
+            private readonly bool HasWeaponForQuest;
+
+            [SaveableField(20)]
+            private JournalLog PlayerAcceptedQuestLog;
+
+            [SaveableField(30)]
+            private JournalLog PlayerHasNeededWeaponLog;
         }
 
         // Save data goes into this class

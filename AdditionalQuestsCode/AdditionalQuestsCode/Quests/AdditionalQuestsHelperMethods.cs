@@ -77,5 +77,29 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
         }
+
+        public static int CalculateAveragePriceForWeaponClass(WeaponClass weaponClass)
+        {
+            int num = 0;
+            int num2 = 0;
+            foreach (Settlement settlement in Settlement.All)
+            {
+                if (settlement.IsTown)
+                {
+                    foreach (ItemRosterElement itemRosterElement in settlement.ItemRoster)
+                    {
+                        WeaponComponent weaponComponent = itemRosterElement.EquipmentElement.Item.WeaponComponent;
+                        if (weaponComponent != null && weaponComponent.PrimaryWeapon.WeaponClass == weaponClass)
+                        {
+                            num2 += itemRosterElement.Amount;
+                            num += itemRosterElement.EquipmentElement.ItemValue;
+                        }
+                    }
+                }
+            }
+            return num / ((num2 == 0) ? 1 : num2);
+        }
+
+
     }
 }
