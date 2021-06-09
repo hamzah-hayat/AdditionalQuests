@@ -16,7 +16,7 @@ namespace AdditionalQuestsCode.Quests
         // Needs to be village notable with less then 20 militia
         private bool ConditionsHold(Hero issueGiver)
         {
-            return issueGiver.IsRuralNotable && issueGiver.CurrentSettlement != null && issueGiver.CurrentSettlement.IsVillage && issueGiver.CurrentSettlement.Militia < 20f;
+            return issueGiver.IsRuralNotable && issueGiver.CurrentSettlement != null && issueGiver.CurrentSettlement.IsVillage && issueGiver.CurrentSettlement.Militia < 15f;
         }
 
         // If the conditions hold, start this quest, otherwise just add it as a possible quest
@@ -85,7 +85,7 @@ namespace AdditionalQuestsCode.Quests
                 get
                 {
                     TextObject textObject = new TextObject("I can handle training our men into militia fighters, but I need someone to find spears to fight with, you should be able to buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total.", null);
-                    //textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededHardWoodAmount);
+                    textObject.SetTextVariable("SPEARS_AMOUNT", NeededSpearsNum);
                     return textObject;
                 }
             }
@@ -157,7 +157,7 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                return new HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold, 20);
+                return new HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold, NeededSpearsNum);
             }
 
             protected override void OnGameLoad()
@@ -172,6 +172,14 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
+            protected int NeededSpearsNum
+            {
+                get
+                {
+                    return 20;
+                }
+            }
+
         }
 
         internal class HeadmanNeedsMilitiaWeaponsQuest : QuestBase
@@ -180,6 +188,8 @@ namespace AdditionalQuestsCode.Quests
             public HeadmanNeedsMilitiaWeaponsQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold,int spearsNumNeeded) : base(questId, questGiver, duration, rewardGold)
             {
                 NeededSpears = spearsNumNeeded;
+                this.SetDialogs();
+                base.InitializeQuestOnCreation();
             }
 
 
