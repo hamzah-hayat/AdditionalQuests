@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 
 namespace AdditionalQuestsCode.Quests
 {
@@ -41,5 +42,40 @@ namespace AdditionalQuestsCode.Quests
             return result;
         }
 
+        public static int GetRequiredWeaponWithTypeCountOnPlayer(WeaponClass weaponType)
+        {
+            int num = 0;
+            foreach (ItemRosterElement itemRosterElement in PartyBase.MainParty.ItemRoster)
+            {
+                if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item.WeaponComponent != null && itemRosterElement.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == weaponType)
+                {
+                    num += itemRosterElement.Amount;
+                }
+            }
+            return num;
+        }
+
+        public static void RemoveWeaponsWithTypeFromPlayer(WeaponClass weaponType,int numWeaponsToDelete)
+        {
+            int num = numWeaponsToDelete;
+            for (int i = PartyBase.MainParty.ItemRoster.Count - 1; i >= 0; i--)
+            {
+                ItemRosterElement itemRosterElement = PartyBase.MainParty.ItemRoster[i];
+                if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item.WeaponComponent != null && itemRosterElement.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == weaponType && itemRosterElement.Amount > 0)
+                {
+                    if (num < itemRosterElement.Amount)
+                    {
+                        PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -num);
+                        return;
+                    }
+                    PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -itemRosterElement.Amount);
+                    num -= itemRosterElement.Amount;
+                }
+                if (num == 0)
+                {
+                    break;
+                }
+            }
+        }
     }
 }
