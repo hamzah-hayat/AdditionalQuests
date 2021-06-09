@@ -624,7 +624,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class HeadmanNeedsHardWoodIssueTypeDefiner : SaveableTypeDefiner
         {
-            public HeadmanNeedsHardWoodIssueTypeDefiner() : base(1000500)
+            public HeadmanNeedsHardWoodIssueTypeDefiner() : base(80500)
             {
             }
 

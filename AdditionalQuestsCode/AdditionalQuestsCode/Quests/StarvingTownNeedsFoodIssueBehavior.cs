@@ -190,7 +190,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class StarvingTownNeedsFoodIssueTypeDefiner : SaveableTypeDefiner
         {
-            public StarvingTownNeedsFoodIssueTypeDefiner() : base(1000504)
+            public StarvingTownNeedsFoodIssueTypeDefiner() : base(80504)
             {
             }
 

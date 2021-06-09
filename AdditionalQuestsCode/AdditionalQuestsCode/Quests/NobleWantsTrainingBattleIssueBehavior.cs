@@ -226,7 +226,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class NobleWantsTrainingBattleIssueTypeDefiner : SaveableTypeDefiner
         {
-            public NobleWantsTrainingBattleIssueTypeDefiner() : base(1000503)
+            public NobleWantsTrainingBattleIssueTypeDefiner() : base(80503)
             {
             }
 

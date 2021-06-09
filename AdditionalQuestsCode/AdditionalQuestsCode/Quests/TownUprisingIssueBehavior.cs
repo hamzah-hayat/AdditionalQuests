@@ -204,7 +204,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class TownUprisingIssueTypeDefiner : SaveableTypeDefiner
         {
-            public TownUprisingIssueTypeDefiner() : base(1000505)
+            public TownUprisingIssueTypeDefiner() : base(80505)
             {
             }
 

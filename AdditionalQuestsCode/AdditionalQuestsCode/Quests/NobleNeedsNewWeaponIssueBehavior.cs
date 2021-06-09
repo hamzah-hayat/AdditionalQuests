@@ -435,7 +435,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class NobleNeedsNewWeaponIssueTypeDefiner : SaveableTypeDefiner
         {
-            public NobleNeedsNewWeaponIssueTypeDefiner() : base(1000502)
+            public NobleNeedsNewWeaponIssueTypeDefiner() : base(80502)
             {
             }
 
