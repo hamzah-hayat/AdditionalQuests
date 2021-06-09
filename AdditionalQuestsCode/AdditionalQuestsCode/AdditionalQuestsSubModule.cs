@@ -20,7 +20,7 @@ namespace AdditionalQuestsCode
             gameStarter.AddBehavior(new HeadmanNeedsMilitiaWeaponsIssueBehavior());
             gameStarter.AddBehavior(new NobleNeedsNewWeaponIssueBehavior());
             gameStarter.AddBehavior(new NobleWantsTrainingBattleIssueBehavior());
-            //gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
+            gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
             gameStarter.AddBehavior(new TownUprisingIssueBehavior());
             gameStarter.AddBehavior(new VillageBanditArmyRaidIssueBehavior());
         }

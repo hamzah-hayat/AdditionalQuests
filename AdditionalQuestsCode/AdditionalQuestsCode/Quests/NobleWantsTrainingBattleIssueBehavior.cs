@@ -17,7 +17,7 @@ namespace AdditionalQuestsCode.Quests
         private bool ConditionsHold(Hero issueGiver)
         {
             int recruits = 0;
-            if(issueGiver.IsNoble&& issueGiver.IsCommander)
+            if(issueGiver.IsNoble&& issueGiver.IsCommander && issueGiver.IsPartyLeader)
             {
                 foreach (var troop in issueGiver.PartyBelongedTo.MemberRoster.GetTroopRoster())
                 {
@@ -224,6 +224,7 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
+        /*
         public class NobleWantsTrainingBattleIssueTypeDefiner : SaveableTypeDefiner
         {
             public NobleWantsTrainingBattleIssueTypeDefiner() : base(80503)
@@ -236,6 +237,7 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(NobleWantsTrainingBattleIssueBehavior.NobleWantsTrainingBattleQuest), 2);
             }
         }
+        */
         
         // Register this event to check for issue event
         public override void RegisterEvents()

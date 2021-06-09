@@ -462,7 +462,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class HeadmanNeedsMilitiaWeaponsIssueTypeDefiner : SaveableTypeDefiner
         {
-            public HeadmanNeedsMilitiaWeaponsIssueTypeDefiner() : base(80501)
+            public HeadmanNeedsMilitiaWeaponsIssueTypeDefiner() : base(585812)
             {
             }
 

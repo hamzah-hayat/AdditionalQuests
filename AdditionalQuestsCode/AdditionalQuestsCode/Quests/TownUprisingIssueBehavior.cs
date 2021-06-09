@@ -202,9 +202,10 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
+        /*
         public class TownUprisingIssueTypeDefiner : SaveableTypeDefiner
         {
-            public TownUprisingIssueTypeDefiner() : base(80505)
+            public TownUprisingIssueTypeDefiner() : base(80601)
             {
             }
 
@@ -214,6 +215,7 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(TownUprisingIssueBehavior.TownUprisingQuest), 2);
             }
         }
+        */
 
 
         // Register this event to check for issue event

@@ -188,9 +188,10 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
+        /*
         public class StarvingTownNeedsFoodIssueTypeDefiner : SaveableTypeDefiner
         {
-            public StarvingTownNeedsFoodIssueTypeDefiner() : base(80504)
+            public StarvingTownNeedsFoodIssueTypeDefiner() : base(80600)
             {
             }
 
@@ -200,7 +201,7 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(StarvingTownNeedsFoodIssueBehavior.StarvingTownNeedsFoodQuest), 2);
             }
         }
-
+        */
 
 
 

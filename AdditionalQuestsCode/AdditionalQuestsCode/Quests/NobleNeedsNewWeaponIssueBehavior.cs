@@ -433,6 +433,7 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
+        /*
         public class NobleNeedsNewWeaponIssueTypeDefiner : SaveableTypeDefiner
         {
             public NobleNeedsNewWeaponIssueTypeDefiner() : base(80502)
@@ -445,6 +446,7 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(NobleNeedsNewWeaponIssueBehavior.NobleNeedsNewWeaponQuest), 2);
             }
         }
+        */
 
         // Register this event to check for issue event
         public override void RegisterEvents()
