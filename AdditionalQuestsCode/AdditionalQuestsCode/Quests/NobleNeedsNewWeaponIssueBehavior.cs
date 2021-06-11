@@ -168,8 +168,9 @@ namespace AdditionalQuestsCode.Quests
         internal class NobleNeedsNewWeaponQuest : QuestBase
         {
             // Constructor with basic vars and any vars about the quest
-            public NobleNeedsNewWeaponQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
+            public NobleNeedsNewWeaponQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold, WeaponClass weaponTypeForQuest) : base(questId, questGiver, duration, rewardGold)
             {
+                WeaponTypeForQuest = weaponTypeForQuest;
             }
 
 
@@ -178,8 +179,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs spears for militia", null);
-                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK} wants a new {WEAPON_TYPE}", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("WEAPON_TYPE", WeaponTypeForQuest.ToString());
                     return textObject;
                 }
             }
@@ -188,19 +190,19 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK} wants a new {WEAPON_TYPE}. {?QUEST_GIVER.GENDER}She{?}He{\\?} will pay you double the market price for the weapon, so long as the weapon is worth more then 3000 gold. \n You can either buy or smith a {WEAPON_TYPE} to hand in.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
-                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    textObject.SetTextVariable("WEAPON_TYPE", WeaponTypeForQuest.ToString());
                     return textObject;
                 }
             }
 
-            private TextObject StageTwoPlayerHasSpearsLogText
+            private TextObject StageTwoPlayerHasWeaponText
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
-                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    TextObject textObject = new TextObject("You now have a weapon to complete the quest. Return to {QUEST_GIVER.LINK} to hand it over.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -209,7 +211,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed.", null);
+                    TextObject textObject = new TextObject("You have failed to find a weapon for {QUEST_GIVER.LINK}, {?QUEST_GIVER.GENDER}she{?}he{\\?} is disapointed.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -218,7 +221,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful.", null);
+                    TextObject textObject = new TextObject("You have delivered a weapon to {QUEST_GIVER.LINK}. {?QUEST_GIVER.GENDER}She{?}He{\\?} is impressed by it and will now use it in battle!.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -227,18 +231,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
-                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
-                    return textObject;
-                }
-            }
-
-            private TextObject StageCancelDueToRaidLogText
-            {
-                get
-                {
-                    TextObject textObject = new TextObject("{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
-                    textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
+                    TextObject textObject = new TextObject("Your clan is now at war with {ISSUE_GIVER.LINK}'s faction. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -252,7 +245,6 @@ namespace AdditionalQuestsCode.Quests
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
                 CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
-                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum, MapEvent>(this.OnRaidCompleted));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
 
@@ -306,14 +298,6 @@ namespace AdditionalQuestsCode.Quests
                 if (base.QuestGiver.CurrentSettlement.OwnerClan.IsAtWarWith(Clan.PlayerClan))
                 {
                     base.CompleteQuestWithCancel(this.StageCancelDueToWarLogText);
-                }
-            }
-
-            private void OnRaidCompleted(BattleSideEnum battleSide, MapEvent mapEvent)
-            {
-                if (mapEvent.MapEventSettlement == base.QuestGiver.CurrentSettlement)
-                {
-                    base.CompleteQuestWithCancel(this.StageCancelDueToRaidLogText);
                 }
             }
 
@@ -393,7 +377,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 if (this.PlayerHasNeededWeaponLog == null && HasWeaponForQuest)
                 {
-                    this.PlayerHasNeededWeaponLog = base.AddLog(this.StageTwoPlayerHasSpearsLogText, false);
+                    this.PlayerHasNeededWeaponLog = base.AddLog(this.StageTwoPlayerHasWeaponText, false);
                     return;
                 }
                 if (this.PlayerHasNeededWeaponLog != null && HasWeaponForQuest)
@@ -426,14 +410,16 @@ namespace AdditionalQuestsCode.Quests
             private readonly bool HasWeaponForQuest;
 
             [SaveableField(20)]
-            private JournalLog PlayerAcceptedQuestLog;
+            private readonly WeaponClass WeaponTypeForQuest;
 
             [SaveableField(30)]
+            private JournalLog PlayerAcceptedQuestLog;
+
+            [SaveableField(40)]
             private JournalLog PlayerHasNeededWeaponLog;
         }
 
         // Save data goes into this class
-        /*
         public class NobleNeedsNewWeaponIssueTypeDefiner : SaveableTypeDefiner
         {
             public NobleNeedsNewWeaponIssueTypeDefiner() : base(80502)
@@ -446,7 +432,6 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(NobleNeedsNewWeaponIssueBehavior.NobleNeedsNewWeaponQuest), 2);
             }
         }
-        */
 
         // Register this event to check for issue event
         public override void RegisterEvents()
