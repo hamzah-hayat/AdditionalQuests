@@ -202,10 +202,9 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
-        /*
         public class VillageBanditArmyRaidIssueTypeDefiner : SaveableTypeDefiner
         {
-            public VillageBanditArmyRaidIssueTypeDefiner() : base(80602)
+            public VillageBanditArmyRaidIssueTypeDefiner() : base(585870)
             {
             }
 
@@ -215,7 +214,6 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidQuest), 2);
             }
         }
-        */
 
         // Register this event to check for issue event
         public override void RegisterEvents()

@@ -16,7 +16,23 @@ namespace AdditionalQuestsCode.Quests
         // Needs to be a noble
         private bool ConditionsHold(Hero issueGiver)
         {
-            return issueGiver.IsNoble && issueGiver.IsCommander && !issueGiver.Noncombatant;
+            if (!issueGiver.IsFactionLeader)
+            {
+                Clan clan = issueGiver.Clan;
+                if (((clan != null) ? clan.Leader : null) != issueGiver)
+                {
+                    return false;
+                }
+            }
+            if (!issueGiver.IsMinorFactionHero && issueGiver.Clan != Clan.PlayerClan)
+            {
+                MobileParty partyBelongedTo = issueGiver.PartyBelongedTo;
+                if (partyBelongedTo != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // If the conditions hold, start this quest, otherwise just add it as a possible quest
@@ -24,10 +40,10 @@ namespace AdditionalQuestsCode.Quests
         {
             if (this.ConditionsHold(hero))
             {
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Rare));
                 return;
             }
-            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Rare));
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
@@ -35,12 +51,12 @@ namespace AdditionalQuestsCode.Quests
             return new NobleNeedsNewWeaponIssueBehavior.NobleNeedsNewWeaponIssue(issueOwner);
         }
 
-
         // Now the Issue
         internal class NobleNeedsNewWeaponIssue : IssueBase
         {
             public NobleNeedsNewWeaponIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(20f))
             {
+                WeaponTypeForQuest = issueOwner.BattleEquipment.GetEquipmentFromSlot(EquipmentIndex.WeaponItemBeginSlot).Item.WeaponComponent.Weapons[0].WeaponClass;
             }
 
             public override TextObject Title
@@ -83,8 +99,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("No, I have not. If you find a good weapon of at least value X in your travels, please bring it to me, I will happily buy it from you for double the market rate. If you feel up to the challenge, you could even try smithing the weapon instead.", null);
-                    //textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededHardWoodAmount);
+                    TextObject textObject = new TextObject("No, I have not. If you find a {WEAPON_TYPE} of at least value 3000{GOLD_ICON} in your travels, please bring it to me, I will happily buy it from you for double the market rate. If you feel up to the challenge, you could even try smithing it instead.", null);
+                    textObject.SetTextVariable("WEAPON_TYPE", WeaponTypeForQuest.ToString());
                     return textObject;
                 }
             }
@@ -156,21 +172,23 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                return new NobleNeedsNewWeaponQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(20f), this.RewardGold);
+                return new NobleNeedsNewWeaponQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(20f), this.RewardGold, WeaponTypeForQuest, 3000);
             }
 
             protected override void OnGameLoad()
             {
-                throw new NotImplementedException();
             }
+
+            private readonly WeaponClass WeaponTypeForQuest;
         }
 
         internal class NobleNeedsNewWeaponQuest : QuestBase
         {
             // Constructor with basic vars and any vars about the quest
-            public NobleNeedsNewWeaponQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold, WeaponClass weaponTypeForQuest) : base(questId, questGiver, duration, rewardGold)
+            public NobleNeedsNewWeaponQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold, WeaponClass weaponTypeForQuest,int weaponGoldValue) : base(questId, questGiver, duration, rewardGold)
             {
                 WeaponTypeForQuest = weaponTypeForQuest;
+                WeaponGoldValue = weaponGoldValue;
             }
 
 
@@ -243,8 +261,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
-                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, bool, bool>(this.OnClanChangedKingdom));
-                CampaignEvents.MercenaryClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom>(this.OnMercenaryClanChangedKingdom));
+                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
 
@@ -254,7 +271,7 @@ namespace AdditionalQuestsCode.Quests
                 foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
                 {
                     ItemRosterElement item = valueTuple.Item1;
-                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword && item.EquipmentElement.Item.Value >= 2000)
+                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponTypeForQuest && item.EquipmentElement.Item.Value >= WeaponGoldValue)
                     {
                         flag = true;
                         break;
@@ -265,7 +282,7 @@ namespace AdditionalQuestsCode.Quests
                     foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
                     {
                         ItemRosterElement item = valueTuple2.Item1;
-                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword && item.EquipmentElement.Item.Value >= 2000)
+                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponTypeForQuest && item.EquipmentElement.Item.Value >= WeaponGoldValue)
                         {
                             flag = true;
                             break;
@@ -278,12 +295,7 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)
-            {
-                this.CheckWarDeclaration();
-            }
-
-            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, bool byRebellion, bool showNotification = true)
+            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)
             {
                 this.CheckWarDeclaration();
             }
@@ -323,17 +335,17 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these weapons.", null);
+                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This will be a fine weapon to fight with.", null);
                 thankYouText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
-                TextObject waitingText = new TextObject("We await those weapons, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject waitingText = new TextObject("I await a a worthy weapon, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
 
 
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {SPEARS_AMOUNT} spears?", null), null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you bought a worthy weapon?", null), null, null).Condition(delegate
                 {
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.GiveWeaponClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here is is.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.GiveWeaponClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
                 }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
@@ -341,7 +353,7 @@ namespace AdditionalQuestsCode.Quests
 
             private bool GiveWeaponClickableConditions(out TextObject explanation)
             {
-                if (HasWeaponForQuest)
+                if (GetRequiredWeaponOnPlayer())
                 {
                     explanation = TextObject.Empty;
                     return true;
@@ -359,13 +371,16 @@ namespace AdditionalQuestsCode.Quests
             private void QuestAcceptedConsequences()
             {
                 base.StartQuest();
+                TextObject objectiveText = new TextObject("Find {WEAPON_TYPE} worth 3000{GOLD_ICON}", null);
+                objectiveText.SetTextVariable("WEAPON_TYPE", WeaponTypeForQuest.ToString());
+                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, objectiveText, GetRequiredWeaponOnPlayer() ? 0 : 1, 1, null, false);
             }
 
-            private bool GetRequiredSpearsCountOnPlayer()
+            private bool GetRequiredWeaponOnPlayer()
             {
                 foreach (ItemRosterElement itemRosterElement in PartyBase.MainParty.ItemRoster)
                 {
-                    if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item.WeaponComponent != null && itemRosterElement.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword && itemRosterElement.EquipmentElement.Item.Value >= 2000)
+                    if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item.WeaponComponent != null && itemRosterElement.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponTypeForQuest && itemRosterElement.EquipmentElement.Item.Value >= WeaponGoldValue)
                     {
                         return true;
                     }
@@ -375,12 +390,12 @@ namespace AdditionalQuestsCode.Quests
 
             private void CheckIfPlayerReadyToReturnWeapon()
             {
-                if (this.PlayerHasNeededWeaponLog == null && HasWeaponForQuest)
+                if (this.PlayerHasNeededWeaponLog == null && GetRequiredWeaponOnPlayer())
                 {
                     this.PlayerHasNeededWeaponLog = base.AddLog(this.StageTwoPlayerHasWeaponText, false);
                     return;
                 }
-                if (this.PlayerHasNeededWeaponLog != null && HasWeaponForQuest)
+                if (this.PlayerHasNeededWeaponLog != null && !GetRequiredWeaponOnPlayer())
                 {
                     base.RemoveLog(this.PlayerHasNeededWeaponLog);
                     this.PlayerHasNeededWeaponLog = null;
@@ -391,11 +406,19 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.CompleteQuestWithSuccess();
                 base.AddLog(this.StageSuccessLogText, false);
-                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this.RewardGold, false);
-                // Remove weapon
 
-                this.RelationshipChangeWithQuestGiver = 10;
-                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+                // Find weapon to sell
+                foreach (ItemRosterElement itemRosterElement in PartyBase.MainParty.ItemRoster)
+                {
+                    if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item.WeaponComponent != null && itemRosterElement.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponTypeForQuest && itemRosterElement.EquipmentElement.Item.Value >= WeaponGoldValue)
+                    {
+                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, itemRosterElement.EquipmentElement.ItemValue*2, false);
+                        PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -1);
+                        this.RelationshipChangeWithQuestGiver = 10;
+                        ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+                        break;
+                    }
+                }
             }
 
             private void Fail()
@@ -404,13 +427,12 @@ namespace AdditionalQuestsCode.Quests
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
             }
 
-
             // Saved vars/logs
             [SaveableField(10)]
-            private readonly bool HasWeaponForQuest;
+            private readonly WeaponClass WeaponTypeForQuest;
 
             [SaveableField(20)]
-            private readonly WeaponClass WeaponTypeForQuest;
+            private readonly int WeaponGoldValue;
 
             [SaveableField(30)]
             private JournalLog PlayerAcceptedQuestLog;
@@ -422,7 +444,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class NobleNeedsNewWeaponIssueTypeDefiner : SaveableTypeDefiner
         {
-            public NobleNeedsNewWeaponIssueTypeDefiner() : base(80502)
+            public NobleNeedsNewWeaponIssueTypeDefiner() : base(585830)
             {
             }
 

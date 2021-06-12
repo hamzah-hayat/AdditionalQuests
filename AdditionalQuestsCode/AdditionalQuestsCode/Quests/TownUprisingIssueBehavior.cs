@@ -22,7 +22,7 @@ namespace AdditionalQuestsCode.Quests
                 if (currentSettlement.IsTown)
                 {
                     Town town = currentSettlement.Town;
-                    return town.Loyalty <= 30 && town.Security <= 50 && issueGiver.IsArtisan;
+                    return town.Loyalty <= 30 && town.Security <= 50;
                 }
             }
             return false;
@@ -202,10 +202,9 @@ namespace AdditionalQuestsCode.Quests
         }
 
         // Save data goes into this class
-        /*
         public class TownUprisingIssueTypeDefiner : SaveableTypeDefiner
         {
-            public TownUprisingIssueTypeDefiner() : base(80601)
+            public TownUprisingIssueTypeDefiner() : base(585860)
             {
             }
 
@@ -215,7 +214,6 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(TownUprisingIssueBehavior.TownUprisingQuest), 2);
             }
         }
-        */
 
 
         // Register this event to check for issue event
