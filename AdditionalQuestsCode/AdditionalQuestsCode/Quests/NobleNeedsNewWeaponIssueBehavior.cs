@@ -189,8 +189,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 WeaponTypeForQuest = weaponTypeForQuest;
                 WeaponGoldValue = weaponGoldValue;
+                this.SetDialogs();
+                base.InitializeQuestOnCreation();
             }
-
 
             // All of our text/logs
             public override TextObject Title
