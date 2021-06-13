@@ -16,7 +16,6 @@ namespace AdditionalQuestsCode
 
         private void AddBehaviors(CampaignGameStarter gameStarter)
         {
-            gameStarter.AddBehavior(new HeadmanNeedsHardWoodIssueBehavior());
             gameStarter.AddBehavior(new HeadmanNeedsMilitiaWeaponsIssueBehavior());
             gameStarter.AddBehavior(new NobleNeedsNewWeaponIssueBehavior());
             //gameStarter.AddBehavior(new NobleWantsTrainingBattleIssueBehavior());
