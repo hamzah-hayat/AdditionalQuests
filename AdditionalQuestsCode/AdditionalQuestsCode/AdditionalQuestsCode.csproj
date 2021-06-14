@@ -81,7 +81,6 @@
     <Compile Include="Quests\NobleWantsTrainingBattleIssueBehavior.cs" />
     <Compile Include="Quests\NobleNeedsNewWeaponIssueBehavior.cs" />
     <Compile Include="Quests\VillageBanditArmyRaidIssueBehavior.cs" />
-    <Compile Include="Quests\HeadmanNeedsHardWoodIssueBehavior.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

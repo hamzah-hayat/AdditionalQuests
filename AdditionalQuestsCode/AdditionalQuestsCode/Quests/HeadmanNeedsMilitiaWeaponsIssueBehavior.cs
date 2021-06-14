@@ -450,6 +450,7 @@ namespace AdditionalQuestsCode.Quests
 
             private void Fail()
             {
+                base.CompleteQuestWithFail();
                 base.QuestGiver.AddPower(-5f);
                 base.QuestGiver.CurrentSettlement.Prosperity += -10f;
                 this.RelationshipChangeWithQuestGiver = -5;
