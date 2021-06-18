@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
+using TaleWorlds.CampaignSystem.GameMenus;
+using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.SandBox;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
@@ -171,7 +177,7 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                throw new NotImplementedException();
+                return new TownUprisingQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold);
             }
 
             protected override void OnGameLoad()
@@ -182,23 +188,622 @@ namespace AdditionalQuestsCode.Quests
 
         internal class TownUprisingQuest : QuestBase
         {
+            // Constructor with basic vars and any vars about the quest
             public TownUprisingQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
             {
+                this.SetDialogs();
+                this.AddGameMenus();
+                base.InitializeQuestOnCreation();
             }
 
-            public override TextObject Title => throw new NotImplementedException();
+            // All of our text/logs
+            public override TextObject Title
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("Rebellion in {ISSUE_SETTLEMENT}!", null);
+                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
 
-            public override bool IsRemainingTimeHidden => throw new NotImplementedException();
+            private TextObject StageOnePlayerAcceptsQuestLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, an artisan in the town of {QUEST_SETTLEMENT} has asked you to help the town militia overthrow the garrison of the town. He has asked you to wait for midnight, which is when the fight will begin. \n \n Wait in {QUEST_SETTLEMENT} until midnight.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
 
+            private TextObject StageTwoFightIsReadyLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=OIBiRTRP}{QUEST_GIVER.LINK} is waiting for you at {SETTLEMENT}.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("SETTLEMENT", base.QuestGiver.CurrentSettlement.EncyclopediaLinkWithName);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageSuccessLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You helped the rebels of {QUEST_SETTLEMENT} take over the town. A new kingdom has been formed! ", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageFailureTimeoutLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("You have failed to join the rebels at {QUEST_SETTLEMENT}. The rebellion plan has been cancelled for now, {QUEST_GIVER.LINK} is disapointed at your lack of commitment.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageFailureRejectionLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=aXMg9M7t}You decided to stay out of the fight. {?QUEST_GIVER.GENDER}She{?}He{\\?} will certainly lose to the rival gang without your help.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageFailureDefeatLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=du3dpMaV}You were unable to defeat {RIVAL_GANG_LEADER.LINK}'s gang, and thus failed to fulfill your commitment to {QUEST_GIVER.LINK}.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    StringHelpers.SetCharacterProperties("RIVAL_GANG_LEADER", this._rivalGangLeader.CharacterObject, textObject);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageCancelDueToWarLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("Your clan is now at war with the rulers of {QUEST_SETTLEMENT}. It will be to difficult to help the rebels now.", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    return textObject;
+                }
+            }
+
+            private TextObject StageCancelDueToSiegeLogText
+            {
+                get
+                {
+                    TextObject textObject = new TextObject("{=s1GWSE9Y}{QUEST_GIVER.LINK} cancels your plans due to the siege of {SETTLEMENT}. {?QUEST_GIVER.GENDER}She{?}He{\\?} has worse troubles than {?QUEST_GIVER.GENDER}her{?}his{\\?} quarrel with the rival gang.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("SETTLEMENT", base.QuestGiver.CurrentSettlement.EncyclopediaLinkWithName);
+                    return textObject;
+                }
+            }
+
+            // Register Events
+            protected override void RegisterEvents()
+            {
+                CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, new Action(this.HourlyTick));
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
+                CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(this.OnSiegeEventStarted));
+                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
+            }
+
+            private void HourlyTick()
+            {
+                if (PlayerEncounter.Current != null && PlayerEncounter.Current.IsPlayerWaiting && PlayerEncounter.EncounterSettlement == QuestGiver.CurrentSettlement && CampaignTime.Now.IsNightTime && !this._isReadyToBeFinalized)
+                {
+                    this.OnQuestGiverPreparationsCompleted();
+                }
+            }
+
+            private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void OnWarDeclared(IFaction faction1, IFaction faction2)
+            {
+                this.CheckWarDeclaration();
+            }
+
+            private void CheckWarDeclaration()
+            {
+                if (QuestGiver.MapFaction.IsAtWarWith(Hero.MainHero.MapFaction))
+                {
+                    base.AddLog(this.StageCancelDueToWarLogText, false);
+                    base.CompleteQuestWithCancel();
+                }
+            }
+
+            private void OnSiegeEventStarted(SiegeEvent siegeEvent)
+            {
+                if (siegeEvent.BesiegedSettlement == base.QuestGiver.CurrentSettlement)
+                {
+                    base.AddLog(this.StageCancelDueToSiegeLogText, false);
+                    base.CompleteQuestWithCancel();
+                }
+            }
+
+
+            // Quest Logic
             protected override void InitializeQuestOnGameLoad()
             {
-                throw new NotImplementedException();
+                this.SetDialogs();
+                this.AddGameMenus();
+                Campaign.Current.ConversationManager.AddDialogFlow(this.GetQuestGiverPreparationCompletedDialogFlow(), this);
             }
 
             protected override void SetDialogs()
             {
-                throw new NotImplementedException();
+                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine("Wait until midnight, I will send someone to you when we are ready. Try not to draw attention to yourself before then.", null, null).Condition(delegate
+                {
+                    return Hero.OneToOneConversationHero == base.QuestGiver;
+                }).Consequence(new ConversationSentence.OnConsequenceDelegate(this.OnQuestAccepted)).CloseDialog();
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine("It's not time yet. I'll send a runner for you when the time comes.", null, null).Condition(delegate
+                {
+                    return Hero.OneToOneConversationHero == base.QuestGiver && !this._isFinalStage && !this._preparationsComplete;
+                }).BeginPlayerOptions().PlayerOption("All right. I am waiting for your runner.", null).NpcLine("You'll know right away once the preparations are complete. Just don't leave town.", null, null).CloseDialog().PlayerOption("I can't just hang on here forever. Be quick about it.", null).NpcLine("I'm getting this together as quickly as I can.", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
+
+            private DialogFlow GetQuestGiverPreparationCompletedDialogFlow()
+            {
+                return DialogFlow.CreateDialogFlow("start", 125).NpcLine("Are you ready for the fight?", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver && this._preparationsComplete && !this._isFinalStage).BeginPlayerOptions().PlayerOption("I am ready.", null).Condition(() => !Hero.MainHero.IsWounded).NpcLine("Let's finish this!", null, null).Consequence(delegate
+                {
+                    Campaign.Current.ConversationManager.ConversationEndOneShot += this.rival_gang_start_fight_on_consequence;
+                }).CloseDialog().PlayerOption("I need more time.", null).Condition(() => !Hero.MainHero.IsWounded).NpcLine("You’d better hurry up!", null, null).Consequence(delegate
+                {
+                    Campaign.Current.ConversationManager.ConversationEndOneShot += this.rival_gang_need_more_time_on_consequence;
+                }).CloseDialog().PlayerOption("My wounds are still fresh. I need some time to recover.", null).Condition(() => Hero.MainHero.IsWounded).NpcLine("We must attack before the garrison hears about our plan. You'd better hurry up!", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+            }
+
+            // Game Menus
+            public void AddGameMenus()
+            {
+                TextObject textObject = new TextObject("A milita solider walks up to you and quietly informs you that the men are in position.", null);
+                base.AddGameMenu("rival_gang_quest_before_fight", TextObject.Empty, new OnInitDelegate(rival_gang_quest_before_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
+                base.AddGameMenu("rival_gang_quest_after_fight", TextObject.Empty, new OnInitDelegate(rival_gang_quest_after_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
+                base.AddGameMenu("rival_gang_quest_wait_duration_is_over", textObject, new OnInitDelegate(rival_gang_wait_duration_is_over_menu_on_init), GameOverlays.MenuOverlayType.None, GameMenu.MenuFlags.none);
+                base.AddGameMenuOption("rival_gang_quest_wait_duration_is_over", "rival_gang_quest_wait_duration_is_over_yes", new TextObject("Follow the solider", null), new GameMenuOption.OnConditionDelegate(this.rival_gang_quest_wait_duration_is_over_yes_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_yes_consequence), false, -1, null);
+                base.AddGameMenuOption("rival_gang_quest_wait_duration_is_over", "rival_gang_quest_wait_duration_is_over_no", new TextObject("Leave", null), new GameMenuOption.OnConditionDelegate(this.rival_gang_quest_wait_duration_is_over_no_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_no_consequence), false, -1, null);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            public override bool IsRemainingTimeHidden
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            private void rival_gang_start_fight_on_consequence()
+            {
+                this._isFinalStage = true;
+                if (Mission.Current != null)
+                {
+                    Mission.Current.EndMission();
+                }
+                Campaign.Current.GameMenuManager.SetNextMenu("rival_gang_quest_before_fight");
+            }
+
+            private void rival_gang_need_more_time_on_consequence()
+            {
+                if (Campaign.Current.CurrentMenuContext.GameMenu.StringId == "rival_gang_quest_wait_duration_is_over")
+                {
+                    Campaign.Current.GameMenuManager.SetNextMenu("town_wait_menus");
+                }
+            }
+
+            private void AddQuestGiverGangLeaderOnSuccessDialogFlow()
+            {
+                Campaign.Current.ConversationManager.AddDialogFlow(DialogFlow.CreateDialogFlow("start", 125).NpcLine("Its done! The remaining troops loyal to the noble have been rounded up and taken prisoner. This is the start of a new begining for the people.", null, null).Condition(delegate
+                {
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, null);
+                    return base.IsOngoing && Hero.OneToOneConversationHero == base.QuestGiver;
+                }).Consequence(delegate
+                {
+                    Campaign.Current.ConversationManager.ConversationEndOneShot += this.OnQuestSucceeded;
+                }).CloseDialog(), null);
+            }
+
+            private CharacterObject GetTroopTypeTemplateForDifficulty()
+            {
+                int difficultyRange = MBMath.ClampInt(MathF.Ceiling(this._issueDifficulty / 0.1f), 1, 10);
+                CharacterObject characterObject;
+                if (difficultyRange == 1)
+                {
+                    characterObject = CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter");
+                }
+                else if (difficultyRange == 10)
+                {
+                    characterObject = CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "mercenary_8");
+                }
+                else
+                {
+                    characterObject = CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "mercenary_" + (difficultyRange - 1));
+                }
+                if (characterObject == null)
+                {
+                    characterObject = CharacterObject.All.First((CharacterObject t) => t.IsBasicTroop && t.IsSoldier);
+                }
+                return characterObject;
+            }
+
+            private void StartCommonAreaBattle(Hero gangLeader)
+            {
+                this.HostileGarrisonParty = MobileParty.CreateParty("rival_gang_leader_party", null, null);
+                TextObject textObject = new TextObject("{=u4jhIFwG}{RIVAL_GANG_LEADER}'s Party", null);
+                textObject.SetTextVariable("RIVAL_GANG_LEADER", this._rivalGangLeader.Name);
+                this.HostileGarrisonParty.InitializeMobileParty(new TroopRoster(this.HostileGarrisonParty.Party), new TroopRoster(this.HostileGarrisonParty.Party), base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f);
+                this.HostileGarrisonParty.SetCustomName(textObject);
+                EnterSettlementAction.ApplyForParty(this.HostileGarrisonParty, base.QuestGiver.CurrentSettlement);
+                this.HostileGarrisonParty.SetPartyUsedByQuest(true);
+                CharacterObject troopTypeTemplateForDifficulty = this.GetTroopTypeTemplateForDifficulty();
+                this.HostileGarrisonParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 15, false, 0, 0, true, -1);
+                ItemObject @object = MBObjectManager.Instance.GetObject<ItemObject>("cleaver_sword_t3");
+                gangLeader.CharacterObject.FirstCivilianEquipment.AddEquipmentToSlotWithoutAgent(EquipmentIndex.WeaponItemBeginSlot, new EquipmentElement(@object, null));
+                this.HostileGarrisonParty.MemberRoster.AddToCounts(gangLeader.CharacterObject, 1, false, 0, 0, true, -1);
+                foreach (TroopRosterElement troopRosterElement in PartyBase.MainParty.MemberRoster.GetTroopRoster())
+                {
+                    if (!troopRosterElement.Character.IsPlayerCharacter)
+                    {
+                        this._playerTroops.Add(troopRosterElement);
+                    }
+                }
+                PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
+                PartyBase.MainParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 20, false, 0, 0, true, -1);
+                if (!this._playerTroops.IsEmpty<TroopRosterElement>())
+                {
+                    List<CharacterObject> list = new List<CharacterObject>();
+                    int num = 5;
+                    foreach (TroopRosterElement troopRosterElement2 in from t in this._playerTroops
+                                                                        orderby t.Character.Level descending
+                                                                        select t)
+                    {
+                        if (num <= 0)
+                        {
+                            break;
+                        }
+                        int num2 = 0;
+                        while (num2 < troopRosterElement2.Number - troopRosterElement2.WoundedNumber && num > 0)
+                        {
+                            list.Add(troopRosterElement2.Character);
+                            num--;
+                            num2++;
+                        }
+                    }
+                    foreach (CharacterObject character in list)
+                    {
+                        PartyBase.MainParty.MemberRoster.AddToCounts(character, 1, false, 0, 0, true, -1);
+                    }
+                }
+                PlayerEncounter.RestartPlayerEncounter(this.HostileGarrisonParty.Party, PartyBase.MainParty, false);
+                GameMenu.ActivateGameMenu("rival_gang_quest_after_fight");
+                this._isReadyToBeFinalized = true;
+                PlayerEncounter.Current.ForceAlleyFight = true;
+                PlayerEncounter.StartBattle();
+                PlayerEncounter.StartCombatMissionWithDialogueInTownCenter(gangLeader.CharacterObject, troopTypeTemplateForDifficulty);
+            }
+
+            private bool rival_gang_quest_wait_duration_is_over_yes_condition(MenuCallbackArgs args)
+            {
+                args.optionLeaveType = GameMenuOption.LeaveType.Continue;
+                return true;
+            }
+
+            private bool rival_gang_quest_wait_duration_is_over_no_condition(MenuCallbackArgs args)
+            {
+                args.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                return true;
+            }
+
+            private static void rival_gang_wait_duration_is_over_menu_on_init(MenuCallbackArgs args)
+            {
+                Campaign.Current.TimeControlMode = CampaignTimeControlMode.Stop;
+                StringHelpers.SetCharacterProperties("QUEST_GIVER", RivalGangMovingInIssueBehavior.RivalGangMovingInIssueQuest._current.QuestGiver.CharacterObject, null);
+            }
+
+            private void rival_gang_quest_wait_duration_is_over_yes_consequence(MenuCallbackArgs args)
+            {
+                CampaignMapConversation.OpenConversation(new ConversationCharacterData(CharacterObject.PlayerCharacter, null, true, true, false, false), new ConversationCharacterData(base.QuestGiver.CharacterObject, null, true, true, false, false));
+            }
+
+            private void rival_gang_quest_wait_duration_is_over_no_consequence(MenuCallbackArgs args)
+            {
+                Campaign.Current.CurrentMenuContext.SwitchToMenu("town_wait_menus");
+            }
+
+            private static void rival_gang_quest_before_fight_init(MenuCallbackArgs args)
+            {
+                RivalGangMovingInIssueBehavior.RivalGangMovingInIssueQuest current = RivalGangMovingInIssueBehavior.RivalGangMovingInIssueQuest._current;
+                if (current != null && current._isFinalStage)
+                {
+                    current.StartCommonAreaBattle(current._rivalGangLeader);
+                }
+            }
+
+            private static void rival_gang_quest_after_fight_init(MenuCallbackArgs args)
+            {
+                RivalGangMovingInIssueBehavior.RivalGangMovingInIssueQuest current = RivalGangMovingInIssueBehavior.RivalGangMovingInIssueQuest._current;
+                if (current != null && current._isReadyToBeFinalized)
+                {
+                    bool hasPlayerWon = PlayerEncounter.Battle.WinningSide == PlayerEncounter.Battle.PlayerSide;
+                    PlayerEncounter.Current.FinalizeBattle();
+                    current.HandlePlayerEncounterResult(hasPlayerWon);
+                    current._isReadyToBeFinalized = false;
+                }
+            }
+
+            private void game_menu_encounter_attack_on_consequence(MenuCallbackArgs args)
+            {
+                int playerMaximumTroopCountForHideoutMission = Campaign.Current.Models.BanditDensityModel.GetPlayerMaximumTroopCountForHideoutMission(MobileParty.MainParty);
+                TroopRoster troopRoster = TroopRoster.CreateDummyTroopRoster();
+                FlattenedTroopRoster strongestAndPriorTroops = MobilePartyHelper.GetStrongestAndPriorTroops(MobileParty.MainParty, playerMaximumTroopCountForHideoutMission, true);
+                troopRoster.Add(strongestAndPriorTroops);
+                args.MenuContext.OpenManageHideoutTroops(troopRoster, new Func<CharacterObject, bool>(this.CanChangeStatusOfTroop), new Action<TroopRoster>(this.OnTroopRosterManageDone));
+            }
+
+            private bool CanChangeStatusOfTroop(CharacterObject character)
+            {
+                return !character.IsPlayerCharacter && !character.IsNotTransferableInHideouts;
+            }
+
+            // Token: 0x0600324B RID: 12875 RVA: 0x000E495C File Offset: 0x000E2B5C
+            private void OnTroopRosterManageDone(TroopRoster hideoutTroops)
+            {
+                GameMenu.SwitchToMenu("hideout_place");
+                Settlement.CurrentSettlement.GetComponent<Hideout>().UpdateNextPossibleAttackTime();
+                if (PlayerEncounter.IsActive)
+                {
+                    PlayerEncounter.LeaveEncounter = false;
+                }
+                else
+                {
+                    PlayerEncounter.Start();
+                    PlayerEncounter.Current.SetupFields(PartyBase.MainParty, Settlement.CurrentSettlement.Party);
+                }
+                if (PlayerEncounter.Battle == null)
+                {
+                    PlayerEncounter.StartBattle();
+                    PlayerEncounter.Update();
+                }
+                CampaignMission.OpenHideoutBattleMission(Settlement.CurrentSettlement.GetComponent<Hideout>().SceneName, (hideoutTroops != null) ? hideoutTroops.ToFlattenedRoster() : null);
+            }
+
+            private void HandlePlayerEncounterResult(bool hasPlayerWon)
+            {
+                PlayerEncounter.Finish(false);
+                EncounterManager.StartSettlementEncounter(MobileParty.MainParty, base.QuestGiver.CurrentSettlement);
+                GameMenu.SwitchToMenu("town");
+                CharacterObject troopTypeTemplateForDifficulty = this.GetTroopTypeTemplateForDifficulty();
+                using (List<TroopRosterElement>.Enumerator enumerator = PartyBase.MainParty.MemberRoster.GetTroopRoster().GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        TroopRosterElement troop = enumerator.Current;
+                        if (troop.Character != troopTypeTemplateForDifficulty)
+                        {
+                            int num = this._playerTroops.FindIndex((TroopRosterElement t) => t.Character == troop.Character);
+                            if (num != -1)
+                            {
+                                this._playerTroops.RemoveAt(num);
+                                this._playerTroops.Insert(num, troop);
+                            }
+                        }
+                    }
+                }
+                PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
+                foreach (TroopRosterElement troopRosterElement in this._playerTroops)
+                {
+                    PartyBase.MainParty.MemberRoster.AddToCounts(troopRosterElement.Character, troopRosterElement.Number, false, troopRosterElement.WoundedNumber, troopRosterElement.Xp, true, -1);
+                }
+                if (hasPlayerWon)
+                {
+                    if (!this._hasBetrayedQuestGiver)
+                    {
+                        this.AddQuestGiverGangLeaderOnSuccessDialogFlow();
+                        PlayerEncounter.LocationEncounter.CreateAndOpenMissionController(LocationComplex.Current.GetLocationOfCharacter(base.QuestGiver), null, base.QuestGiver.CharacterObject, null);
+                        return;
+                    }
+                    this.OnBattleWonWithBetrayal();
+                    return;
+                }
+                else
+                {
+                    if (!this._hasBetrayedQuestGiver)
+                    {
+                        this.OnQuestFailedWithDefeat();
+                        return;
+                    }
+                    this.OnBattleLostWithBetrayal();
+                    return;
+                }
+            }
+
+            protected override void OnTimedOut()
+            {
+                this.OnQuestFailedWithRejectionOrTimeout();
+            }
+
+            private void OnQuestGiverPreparationsCompleted()
+            {
+                this._preparationsComplete = true;
+                if (Settlement.CurrentSettlement != null && Settlement.CurrentSettlement == base.QuestGiver.CurrentSettlement && Campaign.Current.CurrentMenuContext != null && Campaign.Current.CurrentMenuContext.GameMenu.StringId == "town_wait_menus")
+                {
+                    Campaign.Current.CurrentMenuContext.SwitchToMenu("rival_gang_quest_wait_duration_is_over");
+                }
+                TextObject textObject = new TextObject("{=DUKbtlNb}{QUEST_GIVER.LINK} has finally sent a messenger telling you it's time to meet {?QUEST_GIVER.GENDER}her{?}him{\\?} and join the fight.", null);
+                StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                base.AddLog(this._onQuestPreperationsCompletedLogText, false);
+                InformationManager.AddQuickInformation(textObject, 0, null, "");
+            }
+
+            private void OnQuestAccepted()
+            {
+                base.StartQuest();
+                this._onQuestStartedLog = base.AddLog(this._onQuestStartedLogText, false);
+                Campaign.Current.ConversationManager.AddDialogFlow(this.GetRivalGangLeaderDialogFlow(), this);
+                Campaign.Current.ConversationManager.AddDialogFlow(this.GetQuestGiverPreparationCompletedDialogFlow(), this);
+            }
+
+            private void OnQuestSucceeded()
+            {
+                this._onQuestSucceededLog = base.AddLog(this._onQuestSucceededLogText, false);
+                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this._rewardGold, false);
+                if (base.QuestGiver.IsAlive)
+                {
+                    this.RelationshipChangeWithQuestGiver = 5;
+                    TraitLevelingHelper.OnIssueSolvedThroughQuest(base.QuestGiver, new Tuple<TraitObject, int>[]
+                    {
+            new Tuple<TraitObject, int>(DefaultTraits.Honor, 50)
+                    });
+                    base.QuestGiver.AddPower(10f);
+                }
+                if (this._rivalGangLeader.IsAlive)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(this._rivalGangLeader, -5, true, true);
+                }
+                if (this.HostileGarrisonParty != null && this.HostileGarrisonParty.IsActive)
+                {
+                    DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
+                }
+                base.CompleteQuestWithSuccess();
+            }
+
+            private void OnQuestFailedWithRejectionOrTimeout()
+            {
+                base.AddLog(this._onQuestFailedWithRejectionLogText, false);
+                TraitLevelingHelper.OnIssueFailed(base.QuestGiver, new Tuple<TraitObject, int>[]
+                {
+        new Tuple<TraitObject, int>(DefaultTraits.Honor, -20)
+                });
+                this.ApplyQuestFailConsequences();
+            }
+
+            private void OnBattleWonWithBetrayal()
+            {
+                base.AddLog(this._onQuestFailedWithBetrayalLogText, false);
+                if (!this._rivalGangLeader.IsDead)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(this._rivalGangLeader, 5, true, true);
+                }
+                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this._rewardGold * 2, false);
+                TraitLevelingHelper.OnIssueSolvedThroughBetrayal(base.QuestGiver, new Tuple<TraitObject, int>[]
+                {
+        new Tuple<TraitObject, int>(DefaultTraits.Honor, -100)
+                });
+                this.ApplyQuestFailConsequences();
+                base.CompleteQuestWithBetrayal(null);
+            }
+
+            private void OnBattleLostWithBetrayal()
+            {
+                base.AddLog(this._onQuestFailedWithBetrayalLogText, false);
+                if (!this._rivalGangLeader.IsDead)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(this._rivalGangLeader, 5, true, true);
+                }
+                TraitLevelingHelper.OnIssueSolvedThroughBetrayal(base.QuestGiver, new Tuple<TraitObject, int>[]
+                {
+        new Tuple<TraitObject, int>(DefaultTraits.Honor, -100)
+                });
+                base.QuestGiver.CurrentSettlement.Town.Security += -10f;
+                this.ApplyQuestFailConsequences();
+                base.CompleteQuestWithBetrayal(null);
+            }
+
+
+            private void OnQuestFailedWithDefeat()
+            {
+                base.AddLog(this._onQuestFailedWithDefeatLogText, false);
+                this.ApplyQuestFailConsequences();
+                base.CompleteQuestWithFail(null);
+            }
+
+
+            private void ApplyQuestFailConsequences()
+            {
+                this.RelationshipChangeWithQuestGiver = -15;
+                base.QuestGiver.AddPower(-10f);
+                base.QuestGiver.CurrentSettlement.Town.Security += -10f;
+                if (this.HostileGarrisonParty != null && this.HostileGarrisonParty.IsActive)
+                {
+                    DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
+                }
+            }
+
+            protected override void OnFinalize()
+            {
+                if (this._rivalGangLeader != null && this._rivalGangLeader.IsAlive)
+                {
+                    EnterSettlementAction.ApplyForCharacterOnly(this._rivalGangLeader, base.QuestGiver.CurrentSettlement);
+                }
+            }
+
+            private const int QuestGiverRelationBonusOnSuccess = 5;
+
+            private const int RivalGangLeaderRelationPenaltyOnSuccess = -5;
+
+            private const int QuestGiverNotablePowerBonusOnSuccess = 10;
+
+            private const int QuestGiverRelationPenaltyOnFail = -15;
+
+            private const int NotablePowerPenaltyOnFail = -10;
+
+            private const int TownSecurityPenaltyOnFail = -10;
+
+            private const int RivalGangLeaderRelationBonusOnBetrayal = 5;
+
+            private const int NumberofRegularEnemyTroops = 15;
+
+            private const int NumberOfRegularAllyTroops = 20;
+
+            private const int MaxNumberOfPlayerOwnedTroops = 5;
+
+            [SaveableField(1)]
+            private MobileParty HostileGarrisonParty;
+
+            [SaveableField(2)]
+            private bool _isFinalStage;
+
+            [SaveableField(3)]
+            private bool _isReadyToBeFinalized;
+
+            [SaveableField(4)]
+            private List<TroopRosterElement> _playerTroops = new List<TroopRosterElement>();
+
+            [SaveableField(5)]
+            private bool _preparationsComplete;
+
+            [SaveableField(6)]
+            private JournalLog PlayerAcceptedQuestLog;
+
+            private JournalLog _onQuestStartedLog;
+
+            private JournalLog _onQuestSucceededLog;
         }
 
         // Save data goes into this class

@@ -155,12 +155,11 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                throw new NotImplementedException();
+                return new StarvingTownNeedsFoodQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold);
             }
 
             protected override void OnGameLoad()
             {
-                throw new NotImplementedException();
             }
         }
 
@@ -171,6 +170,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 this.SetDialogs();
                 base.InitializeQuestOnCreation();
+                NeededFood = 300;
             }
 
 
@@ -179,7 +179,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs spears for militia", null);
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs food", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -189,19 +189,19 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You have agreed to bring {FOOD_AMOUNT} food as soon as possible.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
-                    textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return textObject;
                 }
             }
 
-            private TextObject StageTwoPlayerHasSpearsLogText
+            private TextObject StageTwoPlayerHasFoodLogText
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    TextObject textObject = new TextObject("You now have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -211,8 +211,10 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed.", null);
-                    textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    TextObject textObject = new TextObject("You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve, {QUEST_GIVER.LINK} is disapointed at your efforts.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return textObject;
                 }
             }
@@ -221,8 +223,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful.", null);
-                    textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    TextObject textObject = new TextObject("You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of of food. You have saved the people from starvation.", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
+                    textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return textObject;
                 }
             }
@@ -237,17 +240,6 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            private TextObject StageCancelDueToRaidLogText
-            {
-                get
-                {
-                    TextObject textObject = new TextObject("{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
-                    textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
-                    StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
-                    return textObject;
-                }
-            }
-
 
             // Register Events
             protected override void RegisterEvents()
@@ -255,7 +247,6 @@ namespace AdditionalQuestsCode.Quests
                 CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
                 CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
-                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum, MapEvent>(this.OnRaidCompleted));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
 
@@ -265,7 +256,7 @@ namespace AdditionalQuestsCode.Quests
                 foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
                 {
                     ItemRosterElement item = valueTuple.Item1;
-                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
+                    if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
                     {
                         flag = true;
                         break;
@@ -276,7 +267,7 @@ namespace AdditionalQuestsCode.Quests
                     foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
                     {
                         ItemRosterElement item = valueTuple2.Item1;
-                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
+                        if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
                         {
                             flag = true;
                             break;
@@ -285,8 +276,8 @@ namespace AdditionalQuestsCode.Quests
                 }
                 if (flag)
                 {
-                    this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredSpearsCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnSpears();
+                    this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetFoodCountOnPlayer());
+                    this.CheckIfPlayerReadyToReturnFood();
                 }
             }
 
@@ -313,14 +304,6 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            private void OnRaidCompleted(BattleSideEnum battleSide, MapEvent mapEvent)
-            {
-                if (mapEvent.MapEventSettlement == base.QuestGiver.CurrentSettlement)
-                {
-                    base.CompleteQuestWithCancel(this.StageCancelDueToRaidLogText);
-                }
-            }
-
             private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
             {
                 QuestHelper.CheckMinorMajorCoercionAndFailQuest(this, mapEvent, attackerParty);
@@ -343,31 +326,31 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these weapons.", null);
+                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all.", null);
                 thankYouText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
-                TextObject waitingText = new TextObject("We await those weapons, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject waitingText = new TextObject("We await the food, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
 
 
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {SPEARS_AMOUNT} spears?", null), null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {FOOD_AMOUNT} food?", null), null, null).Condition(delegate
                 {
-                    MBTextManager.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    MBTextManager.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnSpearsClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here is is.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnFoodClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
                 }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
-            private bool ReturnSpearsClickableConditions(out TextObject explanation)
+            private bool ReturnFoodClickableConditions(out TextObject explanation)
             {
-                if (this.PlayerAcceptedQuestLog.CurrentProgress >= this.NeededSpears)
+                if (this.PlayerAcceptedQuestLog.CurrentProgress >= this.NeededFood)
                 {
                     explanation = TextObject.Empty;
                     return true;
                 }
-                explanation = new TextObject("You don't have enough spears.", null);
+                explanation = new TextObject("You don't have enough food.", null);
                 return false;
             }
 
@@ -380,33 +363,43 @@ namespace AdditionalQuestsCode.Quests
             private void QuestAcceptedConsequences()
             {
                 base.StartQuest();
-                int requiredSpearsCountOnPlayer = this.GetRequiredSpearsCountOnPlayer();
-                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("Collect one handed polearms", null), requiredSpearsCountOnPlayer, this.NeededSpears, null, false);
+                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("Collect Grain/Fish/Meat.", null), GetFoodCountOnPlayer(), this.NeededFood, null, false);
             }
 
-            private int GetRequiredSpearsCountOnPlayer()
+            private int GetFoodCountOnPlayer()
             {
-                int itemNumber = AdditionalQuestsHelperMethods.GetRequiredWeaponWithTypeCountOnPlayer(WeaponClass.OneHandedPolearm);
-                if (itemNumber > this.NeededSpears)
+                int itemNumber = 0;
+                foreach (ItemRosterElement itemRosterElement in PartyBase.MainParty.ItemRoster)
                 {
-                    TextObject textObject = new TextObject("You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    if (itemRosterElement.EquipmentElement.Item != null)
+                    {
+                        if (itemRosterElement.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || itemRosterElement.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish || itemRosterElement.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat)
+                        {
+                            itemNumber += itemRosterElement.Amount;
+                        }
+                    }
+                }
+
+                if (itemNumber > this.NeededFood)
+                {
+                    TextObject textObject = new TextObject("You have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     InformationManager.AddQuickInformation(textObject, 0, null, "");
                 }
                 return itemNumber;
             }
 
-            private void CheckIfPlayerReadyToReturnSpears()
+            private void CheckIfPlayerReadyToReturnFood()
             {
-                if (this.PlayerHasNeededSpearsLog == null && this.PlayerAcceptedQuestLog.CurrentProgress >= this.NeededSpears)
+                if (this.PlayerHasNeededFoodLog == null && this.PlayerAcceptedQuestLog.CurrentProgress >= this.NeededFood)
                 {
-                    this.PlayerHasNeededSpearsLog = base.AddLog(this.StageTwoPlayerHasSpearsLogText, false);
+                    this.PlayerHasNeededFoodLog = base.AddLog(this.StageTwoPlayerHasFoodLogText, false);
                     return;
                 }
-                if (this.PlayerHasNeededSpearsLog != null && this.PlayerAcceptedQuestLog.CurrentProgress < this.NeededSpears)
+                if (this.PlayerHasNeededFoodLog != null && this.PlayerAcceptedQuestLog.CurrentProgress < this.NeededFood)
                 {
-                    base.RemoveLog(this.PlayerHasNeededSpearsLog);
-                    this.PlayerHasNeededSpearsLog = null;
+                    base.RemoveLog(this.PlayerHasNeededFoodLog);
+                    this.PlayerHasNeededFoodLog = null;
                 }
             }
 
@@ -414,19 +407,43 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.CompleteQuestWithSuccess();
                 base.AddLog(this.StageSuccessLogText, false);
-                TraitLevelingHelper.OnIssueSolvedThroughQuest(base.QuestGiver, new Tuple<TraitObject, int>[]
+
+                // Sell Meat first, then Fish, then Grain
+                // Incrase foodstocks for town
+                int foodSellingNum = NeededFood;
+                foodSellingNum -= AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Meat, 2, foodSellingNum);
+                // Use this foreach to find fish, not a default item
+                foreach (var item in Items.AllTradeGoods)
                 {
-                    new Tuple<TraitObject, int>(DefaultTraits.Mercy, 50),
-                    new Tuple<TraitObject, int>(DefaultTraits.Generosity, 30)
-                });
-                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this.RewardGold, false);
-                // Remove spears
-                AdditionalQuestsHelperMethods.RemoveWeaponsWithTypeFromPlayer(WeaponClass.OneHandedPolearm, NeededSpears);
+                    if (item.GetItemCategory() == DefaultItemCategories.Fish)
+                    {
+                        foodSellingNum -= AdditionalQuestsHelperMethods.SellQuestItemForPlayer(item, 2, foodSellingNum);
+                        break;
+                    }
+                }
+                foodSellingNum -= AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Grain, 2, foodSellingNum);
+                QuestGiver.CurrentSettlement.Town.FoodStocks += 300;
+
+                // Now do player effects eg add reknown
+                Clan.PlayerClan.AddRenown(3f, false);
+
+                // Now add power to notable and give relationship bonus
                 base.QuestGiver.AddPower(25f);
-                Settlement.CurrentSettlement.Prosperity += 50f;
-                Settlement.CurrentSettlement.Militia += 20f;
                 this.RelationshipChangeWithQuestGiver = 10;
-                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
+
+                // bonus to relationship with other notables as well
+                foreach (var hero in QuestGiver.CurrentSettlement.Notables)
+                {
+                    if (hero == QuestGiver)
+                    {
+                        continue;
+                    }
+                    ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver/2, false, false);
+                }
+
+                // also increase settlement prosperity
+                Settlement.CurrentSettlement.Prosperity += 100f;
             }
 
             private void Fail()
@@ -434,19 +451,19 @@ namespace AdditionalQuestsCode.Quests
                 base.QuestGiver.AddPower(-5f);
                 base.QuestGiver.CurrentSettlement.Prosperity += -10f;
                 this.RelationshipChangeWithQuestGiver = -5;
-                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+                ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
             }
 
 
             // Saved vars/logs
-            [SaveableField(10)]
-            private readonly int NeededSpears;
+            [SaveableField(1)]
+            private readonly int NeededFood;
 
-            [SaveableField(20)]
+            [SaveableField(2)]
             private JournalLog PlayerAcceptedQuestLog;
 
-            [SaveableField(30)]
-            private JournalLog PlayerHasNeededSpearsLog;
+            [SaveableField(3)]
+            private JournalLog PlayerHasNeededFoodLog;
         }
 
         // Save data goes into this class

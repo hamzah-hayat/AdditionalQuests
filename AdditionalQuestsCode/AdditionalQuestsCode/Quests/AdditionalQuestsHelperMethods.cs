@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 
 namespace AdditionalQuestsCode.Quests
@@ -100,6 +101,56 @@ namespace AdditionalQuestsCode.Quests
             return num / ((num2 == 0) ? 1 : num2);
         }
 
+        // SellQuestItemOfCategoryForPlayer tries to sell an item (using the item category) for the Average price * sellMultipler
+        // If there is not enough to sell, it will return an integer indicating how much is left to sell.
+        // This will remove items from main players inventory
+        public static int SellQuestItemForPlayer(ItemObject item, float sellMultiplier, int numToSell)
+        {
+            int averagePrice = GetAveragePriceOfItem(item);
+            int stillToSell = numToSell;
 
+            for (int i = PartyBase.MainParty.ItemRoster.Count - 1; i >= 0; i--)
+            {
+                ItemRosterElement itemRosterElement = PartyBase.MainParty.ItemRoster[i];
+                if (itemRosterElement.EquipmentElement.Item != null && itemRosterElement.EquipmentElement.Item == item)
+                {
+                    if (itemRosterElement.Amount < numToSell)
+                    {
+                        // We can only sell the amount here
+                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice * itemRosterElement.Amount, false);
+                        PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -itemRosterElement.Amount);
+                        stillToSell -= itemRosterElement.Amount;
+                    } else
+                    {
+                        // We can sell max amount
+                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice*numToSell, false);
+                        PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -numToSell);
+                        stillToSell -= numToSell;
+                    }
+                }
+            }
+
+            return stillToSell;
+        }
+
+        public static int GetAveragePriceOfItem(ItemObject item)
+        {
+            int fiefNum = 0;
+            int itemPrice = 0;
+            foreach (Settlement settlement in Settlement.All)
+            {
+                if (settlement.IsTown)
+                {
+                    settlement.Town.GetItemPrice(item, null, false);
+                    fiefNum++;
+                }
+                else if (settlement.IsVillage)
+                {
+                    itemPrice += settlement.Village.GetItemPrice(item);
+                    fiefNum++;
+                }
+            }
+            return itemPrice / fiefNum;
+        }
     }
 }
