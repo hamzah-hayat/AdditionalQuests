@@ -266,7 +266,6 @@ namespace AdditionalQuestsCode.Quests
                 {
                     TextObject textObject = new TextObject("{=du3dpMaV}You were unable to defeat {RIVAL_GANG_LEADER.LINK}'s gang, and thus failed to fulfill your commitment to {QUEST_GIVER.LINK}.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
-                    StringHelpers.SetCharacterProperties("RIVAL_GANG_LEADER", this._rivalGangLeader.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -703,46 +702,12 @@ namespace AdditionalQuestsCode.Quests
                 this.ApplyQuestFailConsequences();
             }
 
-            private void OnBattleWonWithBetrayal()
-            {
-                base.AddLog(this._onQuestFailedWithBetrayalLogText, false);
-                if (!this._rivalGangLeader.IsDead)
-                {
-                    ChangeRelationAction.ApplyPlayerRelation(this._rivalGangLeader, 5, true, true);
-                }
-                GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this._rewardGold * 2, false);
-                TraitLevelingHelper.OnIssueSolvedThroughBetrayal(base.QuestGiver, new Tuple<TraitObject, int>[]
-                {
-        new Tuple<TraitObject, int>(DefaultTraits.Honor, -100)
-                });
-                this.ApplyQuestFailConsequences();
-                base.CompleteQuestWithBetrayal(null);
-            }
-
-            private void OnBattleLostWithBetrayal()
-            {
-                base.AddLog(this._onQuestFailedWithBetrayalLogText, false);
-                if (!this._rivalGangLeader.IsDead)
-                {
-                    ChangeRelationAction.ApplyPlayerRelation(this._rivalGangLeader, 5, true, true);
-                }
-                TraitLevelingHelper.OnIssueSolvedThroughBetrayal(base.QuestGiver, new Tuple<TraitObject, int>[]
-                {
-        new Tuple<TraitObject, int>(DefaultTraits.Honor, -100)
-                });
-                base.QuestGiver.CurrentSettlement.Town.Security += -10f;
-                this.ApplyQuestFailConsequences();
-                base.CompleteQuestWithBetrayal(null);
-            }
-
-
             private void OnQuestFailedWithDefeat()
             {
                 base.AddLog(this._onQuestFailedWithDefeatLogText, false);
                 this.ApplyQuestFailConsequences();
                 base.CompleteQuestWithFail(null);
             }
-
 
             private void ApplyQuestFailConsequences()
             {
@@ -752,14 +717,6 @@ namespace AdditionalQuestsCode.Quests
                 if (this.HostileGarrisonParty != null && this.HostileGarrisonParty.IsActive)
                 {
                     DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
-                }
-            }
-
-            protected override void OnFinalize()
-            {
-                if (this._rivalGangLeader != null && this._rivalGangLeader.IsAlive)
-                {
-                    EnterSettlementAction.ApplyForCharacterOnly(this._rivalGangLeader, base.QuestGiver.CurrentSettlement);
                 }
             }
 
