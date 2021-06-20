@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Helpers;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
 using TaleWorlds.CampaignSystem.GameMenus;
@@ -462,6 +463,11 @@ namespace AdditionalQuestsCode.Quests
                 this.HostileGarrisonParty.SetPartyUsedByQuest(true);
                 CharacterObject troopTypeTemplateForDifficulty = this.GetTroopTypeTemplateForDifficulty();
                 this.HostileGarrisonParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 15, false, 0, 0, true, -1);
+
+
+
+
+
                 foreach (TroopRosterElement troopRosterElement in PartyBase.MainParty.MemberRoster.GetTroopRoster())
                 {
                     if (!troopRosterElement.Character.IsPlayerCharacter)
@@ -469,12 +475,15 @@ namespace AdditionalQuestsCode.Quests
                         this._playerTroops.Add(troopRosterElement);
                     }
                 }
+
+
                 PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
+                /*
                 PartyBase.MainParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 20, false, 0, 0, true, -1);
                 if (!this._playerTroops.IsEmpty<TroopRosterElement>())
                 {
                     List<CharacterObject> list = new List<CharacterObject>();
-                    int num = 5;
+                    int num = 15;
                     foreach (TroopRosterElement troopRosterElement2 in from t in this._playerTroops
                                                                         orderby t.Character.Level descending
                                                                         select t)
@@ -496,11 +505,14 @@ namespace AdditionalQuestsCode.Quests
                         PartyBase.MainParty.MemberRoster.AddToCounts(character, 1, false, 0, 0, true, -1);
                     }
                 }
+                */
+
                 PlayerEncounter.RestartPlayerEncounter(this.HostileGarrisonParty.Party, PartyBase.MainParty, false);
                 GameMenu.ActivateGameMenu("town_uprising_quest_after_fight");
                 this._isReadyToBeFinalized = true;
                 PlayerEncounter.Current.ForceAlleyFight = true;
                 PlayerEncounter.StartBattle();
+                PlayerEncounter.StartAlleyFightMission();
             }
 
             private bool town_uprising_quest_wait_duration_is_over_yes_condition(MenuCallbackArgs args)
@@ -547,41 +559,6 @@ namespace AdditionalQuestsCode.Quests
                     HandlePlayerEncounterResult(hasPlayerWon);
                     _isReadyToBeFinalized = false;
                 }
-            }
-
-            private void game_menu_encounter_attack_on_consequence(MenuCallbackArgs args)
-            {
-                int playerMaximumTroopCountForHideoutMission = Campaign.Current.Models.BanditDensityModel.GetPlayerMaximumTroopCountForHideoutMission(MobileParty.MainParty);
-                TroopRoster troopRoster = TroopRoster.CreateDummyTroopRoster();
-                FlattenedTroopRoster strongestAndPriorTroops = MobilePartyHelper.GetStrongestAndPriorTroops(MobileParty.MainParty, playerMaximumTroopCountForHideoutMission, true);
-                troopRoster.Add(strongestAndPriorTroops);
-                args.MenuContext.OpenManageHideoutTroops(troopRoster, new Func<CharacterObject, bool>(this.CanChangeStatusOfTroop), new Action<TroopRoster>(this.OnTroopRosterManageDone));
-            }
-
-            private bool CanChangeStatusOfTroop(CharacterObject character)
-            {
-                return !character.IsPlayerCharacter && !character.IsNotTransferableInHideouts;
-            }
-
-            private void OnTroopRosterManageDone(TroopRoster hideoutTroops)
-            {
-                GameMenu.SwitchToMenu("hideout_place");
-                Settlement.CurrentSettlement.GetComponent<Hideout>().UpdateNextPossibleAttackTime();
-                if (PlayerEncounter.IsActive)
-                {
-                    PlayerEncounter.LeaveEncounter = false;
-                }
-                else
-                {
-                    PlayerEncounter.Start();
-                    PlayerEncounter.Current.SetupFields(PartyBase.MainParty, Settlement.CurrentSettlement.Party);
-                }
-                if (PlayerEncounter.Battle == null)
-                {
-                    PlayerEncounter.StartBattle();
-                    PlayerEncounter.Update();
-                }
-                CampaignMission.OpenHideoutBattleMission(Settlement.CurrentSettlement.GetComponent<Hideout>().SceneName, (hideoutTroops != null) ? hideoutTroops.ToFlattenedRoster() : null);
             }
 
             private void HandlePlayerEncounterResult(bool hasPlayerWon)
@@ -659,9 +636,11 @@ namespace AdditionalQuestsCode.Quests
                     DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
                 }
 
-                // Rebel code used from RebllionsCampaignBehaviour
                 Settlement settlement = QuestGiver.CurrentSettlement;
-                CampaignEventDispatcher.Instance.TownRebelliousStateChanged(settlement.Town, true);
+                settlement.Town.GarrisonParty.MemberRoster.Clear();
+                settlement.Town.Loyalty = 0;
+                settlement.Town.Security = 0;
+
                 base.CompleteQuestWithSuccess();
             }
 
@@ -692,26 +671,6 @@ namespace AdditionalQuestsCode.Quests
                     DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
                 }
             }
-           
-            private const int QuestGiverRelationBonusOnSuccess = 5;
-
-            private const int RivalGangLeaderRelationPenaltyOnSuccess = -5;
-
-            private const int QuestGiverNotablePowerBonusOnSuccess = 10;
-
-            private const int QuestGiverRelationPenaltyOnFail = -15;
-
-            private const int NotablePowerPenaltyOnFail = -10;
-
-            private const int TownSecurityPenaltyOnFail = -10;
-
-            private const int RivalGangLeaderRelationBonusOnBetrayal = 5;
-
-            private const int NumberofRegularEnemyTroops = 15;
-
-            private const int NumberOfRegularAllyTroops = 20;
-
-            private const int MaxNumberOfPlayerOwnedTroops = 5;
 
             [SaveableField(1)]
             private MobileParty HostileGarrisonParty;
