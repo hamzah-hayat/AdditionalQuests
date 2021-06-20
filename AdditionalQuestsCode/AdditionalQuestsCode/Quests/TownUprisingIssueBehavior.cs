@@ -28,7 +28,7 @@ namespace AdditionalQuestsCode.Quests
                 if (currentSettlement.IsTown)
                 {
                     Town town = currentSettlement.Town;
-                    return town.Loyalty <= 30 && town.Security <= 50;
+                    return town.Loyalty <= 80 && town.Security <= 80;
                 }
             }
             return false;
@@ -147,7 +147,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                return IssueSettlement.Town.Loyalty <= 30 && IssueSettlement.Town.Security <= 30;
+                return IssueSettlement.Town.Loyalty <= 90 && IssueSettlement.Town.Security <= 90;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -182,7 +182,6 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void OnGameLoad()
             {
-                throw new NotImplementedException();
             }
         }
 
@@ -385,9 +384,6 @@ namespace AdditionalQuestsCode.Quests
             public void AddGameMenus()
             {
                 TextObject textObject = new TextObject("A milita solider walks up to you and quietly informs you that the men are in position.", null);
-
-
-
                 base.AddGameMenu("town_uprising_quest_before_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_before_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
                 base.AddGameMenu("town_uprising_quest_after_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_after_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
                 base.AddGameMenu("town_uprising_quest_wait_duration_is_over", textObject, new OnInitDelegate(town_uprising_wait_duration_is_over_menu_on_init), GameOverlays.MenuOverlayType.None, GameMenu.MenuFlags.none);
@@ -410,12 +406,12 @@ namespace AdditionalQuestsCode.Quests
                 {
                     Mission.Current.EndMission();
                 }
-                Campaign.Current.GameMenuManager.SetNextMenu("rival_gang_quest_before_fight");
+                Campaign.Current.GameMenuManager.SetNextMenu("town_uprising_quest_before_fight");
             }
 
             private void rival_gang_need_more_time_on_consequence()
             {
-                if (Campaign.Current.CurrentMenuContext.GameMenu.StringId == "rival_gang_quest_wait_duration_is_over")
+                if (Campaign.Current.CurrentMenuContext.GameMenu.StringId == "town_uprising_quest_wait_duration_is_over")
                 {
                     Campaign.Current.GameMenuManager.SetNextMenu("town_wait_menus");
                 }
@@ -490,7 +486,7 @@ namespace AdditionalQuestsCode.Quests
                         int num2 = 0;
                         while (num2 < troopRosterElement2.Number - troopRosterElement2.WoundedNumber && num > 0)
                         {
-                            list.Add(troopRosterElement2.Character);
+                            list.Add(troopRosterElement2.Character); 
                             num--;
                             num2++;
                         }
@@ -536,15 +532,21 @@ namespace AdditionalQuestsCode.Quests
 
             private void town_uprising_quest_before_fight_init(MenuCallbackArgs args)
             {
-                StartCommonAreaBattle();
+                if (_isFinalStage)
+                {
+                    StartCommonAreaBattle();
+                }
             }
 
             private void town_uprising_quest_after_fight_init(MenuCallbackArgs args)
             {
+                if (_isReadyToBeFinalized)
+                {
                     bool hasPlayerWon = PlayerEncounter.Battle.WinningSide == PlayerEncounter.Battle.PlayerSide;
                     PlayerEncounter.Current.FinalizeBattle();
                     HandlePlayerEncounterResult(hasPlayerWon);
                     _isReadyToBeFinalized = false;
+                }
             }
 
             private void game_menu_encounter_attack_on_consequence(MenuCallbackArgs args)
@@ -561,7 +563,6 @@ namespace AdditionalQuestsCode.Quests
                 return !character.IsPlayerCharacter && !character.IsNotTransferableInHideouts;
             }
 
-            // Token: 0x0600324B RID: 12875 RVA: 0x000E495C File Offset: 0x000E2B5C
             private void OnTroopRosterManageDone(TroopRoster hideoutTroops)
             {
                 GameMenu.SwitchToMenu("hideout_place");
@@ -657,6 +658,10 @@ namespace AdditionalQuestsCode.Quests
                 {
                     DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
                 }
+
+                // Rebel code used from RebllionsCampaignBehaviour
+                Settlement settlement = QuestGiver.CurrentSettlement;
+                CampaignEventDispatcher.Instance.TownRebelliousStateChanged(settlement.Town, true);
                 base.CompleteQuestWithSuccess();
             }
 
@@ -687,27 +692,7 @@ namespace AdditionalQuestsCode.Quests
                     DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+           
             private const int QuestGiverRelationBonusOnSuccess = 5;
 
             private const int RivalGangLeaderRelationPenaltyOnSuccess = -5;
