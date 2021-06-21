@@ -56,7 +56,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The Town of {SETTLEMENT} is starving, {MERCHANT_NAME} needs help to restock food and help the people.", null);
+                    TextObject textObject = new TextObject("The town of {SETTLEMENT} is starving, {MERCHANT_NAME} needs help to restock the towns food supplies.", null);
                     textObject.SetTextVariable("SETTLEMENT", base.IssueSettlement.Name);
                     textObject.SetTextVariable("MERCHANT_NAME", base.IssueOwner.Name);
                     return textObject;
@@ -67,7 +67,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("The situation is bad, the town is starving, we've had to ration out all the food coming into the city but its getting harder and harder each day for the people. If this keeps up for much longer, we will either all starve to death or the people will riot.", null);
+                    return new TextObject("The food situation is bad, the town is starving. We've had to ration out all the food coming into the city but its getting harder and harder each day to put meals in front of people. If this keeps up for much longer, we will either all starve to death or the people will riot.", null);
                 }
             }
 
@@ -83,7 +83,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I thank you for your kindness, but we require a much larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you double for each you can bring us. Don't worry, the nobles are paying for this, so it won't be out of the peoples pocket.", null);
+                    TextObject textObject = new TextObject("I thank you for your kindness, but we will require a larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you double the average price for each. We will need at least 300 units of food in total to keep the town supplied.", null);
                     return textObject;
                 }
             }
@@ -124,7 +124,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override IssueFrequency GetFrequency()
             {
-                return IssueBase.IssueFrequency.Common;
+                return IssueBase.IssueFrequency.VeryCommon;
             }
 
             public override bool IssueStayAliveConditions()
@@ -189,7 +189,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You have agreed to bring {FOOD_AMOUNT} food as soon as possible.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You will be paid double the average price of each good on delivery.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
@@ -211,7 +211,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve, {QUEST_GIVER.LINK} is disapointed at your efforts.", null);
+                    TextObject textObject = new TextObject("You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve and {QUEST_GIVER.LINK} is disappointed.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
@@ -223,7 +223,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of of food. You have saved the people from starvation.", null);
+                    TextObject textObject = new TextObject("You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of food. You have saved the people from starvation.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return textObject;
@@ -234,7 +234,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("Your clan is now at war with {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -328,7 +328,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all.", null);
                 thankYouText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
-                TextObject waitingText = new TextObject("We await the food, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject waitingText = new TextObject("We await the food supplies, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
 
 
@@ -448,9 +448,9 @@ namespace AdditionalQuestsCode.Quests
 
             private void Fail()
             {
-                base.QuestGiver.AddPower(-5f);
-                base.QuestGiver.CurrentSettlement.Prosperity += -10f;
-                this.RelationshipChangeWithQuestGiver = -5;
+                base.QuestGiver.AddPower(-25f);
+                base.QuestGiver.CurrentSettlement.Prosperity += -50f;
+                this.RelationshipChangeWithQuestGiver = -10;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
             }
 

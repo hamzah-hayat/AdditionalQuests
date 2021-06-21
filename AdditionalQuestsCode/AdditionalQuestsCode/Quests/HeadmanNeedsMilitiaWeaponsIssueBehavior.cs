@@ -84,8 +84,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I can handle training our men into militia fighters, but I need someone to find spears to fight with, you should be able to buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total.", null);
+                    TextObject textObject = new TextObject("I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_GOLD}{GOLD_ICON} for the spears.", null);
                     textObject.SetTextVariable("SPEARS_AMOUNT", NeededSpearsNum);
+                    textObject.SetTextVariable("REWARD_AMOUNT", RewardGold);
                     return textObject;
                 }
             }
@@ -102,7 +103,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The young lads of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of the men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!.", null);
+                    TextObject textObject = new TextObject("The young'uns of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of them men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
                     return textObject;
                 }
@@ -192,7 +193,6 @@ namespace AdditionalQuestsCode.Quests
                 base.InitializeQuestOnCreation();
             }
 
-
             // All of our text/logs
             public override TextObject Title
             {
@@ -208,10 +208,11 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, the headman of the {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_GOLD}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
+                    textObject.SetTextVariable("REWARD_AMOUNT", RewardGold);
                     return textObject;
                 }
             }
@@ -362,9 +363,9 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these weapons.", null);
+                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears.", null);
                 thankYouText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
-                TextObject waitingText = new TextObject("We await those weapons, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject waitingText = new TextObject("We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
 
 
@@ -451,21 +452,21 @@ namespace AdditionalQuestsCode.Quests
             private void Fail()
             {
                 base.CompleteQuestWithFail();
-                base.QuestGiver.AddPower(-5f);
-                base.QuestGiver.CurrentSettlement.Prosperity += -10f;
+                base.QuestGiver.AddPower(-15f);
+                base.QuestGiver.CurrentSettlement.Prosperity += -25f;
                 this.RelationshipChangeWithQuestGiver = -5;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
             }
 
 
             // Saved vars/logs
-            [SaveableField(10)]
+            [SaveableField(1)]
             private readonly int NeededSpears;
 
-            [SaveableField(20)]
+            [SaveableField(2)]
             private JournalLog PlayerAcceptedQuestLog;
 
-            [SaveableField(30)]
+            [SaveableField(3)]
             private JournalLog PlayerHasNeededSpearsLog;
         }
 
