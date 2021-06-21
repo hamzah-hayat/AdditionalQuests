@@ -31,10 +31,10 @@ namespace AdditionalQuestsCode.Quests
                 Settlement settlement = AdditionalQuestsHelperMethods.FindSuitableHideout(hero);
                 if (this.ConditionsHold(hero) && settlement != null)
                 {
-                    Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon, settlement));
+                    Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common, settlement));
                     return;
                 }
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
             }
         }
 
@@ -47,7 +47,7 @@ namespace AdditionalQuestsCode.Quests
         // Now the Issue
         internal class VillageBanditArmyRaidIssue : IssueBase
         {
-            // Issue Vars
+            // Issue Vars and constructor
             [SaveableField(1)]
             Settlement BanditSettlement;
 
@@ -56,6 +56,7 @@ namespace AdditionalQuestsCode.Quests
                 this.BanditSettlement = banditSettlement;
             }
 
+            // Issue TextObjects
             public override TextObject Title
             {
                 get
@@ -70,7 +71,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("A Bandit army is heading {ISSUE_SETTLEMENT} for a raid. The people of {ISSUE_SETTLEMENT} will need help defending themselves", null);
+                    TextObject textObject = new TextObject("A Bandit army is heading to {ISSUE_SETTLEMENT} for a raid. The people of {ISSUE_SETTLEMENT} need help defending themselves.", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -80,7 +81,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("Grave news has reached me, scouts have informed me that an army of bandits led by a self-proclaimed bandit king are making their way to our village right now, intent on taking everything we have. We've sent word to our nobles but I fear they will not reach them in time.", null);
+                    return new TextObject("Dire news has reached me, my scouts say that an army of rabble led by a self-proclaimed bandit \"king\" are making their way to our village right now, intent on taking everything we have. I've sent word to our nobles for help but I fear it may be to late by the time they get here.", null);
                 }
             }
 
@@ -88,7 +89,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("How about the militia, cant they stop the bandits?", null);
+                    return new TextObject("That is troubling news, how will you defend yourselves?", null);
                 }
             }
 
@@ -96,8 +97,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("They will fight for their homes, but the more people we have the better, the enemy will be mostly comprised of rabble, but they will have some better trained bandits as well. Will you help us defend with your men?", null);
-                    //textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededHardWoodAmount);
+                    TextObject textObject = new TextObject("Our militia will fight for our homes, but the more people we have the better. The enemy will be mostly comprised of rabble, just looters looking for easy money but they will have some better trained bandits as well. Will you help us defend the village?", null);
                     return textObject;
                 }
             }
@@ -114,7 +114,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("An army of bandits are heading their way here right now! We have to run, or hide, anything but stay here! Please, you must help us!", null);
+                    TextObject textObject = new TextObject("I heard that an army of bandits are heading their way here right now! We need to run, or hide or-or anything but stay here! Please, you must help us!", null);
                     return textObject;
                 }
             }
@@ -137,7 +137,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override IssueFrequency GetFrequency()
             {
-                return IssueBase.IssueFrequency.VeryCommon;
+                return IssueBase.IssueFrequency.Common;
             }
 
             public override bool IssueStayAliveConditions()
@@ -176,7 +176,7 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                return new VillageBanditArmyRaidQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold);
+                return new VillageBanditArmyRaidQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(10f), 3000, BanditSettlement);
             }
 
             protected override void OnGameLoad()
@@ -186,8 +186,9 @@ namespace AdditionalQuestsCode.Quests
 
         internal class VillageBanditArmyRaidQuest : QuestBase
         {
-            public VillageBanditArmyRaidQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold) : base(questId, questGiver, duration, rewardGold)
+            public VillageBanditArmyRaidQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold, Settlement banditSettlement) : base(questId, questGiver, duration, rewardGold)
             {
+                BanditSettlement = banditSettlement;
                 BanditArmyMobileParty = null;
                 CreateBanditArmyParty();
                 CurrentQuestState = BanditArmyRaidQuestState.BanditArmyMovingToSettlement;
@@ -202,7 +203,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Bandit army raiding {ISSUE_SETTLEMENT}!", null);
+                    TextObject textObject = new TextObject("Bandit army heading to {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -419,6 +420,12 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.StartQuest();
                 base.AddLog(this.StageOnePlayerAcceptsQuestLogText, false);
+                BanditSettlement.Hideout.IsSpotted = true;
+                BanditSettlement.IsVisible = true;
+                QuestHelper.AddMapArrowFromPointToTarget(new TextObject("Direction to Bandits", null), QuestGiver.CurrentSettlement.Position2D, BanditSettlement.Position2D, 5f, 0.1f, 1056732);
+                TextObject textObject = new TextObject("{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village", null);
+                StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                InformationManager.AddQuickInformation(textObject, 0, null, "");
             }
 
             private void FinishQuest(BanditArmyRaidQuestFinish finishState)
@@ -427,18 +434,43 @@ namespace AdditionalQuestsCode.Quests
                 {
                     case BanditArmyRaidQuestFinish.PlayerDefeatBanditArmy:
                         AddLog(StageSuccessLogText, false);
+                        // Now do player effects eg add reknown
+                        Clan.PlayerClan.AddRenown(5f, false);
+                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this.RewardGold, false);
+                        // Now add power to notable and give relationship bonus
+                        base.QuestGiver.AddPower(25f);
+                        this.RelationshipChangeWithQuestGiver = 10;
+                        // bonus to relationship with other notables as well
+                        foreach (var hero in QuestGiver.CurrentSettlement.Notables)
+                        {
+                            if (hero == QuestGiver)
+                            {
+                                ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver, false, true);
+                            }
+                            ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
+                        }
+                        // also increase settlement prosperity
+                        Settlement.CurrentSettlement.Prosperity += 100f;
+                        CompleteQuestWithSuccess();
                         break;
                     case BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer:
                         AddLog(StageFailureRaidLogText, false);
+                        base.QuestGiver.AddPower(-25f);
+                        this.RelationshipChangeWithQuestGiver = -10;
+                        ChangeVillageStateAction.ApplyBySettingToLooted(QuestGiver.CurrentSettlement, BanditArmyMobileParty);
+                        CompleteQuestWithFail();
                         break;
                     case BanditArmyRaidQuestFinish.CancelDueToVillageRaid:
                         AddLog(StageCancelDueToRaidLogText, false);
+                        CompleteQuestWithCancel();
                         break;
                     case BanditArmyRaidQuestFinish.CancelDueToFactionWar:
                         AddLog(StageCancelDueToWarLogText, false);
+                        CompleteQuestWithCancel();
                         break;
                     case BanditArmyRaidQuestFinish.CancelDueToTimeout:
                         AddLog(StageFailureTimeoutLogText, false);
+                        CompleteQuestWithTimeOut();
                         break;
                     default:
                         break;
@@ -452,31 +484,49 @@ namespace AdditionalQuestsCode.Quests
 
             private void CreateBanditArmyParty()
             {
-                Settlement settlement = SettlementHelper.FindNearestSettlement((Settlement x) => x.IsHideout());
+                // Get our Bandit Settlement Culture
                 Clan clan = null;
-                if (settlement != null)
+                if (BanditSettlement != null)
                 {
-                    CultureObject banditCulture = settlement.Culture;
+                    CultureObject banditCulture = BanditSettlement.Culture;
                     clan = Clan.BanditFactions.FirstOrDefault((Clan x) => x.Culture == banditCulture);
                 }
                 if (clan == null)
                 {
                     clan = Clan.All.GetRandomElementWithPredicate((Clan x) => x.IsBanditFaction);
                 }
-                PartyTemplateObject defaultPartyTemplate = settlement.Culture.BanditBossPartyTemplate;
-                BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, settlement.Hideout, false);
-                TextObject customName = new TextObject("Bandit Army", null);
+
+                // Build the Bandit Party
+                // 50% looters, 50% bandit culture specific, with 30% being tier one, 20% being tier two bandit then one leader
+                // Plus bandit leader
+                // Party size is 50 at player clan tier one, plus 25 per player clan tier
+                //this._banditParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"), this.BanditPartyTroopCount / 4);
+                PartyTemplateObject defaultPartyTemplate = BanditSettlement.Culture.BanditBossPartyTemplate;
+                BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
+                TextObject customName = new TextObject("{BANDIT_CULTURE} Army", null);
+                customName.SetTextVariable("BANDIT_CULTURE", BanditSettlement.Culture.Name);
                 this.BanditArmyMobileParty.Party.Owner = ((clan != null) ? clan.Leader : null);
-                this.BanditArmyMobileParty.InitializeMobileParty(defaultPartyTemplate, settlement.GetPosition2D, 0f, 0f, 50);
+                this.BanditArmyMobileParty.InitializeMobileParty(defaultPartyTemplate, BanditSettlement.GetPosition2D, 0.1f, 0.2f);
                 this.BanditArmyMobileParty.SetCustomName(customName);
+                BanditArmyMobileParty.MemberRoster.Clear();
+
+                int banditPartySize = 25 + Hero.MainHero.Clan.Tier * 25;
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"),(banditPartySize*50)/100);
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), (banditPartySize * 30) / 100);
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), (banditPartySize * 20) / 100);
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1,true);
+
+                // Add some food to party
                 float foodChange = MBMath.Absf(this.BanditArmyMobileParty.FoodChange);
                 int num3 = MBMath.Ceiling(base.QuestDueTime.RemainingDaysFromNow * foodChange);
                 int num4 = num3 / 2;
                 BanditArmyMobileParty.ItemRoster.AddToCounts(DefaultItems.Grain, num4);
                 int number = num3 - num4;
                 BanditArmyMobileParty.ItemRoster.AddToCounts(DefaultItems.Meat, number);
+
+                // Set bandit army quest variables
                 BanditArmyMobileParty.SetPartyUsedByQuest(true);
-                BanditArmyMobileParty.IgnoreByOtherPartiesTill(CampaignTime.Never);
+                BanditArmyMobileParty.IgnoreByOtherPartiesTill(QuestDueTime);
                 BanditArmyMobileParty.Aggressiveness = 0f;
                 BanditArmyMobileParty.Ai.SetDoNotMakeNewDecisions(true);
                 BanditArmyMobileParty.Party.Visuals.SetMapIconAsDirty();
@@ -512,9 +562,12 @@ namespace AdditionalQuestsCode.Quests
             private MobileParty BanditArmyMobileParty;
 
             [SaveableField(2)]
-            private BanditArmyRaidQuestState CurrentQuestState;
+            Settlement BanditSettlement;
 
             [SaveableField(3)]
+            private BanditArmyRaidQuestState CurrentQuestState;
+
+            [SaveableField(4)]
             private JournalLog PlayerAcceptedQuestLog;
 
             // The current state of the Quest
