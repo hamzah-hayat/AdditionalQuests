@@ -1,14 +1,13 @@
-## README
-## Quests (Also known as Issues)
+# README
 ## Implemented Quests
-# Merchant Quests:
+### Merchant Quests:
     - {Settlement} Needs Food
         - Settlement needs food to combat starvation, give food to merchant to complete
           Accepts Grain/Fish/Meat, pays double the current average price for each
           Mission is completed after 300 food given
           Gives food to settlement upon quest completion (stops starvation), plus relationship bonus
 
-# Village Quests:
+### Village Quests:
     - Bandit Army Raiding {Settlement}
         - Bandit Army is spawned at hideout based on player Clan tier, heading to nearby Village, defeat bandit army
           Bandit army consists of 50% bandits based on hideout culture (eg sea raiders, forest bandits etc), and 50% looters
@@ -23,7 +22,7 @@
 
 ## Non-Implemented Quests
 
-# Noble Quests:
+### Noble Quests:
     - {NobleName} wants training battle
         - Noble wants to train his troops (has to many tier 1-2 troops), offers a sparring battle with playe.
           Small battle, ~50 troops per side (change based on difficulty?)
@@ -32,7 +31,7 @@
           upon quest completion, levels up all tier 1-2 troops for player and noble
 
 
-# Artisan:
+### Artisan:
     - Rebel Uprising
         - In a low loyalty town, the people are going to rise up!
           Fight a small battle against the garrinson alongside the militia of the town, on success, force a rebellion in that town
@@ -41,22 +40,22 @@
 
 
 
-# Modding notes
+## Modding notes
 
 When creating Issues, had to choose an unused save ID that didnt clash with existing ones:
 Eg
-<!--
+```
 public class HeadmanNeedsHardWoodIssueTypeDefiner : SaveableTypeDefiner
-{
-    // Ensure the number in the base() is unique
-    public HeadmanNeedsHardWoodIssueTypeDefiner() : base(1000500)
     {
+        // Ensure the number in the base() is unique
+        public HeadmanNeedsHardWoodIssueTypeDefiner() : base(1000500)
+        {
+        }
+        
+        protected override void DefineClassTypes()
+        {
+            base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), 1);
+            base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest), 2);
+        }
     }
-    
-    protected override void DefineClassTypes()
-    {
-        base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssue), 1);
-        base.AddClassDefinition(typeof(HeadmanNeedsHardWoodIssueBehavior.HeadmanNeedsHardWoodIssueQuest), 2);
-    }
-} 
--->
+```
