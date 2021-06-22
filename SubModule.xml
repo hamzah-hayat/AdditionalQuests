@@ -5,8 +5,8 @@ Adds new quests for notables to give out to the player
 -->
 <Module>
     <Name value="Additional Quests" />
-    <Id value="additionalQuests" />
-    <Version value="v1.3.1" />
+    <Id value="AdditionalQuests" />
+    <Version value="v1.0.0" />
     <SingleplayerModule value="true" />
     <MultiplayerModule value="false" />
     <Official value="false" />
