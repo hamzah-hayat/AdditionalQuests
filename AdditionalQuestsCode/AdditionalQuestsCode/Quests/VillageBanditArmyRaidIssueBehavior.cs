@@ -220,11 +220,11 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            private TextObject StageTwoPlayerDefeatedBanditArmy
+            private TextObject StageTwoBanditArmyRaidingSettlement
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have defeated the bandit army. The village of {QUEST_SETTLEMENT} is safe.", null);
+                    TextObject textObject = new TextObject("The Bandit army is raiding {QUEST_SETTLEMENT}! Protect them!.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -290,6 +290,7 @@ namespace AdditionalQuestsCode.Quests
                 CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.SettlementEntered));
                 CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, new Action<Village>(this.OnVillageBeingRaided));
+                CampaignEvents.VillageLooted.AddNonSerializedListener(this, new Action<Village>(this.OnVillageLooted));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
 
@@ -307,13 +308,13 @@ namespace AdditionalQuestsCode.Quests
                         case BanditArmyRaidQuestState.BanditArmyMovingToSettlement:
                             if (!BanditArmyMobileParty.IsCurrentlyGoingToSettlement)
                             {
-                                SetPartyAiAction.GetActionForVisitingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
+                                SetPartyAiAction.GetActionForRaidingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
                             }
                             break;
                         case BanditArmyRaidQuestState.BanditArmyDefeatedPlayer:
                             if (!BanditArmyMobileParty.IsCurrentlyGoingToSettlement)
                             {
-                                SetPartyAiAction.GetActionForVisitingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
+                                SetPartyAiAction.GetActionForRaidingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
                             }
                             break;
                         default:
@@ -338,7 +339,7 @@ namespace AdditionalQuestsCode.Quests
                     // We must have lost so make bandits continue onto village
                     if (!BanditArmyMobileParty.IsCurrentlyGoingToSettlement)
                     {
-                        SetPartyAiAction.GetActionForVisitingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
+                        SetPartyAiAction.GetActionForRaidingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
                     }
                     CurrentQuestState = BanditArmyRaidQuestState.BanditArmyDefeatedPlayer;
                 }
@@ -365,10 +366,26 @@ namespace AdditionalQuestsCode.Quests
 
             private void OnVillageBeingRaided(Village village)
             {
+                if(village.Settlement == QuestGiver.CurrentSettlement && village.Settlement.LastAttackerParty == BanditArmyMobileParty)
+                {
+                    // Send notification to player
+                    AddLog(StageTwoBanditArmyRaidingSettlement, false);
+                    return;
+                }
+
                 if (village.Settlement == QuestGiver.CurrentSettlement)
                 {
                     CompleteQuestWithCancel();
                     FinishQuest(BanditArmyRaidQuestFinish.CancelDueToVillageRaid);
+                }
+            }
+
+            private void OnVillageLooted(Village village)
+            {
+                if (village.Settlement == QuestGiver.CurrentSettlement && village.Settlement.LastAttackerParty == BanditArmyMobileParty)
+                {
+                    base.CompleteQuestWithFail();
+                    FinishQuest(BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer);
                 }
             }
 
@@ -380,8 +397,6 @@ namespace AdditionalQuestsCode.Quests
                     {
                         EndCaptivityAction.ApplyByEscape(Hero.MainHero, null);
                     }
-                    base.CompleteQuestWithFail();
-                    FinishQuest(BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer);
                 }
             }
 
@@ -457,7 +472,6 @@ namespace AdditionalQuestsCode.Quests
                         AddLog(StageFailureRaidLogText, false);
                         base.QuestGiver.AddPower(-25f);
                         this.RelationshipChangeWithQuestGiver = -10;
-                        ChangeVillageStateAction.ApplyBySettingToLooted(QuestGiver.CurrentSettlement, BanditArmyMobileParty);
                         CompleteQuestWithFail();
                         break;
                     case BanditArmyRaidQuestFinish.CancelDueToVillageRaid:
@@ -511,9 +525,9 @@ namespace AdditionalQuestsCode.Quests
                 BanditArmyMobileParty.MemberRoster.Clear();
 
                 int banditPartySize = 25 + Hero.MainHero.Clan.Tier * 25;
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"),(banditPartySize*50)/100);
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), (banditPartySize * 30) / 100);
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), (banditPartySize * 20) / 100);
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"),((banditPartySize*50)/100) + MBRandom.RandomInt(-5,5));
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3));
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2));
                 BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1,true);
 
                 // Add some food to party
@@ -530,16 +544,7 @@ namespace AdditionalQuestsCode.Quests
                 BanditArmyMobileParty.Aggressiveness = 0f;
                 BanditArmyMobileParty.Ai.SetDoNotMakeNewDecisions(true);
                 BanditArmyMobileParty.Party.Visuals.SetMapIconAsDirty();
-                SetPartyAiAction.GetActionForVisitingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
-            }
-
-            private void DestroyBanditArmyParty()
-            {
-                if (BanditArmyMobileParty != null && BanditArmyMobileParty.IsActive)
-                {
-                    DestroyPartyAction.Apply(null, BanditArmyMobileParty);
-                    BanditArmyMobileParty = null;
-                }
+                SetPartyAiAction.GetActionForRaidingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
             }
 
             private void ReleaseBanditArmyParty()
