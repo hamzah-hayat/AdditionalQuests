@@ -15,6 +15,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
+using System.Reflection;
 
 namespace AdditionalQuestsCode.Quests
 {
@@ -462,12 +463,12 @@ namespace AdditionalQuestsCode.Quests
                 EnterSettlementAction.ApplyForParty(this.HostileGarrisonParty, base.QuestGiver.CurrentSettlement);
                 this.HostileGarrisonParty.SetPartyUsedByQuest(true);
                 CharacterObject troopTypeTemplateForDifficulty = this.GetTroopTypeTemplateForDifficulty();
-                this.HostileGarrisonParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 15, false, 0, 0, true, -1);
+                this.HostileGarrisonParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 1, false, 0, 0, true, -1);
 
 
 
 
-
+                /*
                 foreach (TroopRosterElement troopRosterElement in PartyBase.MainParty.MemberRoster.GetTroopRoster())
                 {
                     if (!troopRosterElement.Character.IsPlayerCharacter)
@@ -478,6 +479,7 @@ namespace AdditionalQuestsCode.Quests
 
 
                 PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
+                */
                 /*
                 PartyBase.MainParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 20, false, 0, 0, true, -1);
                 if (!this._playerTroops.IsEmpty<TroopRosterElement>())
@@ -622,24 +624,21 @@ namespace AdditionalQuestsCode.Quests
             {
                 this._onQuestSucceededLog = base.AddLog(this.StageSuccessLogText, false);
                 GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, RewardGold, false);
-                if (base.QuestGiver.IsAlive)
-                {
-                    this.RelationshipChangeWithQuestGiver = 5;
-                    TraitLevelingHelper.OnIssueSolvedThroughQuest(base.QuestGiver, new Tuple<TraitObject, int>[]
-                    {
-            new Tuple<TraitObject, int>(DefaultTraits.Honor, 50)
-                    });
-                    base.QuestGiver.AddPower(10f);
-                }
-                if (this.HostileGarrisonParty != null && this.HostileGarrisonParty.IsActive)
-                {
-                    DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
-                }
+                this.RelationshipChangeWithQuestGiver = 15;
+                base.QuestGiver.AddPower(50f);
 
                 Settlement settlement = QuestGiver.CurrentSettlement;
-                settlement.Town.GarrisonParty.MemberRoster.Clear();
-                settlement.Town.Loyalty = 0;
-                settlement.Town.Security = 0;
+                CampaignBehaviorBase rebellionBehaviour = CampaignBehaviorBase.GetCampaignBehavior<RebellionsCampaignBehavior>();
+                MethodInfo dynMethod = rebellionBehaviour.GetType().GetMethod("StartRebellionEvent", BindingFlags.NonPublic | BindingFlags.Instance);
+                dynMethod.Invoke(rebellionBehaviour, new object[] { settlement });
+
+                if (this.HostileGarrisonParty != null)
+                {
+                    if (this.HostileGarrisonParty.IsActive)
+                    {
+                        DestroyPartyAction.Apply(null, this.HostileGarrisonParty);
+                    }
+                }
 
                 base.CompleteQuestWithSuccess();
             }
