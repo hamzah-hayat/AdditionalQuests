@@ -11,7 +11,7 @@
     - Bandit Army Raiding {Settlement}
         - Bandit Army is spawned at hideout based on player Clan tier, heading to nearby Village, defeat bandit army
           Bandit army consists of 50% bandits based on hideout culture (eg sea raiders, forest bandits etc), and 50% looters
-          If bandits reach village quest is failed instantly (Implement defending militia TODO)
+          If bandits reach village they will begin raiding, stop them from finishing the raid
           Rewards 3000 gold as "bounty" from nobles plus relationship bonus
 
     - {Settlement} Needs Militia Weapons

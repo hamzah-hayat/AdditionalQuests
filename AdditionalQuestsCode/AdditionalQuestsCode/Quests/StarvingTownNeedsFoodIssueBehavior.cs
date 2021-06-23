@@ -252,29 +252,32 @@ namespace AdditionalQuestsCode.Quests
 
             private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
             {
-                bool flag = false;
-                foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
+                bool change = false;
+                if (purchasedItems != null)
                 {
-                    ItemRosterElement item = valueTuple.Item1;
-                    if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
+                    foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
                     {
-                        flag = true;
-                        break;
+                        ItemRosterElement item = valueTuple.Item1;
+                        if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
+                        {
+                            change = true;
+                            break;
+                        }
                     }
                 }
-                if (!flag)
+                if(soldItems!=null && !change)
                 {
                     foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
                     {
                         ItemRosterElement item = valueTuple2.Item1;
                         if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
                         {
-                            flag = true;
+                            change = true;
                             break;
                         }
                     }
                 }
-                if (flag)
+                if (change)
                 {
                     this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetFoodCountOnPlayer());
                     this.CheckIfPlayerReadyToReturnFood();

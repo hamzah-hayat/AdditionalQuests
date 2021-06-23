@@ -84,7 +84,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_GOLD}{GOLD_ICON} for the spears.", null);
+                    TextObject textObject = new TextObject("I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_AMOUNT}{GOLD_ICON} for the spears.", null);
                     textObject.SetTextVariable("SPEARS_AMOUNT", NeededSpearsNum);
                     textObject.SetTextVariable("REWARD_AMOUNT", RewardGold);
                     return textObject;
@@ -281,29 +281,32 @@ namespace AdditionalQuestsCode.Quests
 
             private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
             {
-                bool flag = false;
-                foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
+                bool change = false;
+                if (purchasedItems != null)
                 {
-                    ItemRosterElement item = valueTuple.Item1;
-                    if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
+                    foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
                     {
-                        flag = true;
-                        break;
+                        ItemRosterElement item = valueTuple.Item1;
+                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
+                        {
+                            change = true;
+                            break;
+                        }
                     }
                 }
-                if (!flag)
+                if (soldItems != null && !change)
                 {
                     foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
                     {
                         ItemRosterElement item = valueTuple2.Item1;
                         if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
                         {
-                            flag = true;
+                            change = true;
                             break;
                         }
                     }
                 }
-                if (flag)
+                if (change)
                 {
                     this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredSpearsCountOnPlayer());
                     this.CheckIfPlayerReadyToReturnSpears();
