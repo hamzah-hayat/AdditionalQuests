@@ -208,7 +208,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_GOLD}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_AMOUNT}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
@@ -281,36 +281,8 @@ namespace AdditionalQuestsCode.Quests
 
             private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
             {
-                bool change = false;
-                if (purchasedItems != null)
-                {
-                    foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
-                    {
-                        ItemRosterElement item = valueTuple.Item1;
-                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
-                        {
-                            change = true;
-                            break;
-                        }
-                    }
-                }
-                if (soldItems != null && !change)
-                {
-                    foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
-                    {
-                        ItemRosterElement item = valueTuple2.Item1;
-                        if (item.EquipmentElement.Item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedPolearm)
-                        {
-                            change = true;
-                            break;
-                        }
-                    }
-                }
-                if (change)
-                {
-                    this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredSpearsCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnSpears();
-                }
+                this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetRequiredSpearsCountOnPlayer());
+                this.CheckIfPlayerReadyToReturnSpears();
             }
 
             private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)

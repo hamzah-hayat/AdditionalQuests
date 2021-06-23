@@ -252,36 +252,8 @@ namespace AdditionalQuestsCode.Quests
 
             private void OnPlayerInventoryExchange(List<ValueTuple<ItemRosterElement, int>> purchasedItems, List<ValueTuple<ItemRosterElement, int>> soldItems, bool isTrading)
             {
-                bool change = false;
-                if (purchasedItems != null)
-                {
-                    foreach (ValueTuple<ItemRosterElement, int> valueTuple in purchasedItems)
-                    {
-                        ItemRosterElement item = valueTuple.Item1;
-                        if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
-                        {
-                            change = true;
-                            break;
-                        }
-                    }
-                }
-                if(soldItems!=null && !change)
-                {
-                    foreach (ValueTuple<ItemRosterElement, int> valueTuple2 in soldItems)
-                    {
-                        ItemRosterElement item = valueTuple2.Item1;
-                        if (item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Grain || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Meat || item.EquipmentElement.Item.ItemCategory == DefaultItemCategories.Fish)
-                        {
-                            change = true;
-                            break;
-                        }
-                    }
-                }
-                if (change)
-                {
-                    this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetFoodCountOnPlayer());
-                    this.CheckIfPlayerReadyToReturnFood();
-                }
+                this.PlayerAcceptedQuestLog.UpdateCurrentProgress(this.GetFoodCountOnPlayer());
+                this.CheckIfPlayerReadyToReturnFood();
             }
 
             private void OnMercenaryClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom)
