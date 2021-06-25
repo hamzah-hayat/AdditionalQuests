@@ -83,7 +83,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I thank you for your kindness, but we will require a larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you double the average price for each. We will need at least 300 units of food in total to keep the town supplied.", null);
+                    TextObject textObject = new TextObject("I thank you for your kindness, but we will require a larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you triple the average price for each. We will need at least 300 units of food in total to keep the town supplied.", null);
                     return textObject;
                 }
             }
@@ -189,7 +189,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You will be paid double the average price of each good on delivery.", null);
+                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You will be paid triple the average price of each good on delivery.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
@@ -386,17 +386,41 @@ namespace AdditionalQuestsCode.Quests
                 // Sell Meat first, then Fish, then Grain
                 // Incrase foodstocks for town
                 int foodSellingNum = NeededFood;
-                foodSellingNum -= AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Meat, 2, foodSellingNum);
+                int priceMultiplier = 3;
+
+
+                int numSold = AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Meat, priceMultiplier, foodSellingNum); //Returns numSold, which is how many we were able to sell
+                foodSellingNum -= numSold;
+
+                TextObject sellMeatText = new TextObject("You gave {FOOD_AMOUNT} meat. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
+                sellMeatText.SetTextVariable("FOOD_AMOUNT", numSold);
+                sellMeatText.SetTextVariable("GOLD_AMOUNT", numSold * AdditionalQuestsHelperMethods.GetAveragePriceOfItem(DefaultItems.Meat) * priceMultiplier);
+                base.AddLog(sellMeatText);
+
                 // Use this foreach to find fish, not a default item
                 foreach (var item in Items.AllTradeGoods)
                 {
                     if (item.GetItemCategory() == DefaultItemCategories.Fish)
                     {
-                        foodSellingNum -= AdditionalQuestsHelperMethods.SellQuestItemForPlayer(item, 2, foodSellingNum);
+                        numSold = AdditionalQuestsHelperMethods.SellQuestItemForPlayer(item, priceMultiplier, foodSellingNum);
+                        foodSellingNum -= numSold;
+                        TextObject sellFishText = new TextObject("You gave {FOOD_AMOUNT} fish. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
+                        sellFishText.SetTextVariable("FOOD_AMOUNT", numSold);
+                        sellFishText.SetTextVariable("GOLD_AMOUNT", numSold * AdditionalQuestsHelperMethods.GetAveragePriceOfItem(item) * priceMultiplier);
+                        base.AddLog(sellFishText);
                         break;
                     }
                 }
-                foodSellingNum -= AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Grain, 2, foodSellingNum);
+
+                numSold = AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Grain, priceMultiplier, foodSellingNum);
+                foodSellingNum -= numSold;
+                TextObject sellGrainText = new TextObject("You gave {FOOD_AMOUNT} grain. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
+                sellGrainText.SetTextVariable("FOOD_AMOUNT", numSold);
+                sellGrainText.SetTextVariable("GOLD_AMOUNT", numSold * AdditionalQuestsHelperMethods.GetAveragePriceOfItem(DefaultItems.Grain) * priceMultiplier);
+                base.AddLog(sellGrainText);
+
+
+
                 QuestGiver.CurrentSettlement.Town.FoodStocks += 300;
 
                 // Now do player effects eg add reknown

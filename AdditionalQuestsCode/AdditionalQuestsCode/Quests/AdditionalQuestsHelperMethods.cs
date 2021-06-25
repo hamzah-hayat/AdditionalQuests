@@ -104,10 +104,10 @@ namespace AdditionalQuestsCode.Quests
         // SellQuestItemOfCategoryForPlayer tries to sell an item (using the item category) for the Average price * sellMultipler
         // If there is not enough to sell, it will return an integer indicating how much is left to sell.
         // This will remove items from main players inventory
-        public static int SellQuestItemForPlayer(ItemObject item, float sellMultiplier, int numToSell)
+        public static int SellQuestItemForPlayer(ItemObject item, int sellMultiplier, int numToSell)
         {
             int averagePrice = GetAveragePriceOfItem(item);
-            int stillToSell = numToSell;
+            int numSold = 0;
 
             for (int i = PartyBase.MainParty.ItemRoster.Count - 1; i >= 0; i--)
             {
@@ -117,20 +117,20 @@ namespace AdditionalQuestsCode.Quests
                     if (itemRosterElement.Amount < numToSell)
                     {
                         // We can only sell the amount here
-                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice * itemRosterElement.Amount, false);
+                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice * itemRosterElement.Amount * sellMultiplier, false);
                         PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -itemRosterElement.Amount);
-                        stillToSell -= itemRosterElement.Amount;
+                        numSold += itemRosterElement.Amount;
                     } else
                     {
                         // We can sell max amount
-                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice*numToSell, false);
+                        GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice * numToSell * sellMultiplier, false);
                         PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -numToSell);
-                        stillToSell -= numToSell;
+                        numSold += numToSell;
                     }
                 }
             }
 
-            return stillToSell;
+            return numSold;
         }
 
         public static int GetAveragePriceOfItem(ItemObject item)
@@ -141,7 +141,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 if (settlement.IsTown)
                 {
-                    settlement.Town.GetItemPrice(item, null, false);
+                    itemPrice += settlement.Town.GetItemPrice(item);
                     fiefNum++;
                 }
                 else if (settlement.IsVillage)
