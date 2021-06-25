@@ -456,11 +456,12 @@ namespace AdditionalQuestsCode.Quests
                         base.QuestGiver.AddPower(25f);
                         this.RelationshipChangeWithQuestGiver = 10;
                         // bonus to relationship with other notables as well
+                        ChangeRelationAction.ApplyPlayerRelation(QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
                         foreach (var hero in QuestGiver.CurrentSettlement.Notables)
                         {
                             if (hero == QuestGiver)
                             {
-                                ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver, false, true);
+                                continue;
                             }
                             ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
                         }
