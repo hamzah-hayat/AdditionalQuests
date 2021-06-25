@@ -457,7 +457,16 @@ namespace AdditionalQuestsCode.Quests
                         this.RelationshipChangeWithQuestGiver = 20;
                         ChangeRelationAction.ApplyPlayerRelation(QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
                         // also increase settlement prosperity
-                        Settlement.CurrentSettlement.Prosperity += 100f;
+                        // bonus to relationship with other notables as well
+                        foreach (var hero in QuestGiver.CurrentSettlement.Notables)
+                        {
+                            if (hero == QuestGiver)
+                            {
+                                continue;
+                            }
+                            ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
+                        }
+                        QuestGiver.CurrentSettlement.Prosperity += 100f;
                         CompleteQuestWithSuccess();
                         break;
                     case BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer:
