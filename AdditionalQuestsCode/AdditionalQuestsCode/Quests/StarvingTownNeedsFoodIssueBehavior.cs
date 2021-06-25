@@ -428,18 +428,8 @@ namespace AdditionalQuestsCode.Quests
 
                 // Now add power to notable and give relationship bonus
                 base.QuestGiver.AddPower(25f);
-                this.RelationshipChangeWithQuestGiver = 10;
+                this.RelationshipChangeWithQuestGiver = 15;
                 ChangeRelationAction.ApplyPlayerRelation(QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
-
-                // bonus to relationship with other notables as well
-                foreach (var hero in QuestGiver.CurrentSettlement.Notables)
-                {
-                    if (hero == QuestGiver)
-                    {
-                        continue;
-                    }
-                    ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver/2, false, false);
-                }
 
                 // also increase settlement prosperity
                 Settlement.CurrentSettlement.Prosperity += 100f;
