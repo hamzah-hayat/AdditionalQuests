@@ -19,6 +19,12 @@
           Increases number of militia in village by 20
           Quest only occurs in villages with less then 15 militia
 
+Artisan:
+    - Rebellion in {ISSUE_SETTLEMENT}!
+        - In a low loyalty town (<50 ), the people are going to rise up!
+          Fight a small battle against the garrinson alongside the militia of the town, on success, force a rebellion in that town
+          Currently a 10vs10 due to alley fight limitation, might up it later if I figure out how to increase the size of the battle
+
 
 ## Non-Implemented Quests
 
