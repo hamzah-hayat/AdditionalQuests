@@ -14,13 +14,21 @@ namespace AdditionalQuestsCode
             this.AddBehaviors(gameStarter);
         }
 
+        public override void OnGameLoaded(Game game, object initializerObject)
+        {
+            CampaignGameStarter gameStarter = (CampaignGameStarter)initializerObject;
+            AddBehaviors(gameStarter);
+        }
+
         private void AddBehaviors(CampaignGameStarter gameStarter)
         {
             gameStarter.AddBehavior(new HeadmanNeedsMilitiaWeaponsIssueBehavior());
             gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
             gameStarter.AddBehavior(new VillageBanditArmyRaidIssueBehavior());
             //gameStarter.AddBehavior(new NobleWantsTrainingBattleIssueBehavior());
-            //gameStarter.AddBehavior(new TownUprisingIssueBehavior());
+            gameStarter.AddBehavior(new TownUprisingIssueBehavior());
         }
+
+
     }
 }

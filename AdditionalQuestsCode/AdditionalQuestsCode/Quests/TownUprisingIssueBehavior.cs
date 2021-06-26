@@ -30,7 +30,7 @@ namespace AdditionalQuestsCode.Quests
                 if (currentSettlement.IsTown)
                 {
                     Town town = currentSettlement.Town;
-                    return town.Loyalty <= 80 && town.Security <= 80;
+                    return town.Loyalty <= 50;
                 }
             }
             return false;
@@ -64,7 +64,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The people of {ISSUE_SETTLEMENT} are rebelling!", null);
+                    TextObject textObject = new TextObject("Rebellion in {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -84,7 +84,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I trust you, so listen closely. The people of {ISSUE_SETTLEMENT} have been mistreated for far to long, so I have been organising a \"replacement\" of the clan that runs this town. Most of the milita are with me, and I have several captains willing to lead the town. We just need help in convincing the garrinson who are still loyal.", null);
+                    TextObject textObject = new TextObject("I trust you, so listen closely. The people of {ISSUE_SETTLEMENT} have been mistreated for far to long, so I have been organising a \"replacement\" of the clan that runs this town. Most of the milita are with me, and I have several captains willing to lead as our leaders. We just need help in convincing the garrison who are still loyal to our current rulers.", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -102,8 +102,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("We want to make this a bloodless affair, but we will still need to fight the remaining loyalist garrinson here in the town. Meet me here next midnight with your men, and we will start the coup. I will bring my men as well.", null);
-                    //textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededHardWoodAmount);
+                    TextObject textObject = new TextObject("We want to takeover with as little blood spilled as possible, but we will still need to fight the remaining loyalist garrison here in the town. Meet me here with your meen at midnight, and we will start the coup. I will bring my men as well.", null);
                     return textObject;
                 }
             }
@@ -112,7 +111,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("Understood, I will meet with you shortly.", null);
+                    return new TextObject("Understood, I will meet with you soon.", null);
                 }
             }
 
@@ -144,12 +143,12 @@ namespace AdditionalQuestsCode.Quests
 
             public override IssueFrequency GetFrequency()
             {
-                return IssueBase.IssueFrequency.VeryCommon;
+                return IssueBase.IssueFrequency.Common;
             }
 
             public override bool IssueStayAliveConditions()
             {
-                return IssueSettlement.Town.Loyalty <= 90 && IssueSettlement.Town.Security <= 90;
+                return IssueSettlement.Town.Loyalty <= 60;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -431,6 +430,7 @@ namespace AdditionalQuestsCode.Quests
                 }).CloseDialog(), null);
             }
 
+            /*
             private CharacterObject GetTroopTypeTemplateForDifficulty()
             {
                 int difficultyRange = MBMath.ClampInt(MathF.Ceiling(1 / 0.1f), 1, 10);
@@ -453,22 +453,27 @@ namespace AdditionalQuestsCode.Quests
                 }
                 return characterObject;
             }
+            */
 
             private void StartCommonAreaBattle()
             {
+                // Create Garrison party
+                PartyTemplateObject cultureGarrisonTemplate = QuestGiver.CurrentSettlement.Culture.DefaultPartyTemplate;
                 this.HostileGarrisonParty = MobileParty.CreateParty("garrison_party", null, null);
                 TextObject textObject = new TextObject("Garrison", null);
                 this.HostileGarrisonParty.InitializeMobileParty(new TroopRoster(this.HostileGarrisonParty.Party), new TroopRoster(this.HostileGarrisonParty.Party), base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f);
+                HostileGarrisonParty.InitializeMobileParty(cultureGarrisonTemplate, base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f, 30);
                 this.HostileGarrisonParty.SetCustomName(textObject);
                 EnterSettlementAction.ApplyForParty(this.HostileGarrisonParty, base.QuestGiver.CurrentSettlement);
                 this.HostileGarrisonParty.SetPartyUsedByQuest(true);
-                CharacterObject troopTypeTemplateForDifficulty = this.GetTroopTypeTemplateForDifficulty();
-                this.HostileGarrisonParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 1, false, 0, 0, true, -1);
 
 
+                // Player party consists of 15 milita and 15 of players best troops
+                PartyTemplateObject militiaPartyTemplate = QuestGiver.CurrentSettlement.Culture.MilitiaPartyTemplate;
+                FlattenedTroopRoster bestTroops = MobilePartyHelper.GetStrongestAndPriorTroops(PartyBase.MainParty.MobileParty, 14, false);
 
 
-                /*
+                // Store our existing troops in _playerTroops
                 foreach (TroopRosterElement troopRosterElement in PartyBase.MainParty.MemberRoster.GetTroopRoster())
                 {
                     if (!troopRosterElement.Character.IsPlayerCharacter)
@@ -477,37 +482,9 @@ namespace AdditionalQuestsCode.Quests
                     }
                 }
 
-
                 PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
-                */
-                /*
-                PartyBase.MainParty.MemberRoster.AddToCounts(troopTypeTemplateForDifficulty, 20, false, 0, 0, true, -1);
-                if (!this._playerTroops.IsEmpty<TroopRosterElement>())
-                {
-                    List<CharacterObject> list = new List<CharacterObject>();
-                    int num = 15;
-                    foreach (TroopRosterElement troopRosterElement2 in from t in this._playerTroops
-                                                                        orderby t.Character.Level descending
-                                                                        select t)
-                    {
-                        if (num <= 0)
-                        {
-                            break;
-                        }
-                        int num2 = 0;
-                        while (num2 < troopRosterElement2.Number - troopRosterElement2.WoundedNumber && num > 0)
-                        {
-                            list.Add(troopRosterElement2.Character); 
-                            num--;
-                            num2++;
-                        }
-                    }
-                    foreach (CharacterObject character in list)
-                    {
-                        PartyBase.MainParty.MemberRoster.AddToCounts(character, 1, false, 0, 0, true, -1);
-                    }
-                }
-                */
+                PartyBase.MainParty.MemberRoster.Add(bestTroops);
+                PartyBase.MainParty.MobileParty.AddElementToMemberRoster(militiaPartyTemplate.Stacks[0].Character, 15);
 
                 PlayerEncounter.RestartPlayerEncounter(this.HostileGarrisonParty.Party, PartyBase.MainParty, false);
                 GameMenu.ActivateGameMenu("town_uprising_quest_after_fight");
@@ -568,23 +545,6 @@ namespace AdditionalQuestsCode.Quests
                 PlayerEncounter.Finish(false);
                 EncounterManager.StartSettlementEncounter(MobileParty.MainParty, base.QuestGiver.CurrentSettlement);
                 GameMenu.SwitchToMenu("town");
-                CharacterObject troopTypeTemplateForDifficulty = this.GetTroopTypeTemplateForDifficulty();
-                using (List<TroopRosterElement>.Enumerator enumerator = PartyBase.MainParty.MemberRoster.GetTroopRoster().GetEnumerator())
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        TroopRosterElement troop = enumerator.Current;
-                        if (troop.Character != troopTypeTemplateForDifficulty)
-                        {
-                            int num = this._playerTroops.FindIndex((TroopRosterElement t) => t.Character == troop.Character);
-                            if (num != -1)
-                            {
-                                this._playerTroops.RemoveAt(num);
-                                this._playerTroops.Insert(num, troop);
-                            }
-                        }
-                    }
-                }
                 PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
                 foreach (TroopRosterElement troopRosterElement in this._playerTroops)
                 {
@@ -616,7 +576,7 @@ namespace AdditionalQuestsCode.Quests
             private void OnQuestAccepted()
             {
                 base.StartQuest();
-                this._onQuestStartedLog = base.AddLog(StageOnePlayerAcceptsQuestLogText, false);
+                this.PlayerAcceptedQuestLog = base.AddLog(StageOnePlayerAcceptsQuestLogText, false);
                 Campaign.Current.ConversationManager.AddDialogFlow(this.GetQuestGiverPreparationCompletedDialogFlow(), this);
             }
 
@@ -689,8 +649,7 @@ namespace AdditionalQuestsCode.Quests
             [SaveableField(6)]
             private JournalLog PlayerAcceptedQuestLog;
 
-            private JournalLog _onQuestStartedLog;
-
+            [SaveableField(7)]
             private JournalLog _onQuestSucceededLog;
         }
 
