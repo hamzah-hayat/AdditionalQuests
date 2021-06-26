@@ -462,15 +462,15 @@ namespace AdditionalQuestsCode.Quests
                 this.HostileGarrisonParty = MobileParty.CreateParty("garrison_party", null, null);
                 TextObject textObject = new TextObject("Garrison", null);
                 this.HostileGarrisonParty.InitializeMobileParty(new TroopRoster(this.HostileGarrisonParty.Party), new TroopRoster(this.HostileGarrisonParty.Party), base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f);
-                HostileGarrisonParty.InitializeMobileParty(cultureGarrisonTemplate, base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f, 30);
+                HostileGarrisonParty.InitializeMobileParty(cultureGarrisonTemplate, base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f, 10);
                 this.HostileGarrisonParty.SetCustomName(textObject);
                 EnterSettlementAction.ApplyForParty(this.HostileGarrisonParty, base.QuestGiver.CurrentSettlement);
                 this.HostileGarrisonParty.SetPartyUsedByQuest(true);
 
 
-                // Player party consists of 15 milita and 15 of players best troops
+                // Player party consists of 5 milita and 4 of players best troops + hero
                 PartyTemplateObject militiaPartyTemplate = QuestGiver.CurrentSettlement.Culture.MilitiaPartyTemplate;
-                FlattenedTroopRoster bestTroops = MobilePartyHelper.GetStrongestAndPriorTroops(PartyBase.MainParty.MobileParty, 14, false);
+                FlattenedTroopRoster bestTroops = MobilePartyHelper.GetStrongestAndPriorTroops(PartyBase.MainParty.MobileParty, 4, false);
 
 
                 // Store our existing troops in _playerTroops
@@ -484,7 +484,7 @@ namespace AdditionalQuestsCode.Quests
 
                 PartyBase.MainParty.MemberRoster.RemoveIf((TroopRosterElement t) => !t.Character.IsPlayerCharacter);
                 PartyBase.MainParty.MemberRoster.Add(bestTroops);
-                PartyBase.MainParty.MobileParty.AddElementToMemberRoster(militiaPartyTemplate.Stacks[0].Character, 15);
+                PartyBase.MainParty.MobileParty.AddElementToMemberRoster(militiaPartyTemplate.Stacks[0].Character, 5);
 
                 PlayerEncounter.RestartPlayerEncounter(this.HostileGarrisonParty.Party, PartyBase.MainParty, false);
                 GameMenu.ActivateGameMenu("town_uprising_quest_after_fight");
