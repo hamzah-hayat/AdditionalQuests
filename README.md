@@ -48,6 +48,10 @@ Artisan:
 
 ## Modding notes
 
+The code is included in the folder "src"
+You'll have to create a class project in visual studio, but you can then pull them in and use them however you want
+Feel free to copy paste or just use bits and pieces.
+
 When creating Issues, had to choose an unused save ID that didnt clash with existing ones:
 Eg
 ```
