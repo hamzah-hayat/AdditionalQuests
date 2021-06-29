@@ -41,14 +41,6 @@ Nexus Mods Link: https://www.nexusmods.com/mountandblade2bannerlord/mods/3066?ta
           upon quest completion, levels up all tier 1-2 troops for player and noble
 
 
-### Artisan:
-    - Rebel Uprising
-        - In a low loyalty town, the people are going to rise up!
-          Fight a small battle against the garrinson alongside the militia of the town, on success, force a rebellion in that town
-          Upon quest sucess, force rebellion in town, also increase Artisan power
-          Make war between player and faction that controlled town? Not sure
-
-
 
 ## Modding notes
 
