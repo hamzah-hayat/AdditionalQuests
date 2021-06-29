@@ -1,4 +1,8 @@
 # README
+
+## Mod Information
+Nexus Mods Link: https://www.nexusmods.com/mountandblade2bannerlord/mods/3066?tab=description&BH=0
+
 ## Implemented Quests
 ### Merchant Quests:
     - {Settlement} Needs Food
