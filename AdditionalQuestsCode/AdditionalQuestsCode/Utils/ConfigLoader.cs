@@ -1,7 +1,5 @@
 ﻿using Bannerlord.BUTR.Shared.Helpers;
 using System.IO;
-using System.Linq;
-using TaleWorlds.Engine;
 
 namespace AdditionalQuestsCode.Utils
 {
@@ -19,7 +17,7 @@ namespace AdditionalQuestsCode.Utils
         }
         private static void BuildVariables()
         {
-            IsMCMLoaded();
+            Helpers.IsMCMLoaded();
             CheckMcmConfig();
         }
 
@@ -36,16 +34,6 @@ namespace AdditionalQuestsCode.Utils
                 }
             } else {
                 Logging.MessageError("MCM Module is not loaded");
-            }
-        }
-
-        private static void IsMCMLoaded()
-        {
-            var modnames = Utilities.GetModulesNames().ToList();
-            if (modnames.Contains("Bannerlord.MBOptionScreen"))
-            {
-                Statics.MCMModuleLoaded = true;
-                Logging.MessageDebug("MCM Module is loaded");
             }
         }
 

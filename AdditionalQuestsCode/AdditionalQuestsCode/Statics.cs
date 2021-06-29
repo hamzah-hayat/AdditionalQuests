@@ -14,7 +14,6 @@ namespace AdditionalQuestsCode
         public const string logPath = @"..\\..\\Modules\\" + ModuleFolder + "\\AdditionalQuestsCodeLogs.txt";
         public const string ConfigFilePath = @"..\\..\\Modules\\" + ModuleFolder + "\\config.json";
         public static string PrePrend { get; set; } = DisplayName;
-        public const string HarmonyId = ModuleFolder + ".harmony";
         public static string GameVersion = ApplicationVersionHelper.GameVersionStr();
         public static string ModVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
