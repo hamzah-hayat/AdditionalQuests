@@ -6,16 +6,16 @@
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <ModuleName>AdditionalQuests</ModuleName>
-    <GameFolder>D:\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
+    <GameFolder>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
     <Authors>chickenboy10 and ScottieKnowz</Authors>
     <PackageIcon></PackageIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>C:\dev\bannerlord\additional-quests\bin\Win64_Shipping_Client</OutputPath>
+    <OutputPath>C:\Users\Hamzah\Documents\GitHub\AdditionalQuests\bin\Win64_Shipping_Client</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>C:\dev\bannerlord\additional-quests\bin\Win64_Shipping_Client</OutputPath>
+    <OutputPath>C:\Users\Hamzah\Documents\GitHub\AdditionalQuests\bin\Win64_Shipping_Client</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,10 +39,10 @@
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
-	<Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
-  <ItemGroup>    
+  <ItemGroup>
     <PackageReference Include="Bannerlord.BUTR.Shared" Version="1.6.1.39">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -55,10 +55,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Bannerlord.BuildResources" Version="1.0.0.33">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Bannerlord.ButterLib" Version="1.0.21" IncludeAssets="compile" />
     <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.1.1" IncludeAssets="compile" />
     <PackageReference Include="Bannerlord.MCM" Version="4.3.4" IncludeAssets="compile" />
@@ -67,4 +63,9 @@
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
 </Project>
