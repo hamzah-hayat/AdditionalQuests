@@ -12,7 +12,7 @@ namespace AdditionalQuestsCode.Utils
     {
         public static bool logToFile = true;
         public static bool Debug = true;
-        public static string PrePrend = "ScottiesQuests";
+        public static string PrePrend = "AdditionalQuests";
 
         private static void ShowMessage(string message, Color messageColor, bool logToFile = false)
         {
