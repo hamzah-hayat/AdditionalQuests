@@ -525,7 +525,7 @@ namespace AdditionalQuestsCode.Quests
                 this.BanditArmyMobileParty.SetCustomName(customName);
                 BanditArmyMobileParty.MemberRoster.Clear();
 
-                int banditPartySize = 25 + Hero.MainHero.Clan.Tier * 25;
+                int banditPartySize = 50 + Hero.MainHero.Clan.Tier * 50;
                 BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"),((banditPartySize*50)/100) + MBRandom.RandomInt(-5,5));
                 BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3));
                 BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2));
