@@ -3,7 +3,7 @@
 ### Merchant Quests:
     - {Settlement} Needs Food
         - Settlement needs food to combat starvation, give food to merchant to complete
-          Accepts Grain/Fish/Meat, pays double the current average price for each
+          Accepts Grain/Fish/Meat, pays triple the current average price for each
           Mission is completed after 300 food given
           Gives food to settlement upon quest completion (stops starvation), plus relationship bonus
 
@@ -19,7 +19,7 @@
           Increases number of militia in village by 20
           Quest only occurs in villages with less then 15 militia
 
-Artisan:
+### Artisan Quests:
     - Rebellion in {ISSUE_SETTLEMENT}!
         - In a low loyalty town (<50 ), the people are going to rise up!
           Fight a small battle against the garrinson alongside the militia of the town, on success, force a rebellion in that town
@@ -48,9 +48,8 @@ Artisan:
 
 ## Modding notes
 
-The code is included in the folder "src"
-You'll have to create a class project in visual studio, but you can then pull them in and use them however you want
-Feel free to copy paste or just use bits and pieces.
+The code is included in the folder AdditionalQuestsCode (including solution for visual studio)
+You might need to redo the references based on where you installed Bannerlord
 
 When creating Issues, had to choose an unused save ID that didnt clash with existing ones:
 Eg
