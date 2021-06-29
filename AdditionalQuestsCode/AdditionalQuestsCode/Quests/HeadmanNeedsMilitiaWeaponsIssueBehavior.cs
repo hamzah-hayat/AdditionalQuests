@@ -68,7 +68,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("I'm currently organising the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury.", null);
+                    return new TextObject("I'm currently organizing the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury.", null);
                 }
             }
 
