@@ -61,7 +61,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Bandit army heading to {ISSUE_SETTLEMENT}!", null);
+                    TextObject textObject = new TextObject("Bandit Army Heading to {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }

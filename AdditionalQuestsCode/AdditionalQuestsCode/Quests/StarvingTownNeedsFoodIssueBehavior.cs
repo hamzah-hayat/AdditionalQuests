@@ -46,7 +46,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Food crisis in {ISSUE_SETTLEMENT}", null);
+                    TextObject textObject = new TextObject("Food Crisis in {ISSUE_SETTLEMENT}", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }

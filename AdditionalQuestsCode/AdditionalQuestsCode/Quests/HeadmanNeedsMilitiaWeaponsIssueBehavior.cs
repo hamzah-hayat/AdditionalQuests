@@ -48,7 +48,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} needs spears for militia", null);
+                    TextObject textObject = new TextObject("{ISSUE_SETTLEMENT} Needs Spears for Militia", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }

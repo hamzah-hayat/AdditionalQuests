@@ -61,7 +61,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{NOBLE_NAME} wants a training battle", null);
+                    TextObject textObject = new TextObject("{NOBLE_NAME} Wants a Training Battle", null);
                     textObject.SetTextVariable("NOBLE_NAME", base.IssueOwner.Name);
                     return textObject;
                 }
