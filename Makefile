@@ -3,4 +3,11 @@ all:
 
 full:
 	rm -f ../AdditionalQuests.zip
-	zip ../AdditionalQuests.zip -r ./bin SubModule.xml README.md LICENSE
+	# Create Temp folder for zipping
+	mkdir AdditionalQuests
+	cp -r ./bin AdditionalQuests
+	cp SubModule.xml AdditionalQuests
+	cp README.md AdditionalQuests
+	cp LICENSE AdditionalQuests
+	zip ../AdditionalQuests.zip -r AdditionalQuests
+	rm -r AdditionalQuests
