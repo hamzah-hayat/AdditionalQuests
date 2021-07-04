@@ -28,6 +28,12 @@ namespace AdditionalQuestsCode
 
         private void AddBehaviors(CampaignGameStarter gameStarter)
         {
+            // Custom Battle calls CampaignStart on submodules but gameStarter is null??
+            if (gameStarter == null)
+            {
+                return;
+            }
+
             if (Statics.MCMModuleLoaded)
             {
                 if (Statics._settings.HeadsmanNeedsMilitiaWeaponsActive)
