@@ -13,24 +13,29 @@ namespace AdditionalQuestsCode.Quests
 {
     public class NobleWantsTrainingBattleIssueBehavior : CampaignBehaviorBase
     {
-        // Needs to be a noble commander with at least 10 tier one troops
+        // Needs to be a noble commander with at least 20% of their army being tier one/tier two units
         private bool ConditionsHold(Hero issueGiver)
         {
-            int recruits = 0;
-            if(issueGiver.IsNoble && issueGiver.IsPartyLeader)
+            if (issueGiver.IsNoble && issueGiver.IsPartyLeader)
             {
+                double lowTierTroops = 0;
+                double totalTroops = 0;
+
                 foreach (var troop in issueGiver.PartyBelongedTo.MemberRoster.GetTroopRoster())
                 {
-                    if(troop.Character.Tier == 1)
+                    if(troop.Character.Tier == 1 || troop.Character.Tier == 2)
                     {
-                        recruits += troop.Number;
+                        lowTierTroops += troop.Number;
                     }
+                    totalTroops += troop.Number;
                 }
-                if (recruits >= 10)
+
+                if (lowTierTroops / totalTroops >= 0.2)
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -71,7 +76,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{NOBLE_NAME} wants to have his army trained in combat, via a miltary exercise, preferablly against veteran troops.", null);
+                    TextObject textObject = new TextObject("{NOBLE_NAME} wants to have {?QUEST_GIVER.GENDER}her{?}his{\\?} army trained in combat, via a miltary exercise.", null);
                     textObject.SetTextVariable("NOBLE_NAME", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -81,7 +86,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("I have far to many fresh faced recruits in my retuine, not ready for combat against anything more trained that bandits. I believe a good fight with some veteran troops will be good experience for most of them.", null);
+                    return new TextObject("I have far to many fresh faced recruits in my army, not ready for combat against anything more trained then looters. I believe a training exercise with some veteran soliders will be a good experience for them..", null);
                 }
             }
 
@@ -97,8 +102,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("That would be great, If you can wait a couple of days, I can prepare a training battle, bring at least X of your men against Y of mine. I will also provide suitably blunted weapons and medics. If you beat my troops, I'll even throw in a extra reward.", null);
-                    //textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededHardWoodAmount);
+                    TextObject textObject = new TextObject("That would be great, If you can wait a couple of days, I can prepare a training battle. Bring 50 of your men against 50 of mine. I will also provide suitably blunted weapons and medics. If you beat my troops, I'll even throw in a extra reward.", null);
                     return textObject;
                 }
             }
@@ -115,7 +119,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I heard {QUEST_GIVER.NAME} shouting at {?QUEST_GIVER.GENDER}her{?}his{\\?} troops today, she was shouting at a poor lad who had tried to hold a sword by the wrong end. Yes, the pointy one. I hear they are looking for someone to help them prepare a training battle to give them some real combat experience.", null);
+                    TextObject textObject = new TextObject("I heard {QUEST_GIVER.NAME} shouting at {?QUEST_GIVER.GENDER}her{?}his{\\?} troops today, {?QUEST_GIVER.GENDER}she{?}he{\\?} was shouting at a poor recruit who had tried to hold a sword by the wrong end. Yes, the pointy one. I hear they are looking for people with combat experience to help them train.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
                     return textObject;
                 }
@@ -144,21 +148,26 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                int recruits = 0;
-                if (IssueOwner.IsNoble && IssueOwner.IsCommander)
+                if (IssueOwner.IsNoble && IssueOwner.IsPartyLeader)
                 {
+                    double lowTierTroops = 0;
+                    double totalTroops = 0;
+
                     foreach (var troop in IssueOwner.PartyBelongedTo.MemberRoster.GetTroopRoster())
                     {
-                        if (troop.Character.Tier == 1)
+                        if (troop.Character.Tier == 1 || troop.Character.Tier == 2)
                         {
-                            recruits += troop.Number;
+                            lowTierTroops += troop.Number;
                         }
+                        totalTroops += troop.Number;
                     }
-                    if (recruits >= 10)
+
+                    if (lowTierTroops / totalTroops >= 0.2)
                     {
                         return true;
                     }
                 }
+
                 return false;
             }
 
@@ -193,12 +202,11 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                throw new NotImplementedException();
+                return new NobleWantsTrainingBattleQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(10f), 1000);
             }
 
             protected override void OnGameLoad()
             {
-                throw new NotImplementedException();
             }
         }
 
