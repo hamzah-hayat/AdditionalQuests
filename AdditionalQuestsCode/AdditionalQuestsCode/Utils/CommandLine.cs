@@ -14,7 +14,7 @@ namespace AdditionalQuestsCode.Utils
     class CommandLine
     {
 		[CommandLineFunctionality.CommandLineArgumentFunction("uninstall", "additional_quests")]
-		public static string UninstallAdditionalQuests()
+		public static string UninstallAdditionalQuests(List<string> strings)
 		{
 			if (!CampaignCheats.CheckCheatUsage(ref CampaignCheats.ErrorType))
 			{
@@ -28,14 +28,13 @@ namespace AdditionalQuestsCode.Utils
 			Campaign.Current.CampaignBehaviorManager.RemoveBehavior<StarvingTownNeedsFoodIssueBehavior>();
 			Campaign.Current.CampaignBehaviorManager.RemoveBehavior<TownUprisingIssueBehavior>();
 
-            foreach (var issue in Campaign.Current.IssueManager.Issues)
+            foreach (var issue in Campaign.Current.IssueManager.Issues.ToList())
             {
-                if(issue.GetType().Namespace == "AdditionalQuestsCode.Quests")
-                {
+				if (issue.Value.GetType().Namespace.Contains("AdditionalQuestsCode"))
+				{
 					Campaign.Current.IssueManager.DeactivateIssue(issue.Value);
 				}
-            }
-
+			}
 
 
 
