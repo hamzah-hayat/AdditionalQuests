@@ -24,7 +24,7 @@ namespace AdditionalQuestsCode.Utils
         }
         private static void logMessage(string message)
         {
-            LogToFile(message + "; GameVersion: " + Statics.GameVersion + "; ModVersion: " + Statics.ModVersion);
+            LogToFile(message + "; ModVersion: " + Statics.ModVersion);
         }
 
         public static void SendMessage(string message)
@@ -89,7 +89,7 @@ namespace AdditionalQuestsCode.Utils
             message += "\n\n" + exception?.ToStringFull();
             if (ShowVersionsInfo)
             {
-                message += "\n\nGameVersion: " + Statics.GameVersion + "\nModVersion: " + Statics.ModVersion;
+                message += "\n\nModVersion: " + Statics.ModVersion;
             }
             logMessage(title + "\n" + message);
         }
