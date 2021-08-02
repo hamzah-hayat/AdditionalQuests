@@ -1,4 +1,5 @@
 ﻿using AdditionalQuestsCode.Quests;
+using AdditionalQuestsCode.Utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -33,6 +34,7 @@ namespace AdditionalQuestsCode
             gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
             gameStarter.AddBehavior(new VillageBanditArmyRaidIssueBehavior());
             gameStarter.AddBehavior(new TownUprisingIssueBehavior());
+            Logging.MessageDebug("AdditionalQuests loaded sucessfully!");
         }
     }
 }
