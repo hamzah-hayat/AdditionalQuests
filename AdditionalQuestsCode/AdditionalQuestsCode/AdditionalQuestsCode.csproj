@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bannerlord.BUTR.Shared" Version="1.6.1.39">
+    <PackageReference Include="Bannerlord.BUTR.Shared" Version="1.6.1.41">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -51,14 +51,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IsExternalInit" Version="1.0.0">
+    <PackageReference Include="IsExternalInit" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Bannerlord.ButterLib" Version="1.0.21" IncludeAssets="compile" />
-    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.1.1" IncludeAssets="compile" />
-    <PackageReference Include="Bannerlord.MCM" Version="4.3.4" IncludeAssets="compile" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2">
+    <PackageReference Include="Bannerlord.ButterLib" Version="1.0.24" IncludeAssets="compile" />
+    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.1.6" IncludeAssets="compile" />
+    <PackageReference Include="Bannerlord.MCM" Version="4.3.10" IncludeAssets="compile" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
