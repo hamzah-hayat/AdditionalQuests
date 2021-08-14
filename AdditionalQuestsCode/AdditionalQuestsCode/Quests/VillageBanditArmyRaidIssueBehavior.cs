@@ -513,23 +513,22 @@ namespace AdditionalQuestsCode.Quests
 
                 // Build the Bandit Party
                 // 50% looters, 50% bandit culture specific, with 30% being tier one, 20% being tier two bandit then one leader
-                // Plus bandit leader
-                // Party size is 50 at player clan tier one, plus 25 per player clan tier
+                // Party size is 50 at player clan tier one, plus 50 per player clan tier
                 //this._banditParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"), this.BanditPartyTroopCount / 4);
-                PartyTemplateObject defaultPartyTemplate = BanditSettlement.Culture.BanditBossPartyTemplate;
+                int banditPartySize = 50 + Hero.MainHero.Clan.Tier * 50;
+                PartyTemplateObject defaultPartyTemplate = new();
+                defaultPartyTemplate.Stacks = new();
+                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1, 1));
+                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2)));
+                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3)));
+                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"), ((banditPartySize * 50) / 100), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5)));
+
                 BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
                 TextObject customName = new TextObject("{BANDIT_CULTURE} Army", null);
                 customName.SetTextVariable("BANDIT_CULTURE", BanditSettlement.Culture.Name);
                 BanditArmyMobileParty.Party.SetCustomOwner((clan != null) ? clan.Leader : null);
                 this.BanditArmyMobileParty.InitializeMobileParty(defaultPartyTemplate, BanditSettlement.GetPosition2D, 0.1f, 0.2f);
                 this.BanditArmyMobileParty.SetCustomName(customName);
-                BanditArmyMobileParty.MemberRoster.Clear();
-
-                int banditPartySize = 50 + Hero.MainHero.Clan.Tier * 50;
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5));
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3));
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2));
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1, true);
 
                 // Add some food to party
                 float foodChange = MBMath.Absf(this.BanditArmyMobileParty.FoodChange);
