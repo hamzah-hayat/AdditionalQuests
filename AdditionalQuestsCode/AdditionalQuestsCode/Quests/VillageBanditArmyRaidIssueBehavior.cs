@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdditionalQuestsCode.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -516,12 +517,12 @@ namespace AdditionalQuestsCode.Quests
                 // Party size is 50 at player clan tier one, plus 50 per player clan tier
                 //this._banditParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"), this.BanditPartyTroopCount / 4);
                 int banditPartySize = 50 + Hero.MainHero.Clan.Tier * 50;
+
                 PartyTemplateObject defaultPartyTemplate = new();
                 defaultPartyTemplate.Stacks = new();
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1, 1));
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2)));
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3)));
-                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId.Equals("looter")), ((banditPartySize * 50) / 100), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5)));
 
                 BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
                 TextObject customName = new TextObject("{BANDIT_CULTURE} Army", null);
@@ -529,6 +530,10 @@ namespace AdditionalQuestsCode.Quests
                 BanditArmyMobileParty.Party.SetCustomOwner((clan != null) ? clan.Leader : null);
                 this.BanditArmyMobileParty.InitializeMobileParty(defaultPartyTemplate, BanditSettlement.GetPosition2D, 0.1f, 0.2f);
                 this.BanditArmyMobileParty.SetCustomName(customName);
+
+                // Add looters now
+                // We do this because of how InitializeMobileParty works, for bandits it only allows three troop types, and ignores any others, so we need to add the looters after
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId.Equals("looter")), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5));
 
                 // Add some food to party
                 float foodChange = MBMath.Absf(this.BanditArmyMobileParty.FoodChange);
