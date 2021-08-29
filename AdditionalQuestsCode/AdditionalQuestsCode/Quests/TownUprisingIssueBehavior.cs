@@ -22,6 +22,7 @@ namespace AdditionalQuestsCode.Quests
     public class TownUprisingIssueBehavior : CampaignBehaviorBase
     {
         // Needs to be a town notable with low loyalty and security rating
+        // Also make sure it is not the same faction as the player
         private bool ConditionsHold(Hero issueGiver)
         {
             if (issueGiver.CurrentSettlement != null && issueGiver.IsArtisan)
@@ -30,7 +31,7 @@ namespace AdditionalQuestsCode.Quests
                 if (currentSettlement.IsTown)
                 {
                     Town town = currentSettlement.Town;
-                    return town.Loyalty <= 50;
+                    return town.Loyalty <= 50 && currentSettlement.OwnerClan.MapFaction != Hero.MainHero.MapFaction;
                 }
             }
             return false;
@@ -148,7 +149,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                return IssueSettlement.Town.Loyalty <= 60;
+                return IssueSettlement.Town.Loyalty <= 60 && IssueSettlement.OwnerClan.MapFaction != Hero.MainHero.MapFaction;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)

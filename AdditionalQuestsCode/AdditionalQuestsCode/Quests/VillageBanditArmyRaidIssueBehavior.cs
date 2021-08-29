@@ -521,7 +521,7 @@ namespace AdditionalQuestsCode.Quests
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1, 1));
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2)));
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3)));
-                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId == "looter"), ((banditPartySize * 50) / 100), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5)));
+                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId.Equals("looter")), ((banditPartySize * 50) / 100), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5)));
 
                 BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
                 TextObject customName = new TextObject("{BANDIT_CULTURE} Army", null);

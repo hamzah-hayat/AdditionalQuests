@@ -302,9 +302,9 @@ namespace AdditionalQuestsCode.Quests
             protected override void SetDialogs()
             {
                 TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all.", null);
-                thankYouText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+                StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, thankYouText);
                 TextObject waitingText = new TextObject("We await the food supplies, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
-                waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
+                StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, waitingText);
 
 
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
