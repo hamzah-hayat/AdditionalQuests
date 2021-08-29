@@ -52,7 +52,7 @@ namespace AdditionalQuestsCode.Quests
             return num;
         }
 
-        public static void RemoveWeaponsWithTypeFromPlayer(WeaponClass weaponType,int numWeaponsToDelete)
+        public static void RemoveWeaponsWithTypeFromPlayer(WeaponClass weaponType, int numWeaponsToDelete)
         {
             int num = numWeaponsToDelete;
             for (int i = PartyBase.MainParty.ItemRoster.Count - 1; i >= 0; i--)
@@ -116,7 +116,8 @@ namespace AdditionalQuestsCode.Quests
                         GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice * itemRosterElement.Amount * sellMultiplier, false);
                         PartyBase.MainParty.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, -itemRosterElement.Amount);
                         numSold += itemRosterElement.Amount;
-                    } else
+                    }
+                    else
                     {
                         // We can sell max amount
                         GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, averagePrice * numToSell * sellMultiplier, false);

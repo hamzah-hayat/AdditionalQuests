@@ -186,7 +186,7 @@ namespace AdditionalQuestsCode.Quests
         internal class HeadmanNeedsMilitiaWeaponsQuest : QuestBase
         {
             // Constructor with basic vars and any vars about the quest
-            public HeadmanNeedsMilitiaWeaponsQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold,int spearsNumNeeded) : base(questId, questGiver, duration, rewardGold)
+            public HeadmanNeedsMilitiaWeaponsQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold, int spearsNumNeeded) : base(questId, questGiver, duration, rewardGold)
             {
                 NeededSpears = spearsNumNeeded;
                 this.SetDialogs();
@@ -344,7 +344,7 @@ namespace AdditionalQuestsCode.Quests
                 waitingText.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject);
 
 
-                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText,null,null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
+                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
                 this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {SPEARS_AMOUNT} spears?", null), null, null).Condition(delegate
                 {
                     MBTextManager.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
@@ -416,7 +416,7 @@ namespace AdditionalQuestsCode.Quests
                 });
                 GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this.RewardGold, false);
                 // Remove spears
-                AdditionalQuestsHelperMethods.RemoveWeaponsWithTypeFromPlayer(WeaponClass.OneHandedPolearm,NeededSpears);
+                AdditionalQuestsHelperMethods.RemoveWeaponsWithTypeFromPlayer(WeaponClass.OneHandedPolearm, NeededSpears);
                 base.QuestGiver.AddPower(25f);
                 Settlement.CurrentSettlement.Prosperity += 50f;
                 Settlement.CurrentSettlement.Militia += 20f;

@@ -438,7 +438,7 @@ namespace AdditionalQuestsCode.Quests
                     {
                         continue;
                     }
-                    ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver/2, false, false);
+                    ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
                 }
 
                 // also increase settlement prosperity

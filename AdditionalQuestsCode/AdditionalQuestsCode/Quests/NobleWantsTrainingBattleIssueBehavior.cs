@@ -26,7 +26,7 @@ namespace AdditionalQuestsCode.Quests
 
                 foreach (var troop in issueGiver.PartyBelongedTo.MemberRoster.GetTroopRoster())
                 {
-                    if(troop.Character.Tier == 1 || troop.Character.Tier == 2)
+                    if (troop.Character.Tier == 1 || troop.Character.Tier == 2)
                     {
                         lowTierTroops += troop.Number;
                     }
@@ -693,7 +693,7 @@ namespace AdditionalQuestsCode.Quests
                 base.AddClassDefinition(typeof(NobleWantsTrainingBattleIssueBehavior.NobleWantsTrainingBattleQuest), 2);
             }
         }
-        
+
         // Register this event to check for issue event
         public override void RegisterEvents()
         {
