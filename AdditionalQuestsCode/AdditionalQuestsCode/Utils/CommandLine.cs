@@ -38,7 +38,7 @@ namespace AdditionalQuestsCode.Utils
 
 
 
-            return "{=AQ_Uninstall}Uninstall Sucessfull, You may now Save and Exit and uninstall AdditionalQuests";
+            return "Uninstall Sucessfull, You may now Save and Exit and uninstall AdditionalQuests";
         }
 
 

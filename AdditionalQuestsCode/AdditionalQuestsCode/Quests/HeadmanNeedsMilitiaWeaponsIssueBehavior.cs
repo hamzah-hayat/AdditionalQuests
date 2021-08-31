@@ -48,7 +48,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_Title}{ISSUE_SETTLEMENT} Needs Spears for Militia", null);
+                    TextObject textObject = new TextObject("{=AQMSTitle}{ISSUE_SETTLEMENT} Needs Spears for Militia", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -58,7 +58,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_Description}The headman of {ISSUE_SETTLEMENT} needs spears for the militia.", null);
+                    TextObject textObject = new TextObject("{=AQMSDescription}The headman of {ISSUE_SETTLEMENT} needs spears for the militia.", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -68,7 +68,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=AQ_MS_IssueBrief}I'm currently organizing the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury.", null);
+                    return new TextObject("{=AQMSIssueBrief}I'm currently organizing the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury.", null);
                 }
             }
 
@@ -76,7 +76,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=AQ_MS_IssueAccept}How can I help?", null);
+                    return new TextObject("{=AQMSIssueAccept}How can I help?", null);
                 }
             }
 
@@ -84,7 +84,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_IssueSolution}I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_AMOUNT}{GOLD_ICON} for the spears.", null);
+                    TextObject textObject = new TextObject("{=AQMSIssueSolution}I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_AMOUNT}{GOLD_ICON} for the spears.", null);
                     textObject.SetTextVariable("SPEARS_AMOUNT", NeededSpearsNum);
                     textObject.SetTextVariable("REWARD_AMOUNT", RewardGold);
                     return textObject;
@@ -95,7 +95,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=AQ_MS_IssueSolutionAccept}I will find the spears you need.", null);
+                    return new TextObject("{=AQMSIssueSolutionAccept}I will find the spears you need.", null);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_Rumor}The young'uns of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of them men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!.", null);
+                    TextObject textObject = new TextObject("{=AQMSRumor}The young'uns of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of them men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
                     return textObject;
                 }
@@ -198,7 +198,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_Title}{ISSUE_SETTLEMENT} Needs Spears for Militia", null);
+                    TextObject textObject = new TextObject("{=AQMSTitle}{ISSUE_SETTLEMENT} Needs Spears for Militia", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -208,7 +208,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_QuestAcceptLog}{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_AMOUNT}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms.", null);
+                    TextObject textObject = new TextObject("{=AQMSQuestAcceptLog}{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_AMOUNT}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
@@ -221,7 +221,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_HasSpearsLog}You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    TextObject textObject = new TextObject("{=AQMSHasSpearsLog}You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -231,7 +231,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_TimeoutLog}You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed.", null);
+                    TextObject textObject = new TextObject("{=AQMSTimeoutLog}You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed.", null);
                     textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
                     return textObject;
                 }
@@ -241,7 +241,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_SuccessLog}You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful.", null);
+                    TextObject textObject = new TextObject("{=AQMSSuccessLog}You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful.", null);
                     textObject.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
                     return textObject;
                 }
@@ -251,7 +251,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_CancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQMSCancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -261,7 +261,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_CancelRaidLog}{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQMSCancelRaidLog}{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
@@ -338,21 +338,21 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                TextObject thankYouText = new TextObject("{=AQ_MS_ThankYouDialog}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears.", null);
+                TextObject thankYouText = new TextObject("{=AQMSThankYouDialog}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears.", null);
                 StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, thankYouText);
-                TextObject waitingText = new TextObject("{=AQ_MS_WaitingDialog}We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject waitingText = new TextObject("{=AQMSWaitingDialog}We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, waitingText);
 
 
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("{=AQ_MS_DiscussDialog}Have you brought {SPEARS_AMOUNT} spears?", null), null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("{=AQMSDiscussDialog}Have you brought {SPEARS_AMOUNT} spears?", null), null, null).Condition(delegate
                 {
                     MBTextManager.SetTextVariable("SPEARS_AMOUNT", this.NeededSpears);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("{=AQ_MS_HandOverDialog}Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnSpearsClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("{=AQMSHandOverDialog}Yes. Here they are.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnSpearsClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
-                }).CloseDialog().PlayerOption(new TextObject("{=AQ_MS_NotYetDialog}I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+                }).CloseDialog().PlayerOption(new TextObject("{=AQMSNotYetDialog}I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
             private bool ReturnSpearsClickableConditions(out TextObject explanation)
@@ -362,7 +362,7 @@ namespace AdditionalQuestsCode.Quests
                     explanation = TextObject.Empty;
                     return true;
                 }
-                explanation = new TextObject("{=AQ_MS_NotEnoughSpears}You don't have enough spears.", null);
+                explanation = new TextObject("{=AQMSNotEnoughSpears}You don't have enough spears.", null);
                 return false;
             }
 
@@ -376,7 +376,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.StartQuest();
                 int requiredSpearsCountOnPlayer = this.GetRequiredSpearsCountOnPlayer();
-                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("{=AQ_MS_QuestObjective}Collect one handed polearms", null), requiredSpearsCountOnPlayer, this.NeededSpears, null, false);
+                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("{=AQMSQuestObjective}Collect one handed polearms", null), requiredSpearsCountOnPlayer, this.NeededSpears, null, false);
             }
 
             private int GetRequiredSpearsCountOnPlayer()
@@ -384,7 +384,7 @@ namespace AdditionalQuestsCode.Quests
                 int itemNumber = AdditionalQuestsHelperMethods.GetRequiredWeaponWithTypeCountOnPlayer(WeaponClass.OneHandedPolearm);
                 if (itemNumber > this.NeededSpears)
                 {
-                    TextObject textObject = new TextObject("{=AQ_MS_HaveSpearsLog}You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    TextObject textObject = new TextObject("{=AQMSHaveSpearsLog}You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     InformationManager.AddQuickInformation(textObject, 0, null, "");
                 }

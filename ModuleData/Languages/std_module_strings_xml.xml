@@ -6,35 +6,29 @@
     </tags>
     <strings>
         <!--
-            Module strings used for options/config/logging etc
-        -->
-        <string id="AQ_Loaded_Sucessfully" text="AdditionalQuests loaded sucessfully!" />
-        <string id="AQ_Uninstall" text="Uninstall Sucessfull, You may now Save and Exit and uninstall AdditionalQuests" />
-
-        <!--
             Militia Spears Quest
         -->
-        <string id="AQ_MS_Title" text="{ISSUE_SETTLEMENT} Needs Spears for Militia" />
-        <string id="AQ_MS_Description" text="The headman of {ISSUE_SETTLEMENT} needs spears for the militia." />
-        <string id="AQ_MS_IssueBrief" text="I'm currently organizing the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury." />
-        <string id="AQ_MS_IssueAccept" text="How can I help?" />
-        <string id="AQ_MS_IssueSolution" text="I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_AMOUNT}{GOLD_ICON} for the spears." />
-        <string id="AQ_MS_IssueSolutionAccept" text="I will find the spears you need." />
-        <string id="AQ_MS_Rumor" text="The young'uns of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of them men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!." />
-        <string id="AQ_MS_QuestAcceptLog" text="{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_AMOUNT}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms." />
-        <string id="AQ_MS_HasSpearsLog" text="You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
-        <string id="AQ_MS_TimeoutLog" text="You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed." />
-        <string id="AQ_MS_SuccessLog" text="You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful." />
-        <string id="AQ_MS_CancelWarLog" text="Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
-        <string id="AQ_MS_CancelRaidLog" text="{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
-        <string id="AQ_MS_ThankYouDialog" text="Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears." />
-        <string id="AQ_MS_WaitingDialog" text="We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}." />
-        <string id="AQ_MS_DiscussDialog" text="Have you brought {SPEARS_AMOUNT} spears?" />
-        <string id="AQ_MS_HandOverDialog" text="Yes. Here they are." />
-        <string id="AQ_MS_NotYetDialog" text="I'm working on it." />
-        <string id="AQ_MS_NotEnoughSpears" text="You don't have enough spears." />
-        <string id="AQ_MS_QuestObjective" text="Collect one handed polearms" />
-        <string id="AQ_MS_HaveSpearsLog" text="You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
+        <string id="AQMSTitle" text="{ISSUE_SETTLEMENT} Needs Spears for Militia" />
+        <string id="AQMSDescription" text="The headman of {ISSUE_SETTLEMENT} needs spears for the militia." />
+        <string id="AQMSIssueBrief" text="I'm currently organizing the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury." />
+        <string id="AQMSIssueAccept" text="How can I help?" />
+        <string id="AQMSIssueSolution" text="I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_AMOUNT}{GOLD_ICON} for the spears." />
+        <string id="AQMSIssueSolutionAccept" text="I will find the spears you need." />
+        <string id="AQMSRumor" text="The young'uns of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of them men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!." />
+        <string id="AQMSQuestAcceptLog" text="{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_AMOUNT}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms." />
+        <string id="AQMSHasSpearsLog" text="You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
+        <string id="AQMSTimeoutLog" text="You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed." />
+        <string id="AQMSSuccessLog" text="You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful." />
+        <string id="AQMSCancelWarLog" text="Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
+        <string id="AQMSCancelRaidLog" text="{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
+        <string id="AQMSThankYouDialog" text="Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears." />
+        <string id="AQMSWaitingDialog" text="We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}." />
+        <string id="AQMSDiscussDialog" text="Have you brought {SPEARS_AMOUNT} spears?" />
+        <string id="AQMSHandOverDialog" text="Yes. Here they are." />
+        <string id="AQMSNotYetDialog" text="I'm working on it." />
+        <string id="AQMSNotEnoughSpears" text="You don't have enough spears." />
+        <string id="AQMSQuestObjective" text="Collect one handed polearms" />
+        <string id="AQMSHaveSpearsLog" text="You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
 
         <!--
             Starving Town Quest
