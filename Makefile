@@ -6,6 +6,7 @@ full:
 	# Create Temp folder for zipping
 	mkdir AdditionalQuests
 	cp -r ./bin AdditionalQuests
+	cp -r ./ModuleData AdditionalQuests
 	cp SubModule.xml AdditionalQuests
 	cp README.md AdditionalQuests
 	cp LICENSE AdditionalQuests

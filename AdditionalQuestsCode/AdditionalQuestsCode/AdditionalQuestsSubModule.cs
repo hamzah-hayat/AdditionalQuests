@@ -34,7 +34,7 @@ namespace AdditionalQuestsCode
             gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
             gameStarter.AddBehavior(new VillageBanditArmyRaidIssueBehavior());
             gameStarter.AddBehavior(new TownUprisingIssueBehavior());
-            Logging.MessageDebug("AdditionalQuests loaded sucessfully!");
+            Logging.MessageDebug("{=AQ_Loaded_Sucessfully}AdditionalQuests loaded sucessfully!");
         }
     }
 }

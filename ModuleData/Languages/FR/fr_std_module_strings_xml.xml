@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+    <tags>
+        <tag language="Français" />
+    </tags>
+    <strings>
+        <!--
+            Module strings used for options/config/logging etc
+        -->
+        <string id="AQ_Loaded_Sucessfully" text="AdditionalQuests chargé avec succès !" />
+        <string id="AQ_Uninstall" text="Désinstaller avec succès, vous pouvez maintenant enregistrer et quitter et désinstaller AdditionalQuests" />
+
+        <!--
+            Militia Spears Quest
+        -->
+        <string id="AQ_MS_Title" text="{ISSUE_SETTLEMENT} a besoin de lances pour la milice" />
+        <string id="AQ_MS_Description" text="Le chef de {ISSUE_SETTLEMENT} a besoin de lances pour la milice." />
+        <string id="AQ_MS_IssueBrief" text="J'organise actuellement la milice du village, mais nous manquons d'armes pour nous entraîner et nous battre. En particulier, nous avons très peu de lances dans l'armurerie." />
+        <string id="AQ_MS_IssueAccept" text="Comment puis-je aider?" />
+        <string id="AQ_MS_IssueSolution" text="Je peux gérer la formation de mon peuple en combattants de la milice, mais j'ai besoin de quelqu'un pour trouver des lances avec lesquelles me battre. Vous pouvez les acheter dans les villes environnantes. Vous pouvez même en fabriquer vous-même, si vous êtes un bon forgeron. Nous aurons besoin de {SPEARS_AMOUNT} lances au total. Je vous paierai {REWARD_AMOUNT}{GOLD_ICON} pour les lances." />
+        <string id="AQ_MS_IssueSolutionAccept" text="Je vais trouver les lances dont vous avez besoin." />
+        <string id="AQ_MS_Rumor" text="Les jeunes du village se sont tous enrôlés dans la milice nouvellement formée. Mais j'ai entendu dire que {QUEST_GIVER.NAME} n'avait pas assez de lances pour même la moitié d'entre eux avec lesquels s'entraîner, alors ils ont utilisé des bâtons en bois pour s'entraîner. J'espère qu'ils n'auront pas à utiliser ces mêmes bâtons dans un vrai combat !." />
+        <string id="AQ_MS_QuestAcceptLog" text="{QUEST_GIVER.LINK}, une {?QUEST_GIVER.GENDER}chefs{?}chef{\\?} de {QUEST_SETTLEMENT} vous a demandé de lui remettre {SPEARS_AMOUNT} lances {?QUEST_GIVER.GENDER}elle{?}lui{\\ ?} pour la milice villageoise. Cela contribuera à augmenter le nombre de miliciens capables dans le village. \n \n Vous avez accepté de leur apporter {SPEARS_AMOUNT} lances dès que possible. Vous serez payé {REWARD_AMOUNT}{GOLD_ICON} pour les lances. \n \n Les lances doivent être des armes d'hast à une main." />
+        <string id="AQ_MS_HasSpearsLog" text="Vous avez maintenant assez de lances pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre." />
+        <string id="AQ_MS_TimeoutLog" text="Vous n'avez pas réussi à livrer {SPEARS_AMOUNT} lances aux villageois. Ils ne pourront pas correctement entraîner leur milice. Le chef est déçu." />
+        <string id="AQ_MS_SuccessLog" text="Vous avez livré {SPEARS_AMOUNT} lances aux villageois. Leur milice est prête à s'entraîner et à défendre le village. Le chef et les villageois sont reconnaissants." />
+        <string id="AQ_MS_CancelWarLog" text="Votre clan est maintenant en guerre contre le seigneur de {ISSUE_GIVER.LINK}. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
+        <string id="AQ_MS_CancelRaidLog" text="{SETTLEMENT_NAME} a été perquisitionné par quelqu'un d'autre. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
+        <string id="AQ_MS_ThankYouDialog" text="Merci {?PLAYER.GENDER}milady{?}monsieur{\\?} ! Nous ferons bon usage de ces lances." />
+        <string id="AQ_MS_WaitingDialog" text="Nous attendons ces lances, {?PLAYER.GENDER}milady{?}monsieur{\\?}." />
+        <string id="AQ_MS_DiscussDialog" text="Avez-vous apporté {SPEARS_AMOUNT} lances ?" />
+        <string id="AQ_MS_HandOverDialog" text="Oui. Les voici." />
+        <string id="AQ_MS_NotYetDialog" text="J'y travaille." />
+        <string id="AQ_MS_NotEnoughSpears" text="Vous n'avez pas assez de lances." />
+        <string id="AQ_MS_QuestObjective" text="Collectionnez les armes d'hast à une main" />
+        <string id="AQ_MS_HaveSpearsLog" text="Vous avez assez de lances pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre. " />
+
+        <!--
+            Starving Town Quest
+        -->
+
+        <!--
+            Town Uprising Quest
+        -->
+
+        <!--
+            Bandit Army Quest
+        -->
+
+    </strings>
+</base>
