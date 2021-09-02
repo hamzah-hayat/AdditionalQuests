@@ -251,7 +251,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQMSCancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQGenericCancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -261,7 +261,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQMSCancelRaidLog}{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQGenericCancelRaidLog}{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;

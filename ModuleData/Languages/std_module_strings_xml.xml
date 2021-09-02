@@ -28,8 +28,6 @@
         <string id="AQMSHasSpearsLog" text="You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
         <string id="AQMSTimeoutLog" text="You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed." />
         <string id="AQMSSuccessLog" text="You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful." />
-        <string id="AQMSCancelWarLog" text="Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
-        <string id="AQMSCancelRaidLog" text="{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
         <string id="AQMSThankYouDialog" text="Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears." />
         <string id="AQMSWaitingDialog" text="We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}." />
         <string id="AQMSDiscussDialog" text="Have you brought {SPEARS_AMOUNT} spears?" />
@@ -53,7 +51,6 @@
         <string id="AQSTHasFoodLog" text="You now have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over." />
         <string id="AQSTTimeoutLog" text="You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve and {QUEST_GIVER.LINK} is disappointed." />
         <string id="AQSTSuccessLog" text="You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of food. You have saved the people from starvation." />
-        <string id="AQSTCancelWarLog" text="Your clan is now at war with {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
         <string id="AQSTThankYouDialog" text="Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all." />
         <string id="AQSTWaitingDialog" text="We await the food supplies, {?PLAYER.GENDER}milady{?}sir{\\?}." />
         <string id="AQSTDiscussDialog" text="Have you brought {FOOD_AMOUNT} food?" />
@@ -115,8 +112,6 @@
         <string id="AQBATimeoutLog" text="You have taken to long to defeat the bandit army, forunately, this means the nobles rulling {QUEST_SETTLEMENT} have been able to respond in time, your agreement was cancelled." />
         <string id="AQBASuccessLog" text="You have defeated the bandit army that was going to raid {QUEST_SETTLEMENT}. The villagers are very grateful. The faction ruling the village have awarded you a bounty for defending the village." />
         <string id="AQBAFailureLog" text="You've failed to stop the bandit army. The bandits ravaged {QUEST_SETTLEMENT} and left." />
-        <string id="AQBACancelWarLog" text="Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
-        <string id="AQBACancelRaidLog" text="{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
         <string id="AQBAOfferDialog" text="Thank you. The bandits are on their way from a hideout close by. My scouts will show you where it is. We will pray for your sucess." />
         <string id="AQBADiscussDialogStart" text="I don't think they'll be long now. I hope you can stop them in time." />
         <string id="AQBADiscussDialogTalk" text="Don't worry, we will crush their \"army\"." />

@@ -234,7 +234,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQSTCancelWarLog}Your clan is now at war with {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQGenericCancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }

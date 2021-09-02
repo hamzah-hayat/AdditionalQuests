@@ -204,7 +204,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Bandit army heading to {ISSUE_SETTLEMENT}!", null);
+                    TextObject textObject = new TextObject("{=AQBATitle}Bandit Army heading to {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -214,7 +214,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The village of {QUEST_SETTLEMENT} is about to be raided by a bandit army from a nearby hideout! {QUEST_GIVER.LINK} has asked you to stop the bandits from devastating the village. \n \n Stop the bandits from reaching {QUEST_SETTLEMENT}.", null);
+                    TextObject textObject = new TextObject("{=AQBAQuestAcceptLog}The village of {QUEST_SETTLEMENT} is about to be raided by a bandit army from a nearby hideout! {QUEST_GIVER.LINK} has asked you to stop the bandits from devastating the village. \n \n Stop the bandits from reaching {QUEST_SETTLEMENT}.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
@@ -225,7 +225,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The Bandit army is raiding {QUEST_SETTLEMENT}! Protect them!.", null);
+                    TextObject textObject = new TextObject("{=AQBABanditRaidingLog}The Bandit army is raiding {QUEST_SETTLEMENT}! Protect them!.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -235,7 +235,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have defeated the bandit army that was going to raid {QUEST_SETTLEMENT}. The villagers are very grateful. The faction ruling the village have awarded you a bounty for defending the village.", null);
+                    TextObject textObject = new TextObject("{=AQBASuccessLog}You have defeated the bandit army that was going to raid {QUEST_SETTLEMENT}. The villagers are very grateful. The faction ruling the village have awarded you a bounty for defending the village.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -245,7 +245,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You've failed to stop the bandit army. The bandits ravaged {QUEST_SETTLEMENT} and left.", null);
+                    TextObject textObject = new TextObject("{=AQBAFailureLog}You've failed to stop the bandit army. The bandits ravaged {QUEST_SETTLEMENT} and left.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -255,7 +255,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have taken to long to defeat the bandit army, forunately, this means the nobles rulling {QUEST_SETTLEMENT} have been able to respond in time, your agreement was cancelled.", null);
+                    TextObject textObject = new TextObject("{=AQBATimeoutLog}You have taken to long to defeat the bandit army, forunately, this means the nobles rulling {QUEST_SETTLEMENT} have been able to respond in time, your agreement was cancelled.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -265,7 +265,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQGenericCancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -275,7 +275,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQGenericCancelRaidLog}{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     textObject.SetTextVariable("SETTLEMENT_NAME", base.QuestGiver.CurrentSettlement.Name);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
@@ -427,9 +427,9 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine("Thank you. The bandits are on their way from a hideout close by. My scouts will show you where it is. We will pray for your sucess.", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine("I don't think they'll be long now. I hope you can stop them in time.", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver).BeginPlayerOptions().PlayerOption("Don't worry, we will crush their \"army\".", null).NpcLine("Good, good. Thank you again.", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
-                this.QuestCharacterDialogFlow = DialogFlow.CreateDialogFlow("start", 125).NpcLine("Who the hell are you? This 'ere is an army, we're on our way to a village to collect some \"taxes\". If you know whats good for you, you'll stay outta our way!", null, null).Condition(() => BanditArmyMobileParty != null && BanditArmyMobileParty.IsActive && CharacterObject.OneToOneConversationCharacter == BanditArmyMobileParty.Leader).BeginPlayerOptions().PlayerOption("You wont be raiding around here anytime soon, We're here to stop you!", null).CloseDialog().EndPlayerOptions().CloseDialog();
+                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine("{=AQBAOfferDialog}Thank you. The bandits are on their way from a hideout close by. My scouts will show you where it is. We will pray for your sucess.", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine("{=AQBADiscussDialogStart}I don't think they'll be long now. I hope you can stop them in time.", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver).BeginPlayerOptions().PlayerOption("{=AQBADiscussDialogTalk}Don't worry, we will crush their \"army\".", null).NpcLine("{=AQBADiscussDialogFinish}Good, good. Thank you again.", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+                this.QuestCharacterDialogFlow = DialogFlow.CreateDialogFlow("start", 125).NpcLine("{=AQBABanditConfront}Who the hell are you? This 'ere is an army, we're on our way to a village to collect some \"taxes\". If you know whats good for you, you'll stay outta our way!", null, null).Condition(() => BanditArmyMobileParty != null && BanditArmyMobileParty.IsActive && CharacterObject.OneToOneConversationCharacter == BanditArmyMobileParty.Leader).BeginPlayerOptions().PlayerOption("{=AQBABanditConfrontResponse}You wont be raiding around here anytime soon, We're here to stop you!", null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
             private void QuestAcceptedConsequences()
@@ -438,8 +438,8 @@ namespace AdditionalQuestsCode.Quests
                 base.AddLog(this.StageOnePlayerAcceptsQuestLogText, false);
                 BanditSettlement.Hideout.IsSpotted = true;
                 BanditSettlement.IsVisible = true;
-                QuestHelper.AddMapArrowFromPointToTarget(new TextObject("Direction to Bandits", null), QuestGiver.CurrentSettlement.Position2D, BanditSettlement.Position2D, 5f, 0.1f, 1056732);
-                TextObject textObject = new TextObject("{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village", null);
+                QuestHelper.AddMapArrowFromPointToTarget(new TextObject("{=AQBADirection}Direction to Bandits", null), QuestGiver.CurrentSettlement.Position2D, BanditSettlement.Position2D, 5f, 0.1f, 1056732);
+                TextObject textObject = new TextObject("{=AQBABanditHideoutMarked}{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village", null);
                 StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                 InformationManager.AddQuickInformation(textObject, 0, null, "");
             }
@@ -525,7 +525,7 @@ namespace AdditionalQuestsCode.Quests
                 defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3)));
 
                 BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
-                TextObject customName = new TextObject("{BANDIT_CULTURE} Army", null);
+                TextObject customName = new TextObject("{=AQBABanditArmyName}{BANDIT_CULTURE} Army", null);
                 customName.SetTextVariable("BANDIT_CULTURE", BanditSettlement.Culture.Name);
                 BanditArmyMobileParty.Party.SetCustomOwner((clan != null) ? clan.Leader : null);
                 this.BanditArmyMobileParty.InitializeMobileParty(defaultPartyTemplate, BanditSettlement.GetPosition2D, 0.1f, 0.2f);
