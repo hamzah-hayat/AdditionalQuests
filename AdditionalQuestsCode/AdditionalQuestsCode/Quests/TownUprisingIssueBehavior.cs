@@ -65,7 +65,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Rebellion in {ISSUE_SETTLEMENT}!", null);
+                    TextObject textObject = new TextObject("{=AQTUTitle}Rebellion in {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -75,7 +75,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The people {ISSUE_SETTLEMENT} are angry at their mistreatment by their nobility. They are planning a rebellion!", null);
+                    TextObject textObject = new TextObject("{=AQTUDescription}The people {ISSUE_SETTLEMENT} are angry at their mistreatment by their nobility. They are planning a rebellion!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -85,7 +85,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I trust you, so listen closely. The people of {ISSUE_SETTLEMENT} have been mistreated for far to long, so I have been organising a \"replacement\" of the clan that runs this town. Most of the milita are with me, and I have several captains willing to lead as our leaders. We just need help in convincing the garrison who are still loyal to our current rulers.", null);
+                    TextObject textObject = new TextObject("{=AQTUIssueBrief}I trust you, so listen closely. The people of {ISSUE_SETTLEMENT} have been mistreated for far to long, so I have been organising a \"replacement\" of the clan that runs this town. Most of the milita are with me, and I have several captains willing to lead as our leaders. We just need help in convincing the garrison who are still loyal to our current rulers.", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -95,7 +95,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("I can help with this rebellion, what do you need of me?", null);
+                    return new TextObject("{=AQTUIssueAccept}I can help with this rebellion, what do you need of me?", null);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("We want to takeover with as little blood spilled as possible, but we will still need to fight the remaining loyalist garrison here in the town. Meet me here with your meen at midnight, and we will start the coup. I will bring my men as well.", null);
+                    TextObject textObject = new TextObject("{=AQTUIssueSolution}We want to takeover with as little blood spilled as possible, but we will still need to fight the remaining loyalist garrison here in the town. Meet me here with your meen at midnight, and we will start the coup. I will bring my men as well.", null);
                     return textObject;
                 }
             }
@@ -112,7 +112,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("Understood, I will meet with you soon.", null);
+                    return new TextObject("{=AQTUIssueSolutionAccept}Understood, I will meet with you soon.", null);
                 }
             }
 
@@ -120,7 +120,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Theres talk around that {QUEST_GIVER.NAME} has convinced the town milita to overthrow the ruling clan. They've denied everything, but I'm not so sure...", null);
+                    TextObject textObject = new TextObject("{=AQTURumor}Theres talk around that {QUEST_GIVER.NAME} has convinced the town milita to overthrow the ruling clan. They've denied everything, but I'm not so sure...", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
                     return textObject;
                 }
@@ -202,7 +202,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Rebellion in {ISSUE_SETTLEMENT}!", null);
+                    TextObject textObject = new TextObject("{=AQTUTitle}Rebellion in {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -212,7 +212,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, an artisan in the town of {QUEST_SETTLEMENT} has asked you to help the town militia overthrow the garrison of the town. He has asked you to wait for midnight, which is when the fight will begin. \n \n Wait in {QUEST_SETTLEMENT} until midnight.", null);
+                    TextObject textObject = new TextObject("{=AQTUQuestAcceptLog}{QUEST_GIVER.LINK}, an artisan in the town of {QUEST_SETTLEMENT} has asked you to help the town militia overthrow the garrison of the town. He has asked you to wait for midnight, which is when the fight will begin. \n \n Wait in {QUEST_SETTLEMENT} until midnight.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
@@ -223,7 +223,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=OIBiRTRP}{QUEST_GIVER.LINK} is waiting for you at {SETTLEMENT}.", null);
+                    TextObject textObject = new TextObject("{=AQTUFightReady}{QUEST_GIVER.LINK}'s loyal soliders are ready for the aumbush at {SETTLEMENT}.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("SETTLEMENT", base.QuestGiver.CurrentSettlement.EncyclopediaLinkWithName);
                     return textObject;
@@ -234,7 +234,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You helped the rebels of {QUEST_SETTLEMENT} take over the town. A new kingdom has been formed! ", null);
+                    TextObject textObject = new TextObject("{=AQTUSuccessLog}You helped the rebels of {QUEST_SETTLEMENT} take over the town. A new kingdom has been formed!", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -244,7 +244,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have failed to join the rebels at {QUEST_SETTLEMENT}. The rebellion plan has been cancelled for now, {QUEST_GIVER.LINK} is disapointed at your lack of commitment.", null);
+                    TextObject textObject = new TextObject("{=AQTUTimeoutLog}You have failed to join the rebels at {QUEST_SETTLEMENT}. The rebellion plan has been cancelled for now, {QUEST_GIVER.LINK} is disapointed at your lack of commitment.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
@@ -255,7 +255,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=aXMg9M7t}You decided to stay out of the fight. {?QUEST_GIVER.GENDER}She{?}He{\\?} will certainly lose to the rival gang without your help.", null);
+                    TextObject textObject = new TextObject("{=AQTURejectionLog}You decided to stay out of the fight. {QUEST_GIVER.LINK} has called off the aumbush and is disapointed at your refusal to fight.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -265,8 +265,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=du3dpMaV}You were unable to defeat {RIVAL_GANG_LEADER.LINK}'s gang, and thus failed to fulfill your commitment to {QUEST_GIVER.LINK}.", null);
-                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
+                    TextObject textObject = new TextObject("{=AQTUFailure}You were unable to defeat the loyalist soldiers of {QUEST_SETTLEMENT}, the rebellion was a failure!", null);
+                    textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
             }
@@ -275,7 +275,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Your clan is now at war with the rulers of {QUEST_SETTLEMENT}. It will be to difficult to help the rebels now.", null);
+                    TextObject textObject = new TextObject("{=AQTUCancelWarLog}Your clan is now at war with the rulers of {QUEST_SETTLEMENT}. It will be to difficult to help the rebels now.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -285,7 +285,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=s1GWSE9Y}{QUEST_GIVER.LINK} cancels your plans due to the siege of {SETTLEMENT}. {?QUEST_GIVER.GENDER}She{?}He{\\?} has worse troubles than {?QUEST_GIVER.GENDER}her{?}his{\\?} quarrel with the rival gang.", null);
+                    TextObject textObject = new TextObject("{=AQTUCancelSiegeLog}{QUEST_GIVER.LINK} cancels your plans due to the siege of {SETTLEMENT}. The plans for the rebellion must now be put on hold.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("SETTLEMENT", base.QuestGiver.CurrentSettlement.EncyclopediaLinkWithName);
                     return textObject;
@@ -316,7 +316,7 @@ namespace AdditionalQuestsCode.Quests
                 {
                     Campaign.Current.CurrentMenuContext.SwitchToMenu("town_uprising_quest_wait_duration_is_over");
                 }
-                TextObject textObject = new TextObject("{=DUKbtlNb}{QUEST_GIVER.LINK} has finally sent a messenger telling you it's time to meet {?QUEST_GIVER.GENDER}her{?}him{\\?} and join the fight.", null);
+                TextObject textObject = new TextObject("{=AQTUPreparationComplete}{QUEST_GIVER.LINK} has finally sent a messenger telling you it's time to meet {?QUEST_GIVER.GENDER}her{?}him{\\?} and join the fight.", null);
                 StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                 base.AddLog(StageTwoFightIsReadyLogText, false);
                 InformationManager.AddQuickInformation(textObject, 0, null, "");
@@ -361,36 +361,36 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine("Wait until midnight, I will send someone to you when we are ready. Try not to draw attention to yourself before then.", null, null).Condition(delegate
+                this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine("{=AQTUOfferDialog}Wait until midnight, I will send someone to you when we are ready. Try not to draw attention to yourself before then.", null, null).Condition(delegate
                 {
                     return Hero.OneToOneConversationHero == base.QuestGiver;
                 }).Consequence(new ConversationSentence.OnConsequenceDelegate(this.OnQuestAccepted)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine("It's not time yet. I'll send a runner for you when the time comes.", null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine("{=AQTUDiscussDialog}It's not time yet. I'll send a runner for you when the time comes.", null, null).Condition(delegate
                 {
                     return Hero.OneToOneConversationHero == base.QuestGiver && !this._isFinalStage && !this._preparationsComplete;
-                }).BeginPlayerOptions().PlayerOption("All right. I am waiting for your runner.", null).NpcLine("You'll know right away once the preparations are complete. Just don't leave town.", null, null).CloseDialog().PlayerOption("I can't just hang on here forever. Be quick about it.", null).NpcLine("I'm getting this together as quickly as I can.", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+                }).BeginPlayerOptions().PlayerOption("{=AQTUWaitingForRunner}All right. I am waiting for your runner.", null).NpcLine("{=AQTUPrepNotFinished}You'll know right away once the preparations are complete. Just don't leave town.", null, null).CloseDialog().PlayerOption("{=AQTUWaitingImpatient}I can't just hang on here forever. Be quick about it.", null).NpcLine("{=AQTUPrepImpatient}I'm getting this together as quickly as I can.", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
             private DialogFlow GetQuestGiverPreparationCompletedDialogFlow()
             {
-                return DialogFlow.CreateDialogFlow("start", 125).NpcLine("Are you ready for the fight?", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver && this._preparationsComplete && !this._isFinalStage).BeginPlayerOptions().PlayerOption("I am ready.", null).Condition(() => !Hero.MainHero.IsWounded).NpcLine("Let's finish this!", null, null).Consequence(delegate
+                return DialogFlow.CreateDialogFlow("start", 125).NpcLine("{=AQTUReadyDialog}Are you ready for the fight?", null, null).Condition(() => Hero.OneToOneConversationHero == base.QuestGiver && this._preparationsComplete && !this._isFinalStage).BeginPlayerOptions().PlayerOption("I am ready.", null).Condition(() => !Hero.MainHero.IsWounded).NpcLine("Let's finish this!", null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.rival_gang_start_fight_on_consequence;
-                }).CloseDialog().PlayerOption("I need more time.", null).Condition(() => !Hero.MainHero.IsWounded).NpcLine("You’d better hurry up!", null, null).Consequence(delegate
+                }).CloseDialog().PlayerOption("{=AQTUNotReady}I need more time.", null).Condition(() => !Hero.MainHero.IsWounded).NpcLine("{=AQTUNotReadyHurryUp}You’d better hurry up!", null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.rival_gang_need_more_time_on_consequence;
-                }).CloseDialog().PlayerOption("My wounds are still fresh. I need some time to recover.", null).Condition(() => Hero.MainHero.IsWounded).NpcLine("We must attack before the garrison hears about our plan. You'd better hurry up!", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+                }).CloseDialog().PlayerOption("{=AQTUNotReadyWounded}My wounds are still fresh. I need some time to recover.", null).Condition(() => Hero.MainHero.IsWounded).NpcLine("{=AQTUNotReadyHurryUpAlt}We must attack before the garrison hears about our plan. You'd better hurry up!", null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
             // Game Menus
             public void AddGameMenus()
             {
-                TextObject textObject = new TextObject("A milita soldier walks up to you and quietly informs you that the men are in position.", null);
+                TextObject textObject = new TextObject("{=AQTUStartFightMenu}A milita soldier walks up to you and quietly informs you that the men are in position.", null);
                 base.AddGameMenu("town_uprising_quest_before_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_before_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
                 base.AddGameMenu("town_uprising_quest_after_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_after_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
                 base.AddGameMenu("town_uprising_quest_wait_duration_is_over", textObject, new OnInitDelegate(town_uprising_wait_duration_is_over_menu_on_init), GameOverlays.MenuOverlayType.None, GameMenu.MenuFlags.none);
-                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_yes", new TextObject("Follow the soldier", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_yes_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_yes_consequence), false, -1, null);
-                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_no", new TextObject("Leave", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_no_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_no_consequence), false, -1, null);
+                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_yes", new TextObject("{=AQTUStartFightOption}Follow the soldier", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_yes_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_yes_consequence), false, -1, null);
+                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_no", new TextObject("{=AQTULeaveFightOption}Leave", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_no_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_no_consequence), false, -1, null);
             }
 
             public override bool IsRemainingTimeHidden
@@ -421,7 +421,7 @@ namespace AdditionalQuestsCode.Quests
 
             private void AddQuestGiverGangLeaderOnSuccessDialogFlow()
             {
-                Campaign.Current.ConversationManager.AddDialogFlow(DialogFlow.CreateDialogFlow("start", 125).NpcLine("Its done! The remaining troops loyal to the noble have been rounded up and taken prisoner. This is the start of a new begining for the people.", null, null).Condition(delegate
+                Campaign.Current.ConversationManager.AddDialogFlow(DialogFlow.CreateDialogFlow("start", 125).NpcLine("{=AQTUSuccessDialog}Its done! The remaining troops loyal to the noble have been rounded up and taken prisoner. This is the start of a new begining for the people.", null, null).Condition(delegate
                 {
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, null);
                     return base.IsOngoing && Hero.OneToOneConversationHero == base.QuestGiver;

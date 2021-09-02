@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+    <tags>
+        <tag language="English" />
+    </tags>
+    <strings>
+        <!--
+            Generic Strings that can be reused for multiple quests
+        -->
+        <string id="AQGenericCancelWarLog" text="Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
+        <string id="AQGenericCancelRaidLog" text="{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
+
+        <!--
+            Militia Spears Quest
+        -->
+        <string id="AQMSTitle" text="{ISSUE_SETTLEMENT} Needs Spears for Militia" />
+        <string id="AQMSDescription" text="The headman of {ISSUE_SETTLEMENT} needs spears for the militia." />
+        <string id="AQMSIssueBrief" text="I'm currently organizing the militia of the village, however we lack weapons to train and fight with. In particular, we have very few spears in the armoury." />
+        <string id="AQMSIssueAccept" text="How can I help?" />
+        <string id="AQMSIssueSolution" text="I can handle training my people into militia fighters, but I need someone to find spears to fight with. You can buy them in the surrounding towns. You can even make your own, if you are a decent smith. We will need {SPEARS_AMOUNT} spears in total. I will pay you {REWARD_AMOUNT}{GOLD_ICON} for the spears." />
+        <string id="AQMSIssueSolutionAccept" text="I will find the spears you need." />
+        <string id="AQMSRumor" text="The young'uns of the village have all signed up to the newly forming militia. But I heard {QUEST_GIVER.NAME} doesnt have enough spears for even half of them men to train with, so they've been using wooden sticks to train with. I hope they dont end up having to use those same sticks in a real fight!." />
+        <string id="AQMSQuestAcceptLog" text="{QUEST_GIVER.LINK}, a {?QUEST_GIVER.GENDER}headwomen{?}headman{\\?} of {QUEST_SETTLEMENT} asked you to deliver {SPEARS_AMOUNT} spears to {?QUEST_GIVER.GENDER}her{?}him{\\?} for the village militia. This will help boost the number of able militia in the village. \n \n You have agreed to bring them {SPEARS_AMOUNT} spears as soon as possible. You will be paid {REWARD_AMOUNT}{GOLD_ICON} for the spears. \n \n The spears should be one handed polearms." />
+        <string id="AQMSHasSpearsLog" text="You now have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
+        <string id="AQMSTimeoutLog" text="You have failed to deliver {SPEARS_AMOUNT} spears to the villagers. They wont be able to properly train their militia. The Headman is disappointed." />
+        <string id="AQMSSuccessLog" text="You have delivered {SPEARS_AMOUNT} spears to the villagers. Their militia is ready to train and defend the village. The Headman and the villagers are grateful." />
+        <string id="AQMSThankYouDialog" text="Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears." />
+        <string id="AQMSWaitingDialog" text="We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}." />
+        <string id="AQMSDiscussDialog" text="Have you brought {SPEARS_AMOUNT} spears?" />
+        <string id="AQMSHandOverDialog" text="Yes. Here they are." />
+        <string id="AQMSNotYetDialog" text="I'm working on it." />
+        <string id="AQMSNotEnoughSpears" text="You don't have enough spears." />
+        <string id="AQMSQuestObjective" text="Collect one handed polearms" />
+        <string id="AQMSHaveSpearsLog" text="You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
+
+        <!--
+            Starving Town Quest
+        -->
+        <string id="AQSTitle" text="Food Crisis in {ISSUE_SETTLEMENT}" />
+        <string id="AQSTDescription" text="The town of {SETTLEMENT} is starving, {MERCHANT_NAME} needs help to restock the towns food supplies." />
+        <string id="AQSTIssueBrief" text="The food situation is bad, the town is starving. We've had to ration out all the food coming into the city but its getting harder and harder each day to put meals in front of people. If this keeps up for much longer, we will either all starve to death or the people will riot." />
+        <string id="AQSTIssueAccept" text="Can I help? I have some food to spare." />
+        <string id="AQSTIssueSolution" text="I thank you for your kindness, but we will require a larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you triple the average price for each. We will need at least 300 units of food in total to keep the town supplied." />
+        <string id="AQSTIssueSolutionAccept" text="I will head out to find food for the town." />
+        <string id="AQSTRumor" text="I'm so hungry... oh, sorry, Did I walk into you? Its been so hard lately... I haven't eaten in so long... If only someone could help {QUEST_GIVER.NAME} bring more food into town..." />
+        <string id="AQSTQuestAcceptLog" text="{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You will be paid triple the average price of each good on delivery." />
+        <string id="AQSTHasFoodLog" text="You now have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over." />
+        <string id="AQSTTimeoutLog" text="You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve and {QUEST_GIVER.LINK} is disappointed." />
+        <string id="AQSTSuccessLog" text="You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of food. You have saved the people from starvation." />
+        <string id="AQSTThankYouDialog" text="Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all." />
+        <string id="AQSTWaitingDialog" text="We await the food supplies, {?PLAYER.GENDER}milady{?}sir{\\?}." />
+        <string id="AQSTDiscussDialog" text="Have you brought {FOOD_AMOUNT} food?" />
+        <string id="AQSTHandOverDialog" text="Yes. Here is is." />
+        <string id="AQSTNotYetDialog" text="I'm working on it." />
+        <string id="AQSTNotEnoughFood" text="You don't have enough food." />
+        <string id="AQSTQuestObjective" text="Collect Grain/Fish/Meat." />
+        <string id="AQSTHaveFoodLog" text="You have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over." />
+        <string id="AQSTGaveFoodMeat" text="You gave {FOOD_AMOUNT} meat. In return you got {GOLD_AMOUNT}{GOLD_ICON}." />
+        <string id="AQSTGaveFoodFish" text="You gave {FOOD_AMOUNT} fish. In return you got {GOLD_AMOUNT}{GOLD_ICON}." />
+        <string id="AQSTGaveFoodGrain" text="You gave {FOOD_AMOUNT} grain. In return you got {GOLD_AMOUNT}{GOLD_ICON}." />
+
+        <!--
+            Town Uprising Quest
+        -->
+        <string id="AQTUTitle" text="Rebellion in {ISSUE_SETTLEMENT}!" />
+        <string id="AQTUDescription" text="The people {ISSUE_SETTLEMENT} are angry at their mistreatment by their nobility. They are planning a rebellion!" />
+        <string id="AQTUIssueBrief" text="I trust you, so listen closely. The people of {ISSUE_SETTLEMENT} have been mistreated for far to long, so I have been organising a \"replacement\" of the clan that runs this town. Most of the milita are with me, and I have several captains willing to lead as our leaders. We just need help in convincing the garrison who are still loyal to our current rulers." />
+        <string id="AQTUIssueAccept" text="I can help with this rebellion, what do you need of me?" />
+        <string id="AQTUIssueSolution" text="We want to takeover with as little blood spilled as possible, but we will still need to fight the remaining loyalist garrison here in the town. Meet me here with your meen at midnight, and we will start the coup. I will bring my men as well." />
+        <string id="AQTUIssueSolutionAccept" text="Understood, I will meet with you soon." />
+        <string id="AQTURumor" text="Theres talk around that {QUEST_GIVER.NAME} has convinced the town milita to overthrow the ruling clan. They've denied everything, but I'm not so sure..." />
+        <string id="AQTUQuestAcceptLog" text="{QUEST_GIVER.LINK}, an artisan in the town of {QUEST_SETTLEMENT} has asked you to help the town militia overthrow the garrison of the town. He has asked you to wait for midnight, which is when the fight will begin. \n \n Wait in {QUEST_SETTLEMENT} until midnight." />
+        <string id="AQTUFightReady" text="{QUEST_GIVER.LINK}'s loyal soliders are ready for the aumbush at {SETTLEMENT}." />
+        <string id="AQTUTimeoutLog" text="You have failed to join the rebels at {QUEST_SETTLEMENT}. The rebellion plan has been cancelled for now, {QUEST_GIVER.LINK} is disapointed at your lack of commitment." />
+        <string id="AQTUSuccessLog" text="You helped the rebels of {QUEST_SETTLEMENT} take over the town. A new kingdom has been formed!" />
+        <string id="AQTURejectionLog" text="You decided to stay out of the fight. {QUEST_GIVER.LINK} has called off the aumbush and is disapointed at your refusal to fight." />
+        <string id="AQTUFailure" text="You were unable to defeat the loyalist soldiers of {QUEST_SETTLEMENT}, the rebellion was a failure!" />
+        <string id="AQTUCancelWarLog" text="Your clan is now at war with the rulers of {QUEST_SETTLEMENT}. It will be to difficult to help the rebels now." />
+        <string id="AQTUCancelSiegeLog" text="{QUEST_GIVER.LINK} cancels your plans due to the siege of {SETTLEMENT}. The plans for the rebellion must now be put on hold." />
+        <string id="AQTUPreparationComplete" text="{QUEST_GIVER.LINK} has finally sent a messenger telling you it's time to meet {?QUEST_GIVER.GENDER}her{?}him{\\?} and join the fight." />
+        <string id="AQTUOfferDialog" text="Wait until midnight, I will send someone to you when we are ready. Try not to draw attention to yourself before then." />
+        <string id="AQTUDiscussDialog" text="It's not time yet. I'll send a runner for you when the time comes." />
+        <string id="AQTUWaitingForRunner" text="All right. I am waiting for your runner." />
+        <string id="AQTUPrepNotFinished" text="You'll know right away once the preparations are complete. Just don't leave town." />
+        <string id="AQTUWaitingImpatient" text="I can't just hang on here forever. Be quick about it." />
+        <string id="AQTUPrepImpatient" text="I'm getting this together as quickly as I can." />
+        <string id="AQTUReadyDialog" text="Are you ready for the fight?" />
+        <string id="AQTUNotReady" text="I need more time." />
+        <string id="AQTUNotReadyWounded" text="My wounds are still fresh. I need some time to recover." />
+        <string id="AQTUStartFightMenu" text="A milita soldier walks up to you and quietly informs you that the men are in position." />
+        <string id="AQTUStartFightOption" text="Follow the soldier" />
+        <string id="AQTULeaveFightOption" text="Leave" />
+        <string id="AQTUSuccessDialog" text="Its done! The remaining troops loyal to the noble have been rounded up and taken prisoner. This is the start of a new begining for the people." />
+
+        <!--
+            Bandit Army Quest
+        -->
+        <string id="AQBATitle" text="Bandit Army Heading to {ISSUE_SETTLEMENT}!" />
+        <string id="AQBADescription" text="A Bandit army is heading to {ISSUE_SETTLEMENT} for a raid. The people of {ISSUE_SETTLEMENT} need help defending themselves." />
+        <string id="AQBAIssueBrief" text="Dire news has reached me, my scouts say that an army of rabble led by a self-proclaimed bandit \"king\" are making their way to our village right now, intent on taking everything we have. I've sent word to our nobles for help but I fear it may be to late by the time they get here." />
+        <string id="AQBAIssueAccept" text="That is troubling news, how will you defend yourselves?" />
+        <string id="AQBAIssueSolution" text="Our militia will fight for our homes, but the more people we have the better. The enemy will be mostly comprised of rabble, just looters looking for easy money but they will have some better trained bandits as well. Will you help us defend the village?" />
+        <string id="AQBAIssueSolutionAccept" text="Yes, I will help defend the village." />
+        <string id="AQBARumor" text="I heard that an army of bandits are heading their way here right now! We need to run, or hide or-or anything but stay here! Please, you must help us!" />
+        <string id="AQBAQuestAcceptLog" text="The village of {QUEST_SETTLEMENT} is about to be raided by a bandit army from a nearby hideout! {QUEST_GIVER.LINK} has asked you to stop the bandits from devastating the village. \n \n Stop the bandits from reaching {QUEST_SETTLEMENT}." />
+        <string id="AQBABanditRaidingLog" text="The Bandit army is raiding {QUEST_SETTLEMENT}! Protect them!." />
+        <string id="AQBATimeoutLog" text="You have taken to long to defeat the bandit army, forunately, this means the nobles rulling {QUEST_SETTLEMENT} have been able to respond in time, your agreement was cancelled." />
+        <string id="AQBASuccessLog" text="You have defeated the bandit army that was going to raid {QUEST_SETTLEMENT}. The villagers are very grateful. The faction ruling the village have awarded you a bounty for defending the village." />
+        <string id="AQBAFailureLog" text="You've failed to stop the bandit army. The bandits ravaged {QUEST_SETTLEMENT} and left." />
+        <string id="AQBAOfferDialog" text="Thank you. The bandits are on their way from a hideout close by. My scouts will show you where it is. We will pray for your sucess." />
+        <string id="AQBADiscussDialogStart" text="I don't think they'll be long now. I hope you can stop them in time." />
+        <string id="AQBADiscussDialogTalk" text="Don't worry, we will crush their \"army\"." />
+        <string id="AQBADiscussDialogFinish" text="Good, good. Thank you again." />
+        <string id="AQBABanditConfront" text="Who the hell are you? This 'ere is an army, we're on our way to a village to collect some \"taxes\". If you know whats good for you, you'll stay outta our way!" />
+        <string id="AQBABanditConfrontResponse" text="You wont be raiding around here anytime soon, We're here to stop you!" />
+        <string id="AQBADirection" text="Direction to Bandits" />
+        <string id="AQBABanditHideoutMarked" text="{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village" />
+        <string id="AQBABanditArmyName" text="{BANDIT_CULTURE} Army" />
+
+    </strings>
+</base>

@@ -46,7 +46,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Food Crisis in {ISSUE_SETTLEMENT}", null);
+                    TextObject textObject = new TextObject("{=AQSTTitle}Food Crisis in {ISSUE_SETTLEMENT}", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -56,7 +56,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("The town of {SETTLEMENT} is starving, {MERCHANT_NAME} needs help to restock the towns food supplies.", null);
+                    TextObject textObject = new TextObject("{=AQSTDescription}The town of {SETTLEMENT} is starving, {MERCHANT_NAME} needs help to restock the towns food supplies.", null);
                     textObject.SetTextVariable("SETTLEMENT", base.IssueSettlement.Name);
                     textObject.SetTextVariable("MERCHANT_NAME", base.IssueOwner.Name);
                     return textObject;
@@ -67,7 +67,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("The food situation is bad, the town is starving. We've had to ration out all the food coming into the city but its getting harder and harder each day to put meals in front of people. If this keeps up for much longer, we will either all starve to death or the people will riot.", null);
+                    return new TextObject("{=AQSTIssueBrief}The food situation is bad, the town is starving. We've had to ration out all the food coming into the city but its getting harder and harder each day to put meals in front of people. If this keeps up for much longer, we will either all starve to death or the people will riot.", null);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("Can I help? I have some food to spare.", null);
+                    return new TextObject("{=AQSTIssueAccept}Can I help? I have some food to spare.", null);
                 }
             }
 
@@ -83,7 +83,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I thank you for your kindness, but we will require a larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you triple the average price for each. We will need at least 300 units of food in total to keep the town supplied.", null);
+                    TextObject textObject = new TextObject("{=AQSTIssueSolution}I thank you for your kindness, but we will require a larger amount of food to restock the city, enough to keep us going while we sort out the source of our food shortage. If you can supply Grain, Meat and Fish, I will pay you triple the average price for each. We will need at least 300 units of food in total to keep the town supplied.", null);
                     return textObject;
                 }
             }
@@ -92,7 +92,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("I will head out to find food for the town.", null);
+                    return new TextObject("{=AQSTIssueSolutionAccept}I will head out to find food for the town.", null);
                 }
             }
 
@@ -100,7 +100,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I'm so hungry... oh, sorry, Did I walk into you? Its been so hard lately... I haven't eaten in so long... If only someone could help {QUEST_GIVER.NAME} bring more food into town...", null);
+                    TextObject textObject = new TextObject("{=AQSTRumor}I'm so hungry... oh, sorry, Did I walk into you? Its been so hard lately... I haven't eaten in so long... If only someone could help {QUEST_GIVER.NAME} bring more food into town...", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
                     return textObject;
                 }
@@ -179,7 +179,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Food crisis in {ISSUE_SETTLEMENT}", null);
+                    TextObject textObject = new TextObject("{=AQSTitle}Food crisis in {ISSUE_SETTLEMENT}", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -189,7 +189,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You will be paid triple the average price of each good on delivery.", null);
+                    TextObject textObject = new TextObject("{=AQSTQuestAcceptLog}{QUEST_GIVER.LINK}, a merchant in the town of {QUEST_SETTLEMENT} asked you to deliver {FOOD_AMOUNT} food to the town, to help fulfil the current food crisis. The food can either be Grain, Meat or Fish. \n \n You will be paid triple the average price of each good on delivery.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
@@ -201,7 +201,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You now have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
+                    TextObject textObject = new TextObject("{=AQSTHasFoodLog}You now have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand it over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     return textObject;
                 }
@@ -211,7 +211,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve and {QUEST_GIVER.LINK} is disappointed.", null);
+                    TextObject textObject = new TextObject("{=AQSTTimeoutLog}You have failed to deliver {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people continue to starve and {QUEST_GIVER.LINK} is disappointed.", null);
                     StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
@@ -223,7 +223,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of food. You have saved the people from starvation.", null);
+                    TextObject textObject = new TextObject("{=AQSTSuccessLog}You have delivered {FOOD_AMOUNT} food to {QUEST_SETTLEMENT}. The people rejoice at the delivery of food. You have saved the people from starvation.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     textObject.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return textObject;
@@ -234,7 +234,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Your clan is now at war with {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
+                    TextObject textObject = new TextObject("{=AQGenericCancelWarLog}Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled.", null);
                     StringHelpers.SetCharacterProperties("ISSUE_GIVER", base.QuestGiver.CharacterObject, textObject);
                     return textObject;
                 }
@@ -301,21 +301,21 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void SetDialogs()
             {
-                TextObject thankYouText = new TextObject("Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all.", null);
+                TextObject thankYouText = new TextObject("{=AQSTThankYouDialog}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! This food will help us all.", null);
                 StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, thankYouText);
-                TextObject waitingText = new TextObject("We await the food supplies, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
+                TextObject waitingText = new TextObject("{=AQSTWaitingDialog}We await the food supplies, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
                 StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, waitingText);
 
 
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
-                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("Have you brought {FOOD_AMOUNT} food?", null), null, null).Condition(delegate
+                this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).NpcLine(new TextObject("{=AQSTDiscussDialog}Have you brought {FOOD_AMOUNT} food?", null), null, null).Condition(delegate
                 {
                     MBTextManager.SetTextVariable("FOOD_AMOUNT", this.NeededFood);
                     return CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject;
-                }).BeginPlayerOptions().PlayerOption(new TextObject("Yes. Here is is.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnFoodClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
+                }).BeginPlayerOptions().PlayerOption(new TextObject("{=AQSTHandOverDialog}Yes. Here is is.", null), null).ClickableCondition(new ConversationSentence.OnClickableConditionDelegate(this.ReturnFoodClickableConditions)).NpcLine(thankYouText, null, null).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot += this.Success;
-                }).CloseDialog().PlayerOption(new TextObject("I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
+                }).CloseDialog().PlayerOption(new TextObject("{=AQSTNotYetDialog}I'm working on it.", null), null).NpcLine(waitingText, null, null).CloseDialog().EndPlayerOptions().CloseDialog();
             }
 
             private bool ReturnFoodClickableConditions(out TextObject explanation)
@@ -325,7 +325,7 @@ namespace AdditionalQuestsCode.Quests
                     explanation = TextObject.Empty;
                     return true;
                 }
-                explanation = new TextObject("You don't have enough food.", null);
+                explanation = new TextObject("{=AQSTNotEnoughFood}You don't have enough food.", null);
                 return false;
             }
 
@@ -338,7 +338,7 @@ namespace AdditionalQuestsCode.Quests
             private void QuestAcceptedConsequences()
             {
                 base.StartQuest();
-                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("Collect Grain/Fish/Meat.", null), GetFoodCountOnPlayer(), this.NeededFood, null, false);
+                this.PlayerAcceptedQuestLog = base.AddDiscreteLog(this.StageOnePlayerAcceptsQuestLogText, new TextObject("{=AQSTQuestObjective}Collect Grain/Fish/Meat.", null), GetFoodCountOnPlayer(), this.NeededFood, null, false);
             }
 
             private int GetFoodCountOnPlayer()
@@ -357,7 +357,7 @@ namespace AdditionalQuestsCode.Quests
 
                 if (itemNumber > this.NeededFood)
                 {
-                    TextObject textObject = new TextObject("You have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
+                    TextObject textObject = new TextObject("{=AQSTHaveFoodLog}You have enough food to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
                     InformationManager.AddQuickInformation(textObject, 0, null, "");
                 }
@@ -392,7 +392,7 @@ namespace AdditionalQuestsCode.Quests
                 int numSold = AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Meat, priceMultiplier, foodSellingNum); //Returns numSold, which is how many we were able to sell
                 foodSellingNum -= numSold;
 
-                TextObject sellMeatText = new TextObject("You gave {FOOD_AMOUNT} meat. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
+                TextObject sellMeatText = new TextObject("{=AQSTGaveFoodMeat}You gave {FOOD_AMOUNT} meat. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
                 sellMeatText.SetTextVariable("FOOD_AMOUNT", numSold);
                 sellMeatText.SetTextVariable("GOLD_AMOUNT", numSold * AdditionalQuestsHelperMethods.GetAveragePriceOfItem(DefaultItems.Meat) * priceMultiplier);
                 base.AddLog(sellMeatText);
@@ -404,7 +404,7 @@ namespace AdditionalQuestsCode.Quests
                     {
                         numSold = AdditionalQuestsHelperMethods.SellQuestItemForPlayer(item, priceMultiplier, foodSellingNum);
                         foodSellingNum -= numSold;
-                        TextObject sellFishText = new TextObject("You gave {FOOD_AMOUNT} fish. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
+                        TextObject sellFishText = new TextObject("{=AQSTGaveFoodFish}You gave {FOOD_AMOUNT} fish. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
                         sellFishText.SetTextVariable("FOOD_AMOUNT", numSold);
                         sellFishText.SetTextVariable("GOLD_AMOUNT", numSold * AdditionalQuestsHelperMethods.GetAveragePriceOfItem(item) * priceMultiplier);
                         base.AddLog(sellFishText);
@@ -414,7 +414,7 @@ namespace AdditionalQuestsCode.Quests
 
                 numSold = AdditionalQuestsHelperMethods.SellQuestItemForPlayer(DefaultItems.Grain, priceMultiplier, foodSellingNum);
                 foodSellingNum -= numSold;
-                TextObject sellGrainText = new TextObject("You gave {FOOD_AMOUNT} grain. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
+                TextObject sellGrainText = new TextObject("{=AQSTGaveFoodGrain}You gave {FOOD_AMOUNT} grain. In return you got {GOLD_AMOUNT}{GOLD_ICON}.", null);
                 sellGrainText.SetTextVariable("FOOD_AMOUNT", numSold);
                 sellGrainText.SetTextVariable("GOLD_AMOUNT", numSold * AdditionalQuestsHelperMethods.GetAveragePriceOfItem(DefaultItems.Grain) * priceMultiplier);
                 base.AddLog(sellGrainText);
