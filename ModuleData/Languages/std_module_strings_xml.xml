@@ -11,9 +11,6 @@
         <string id="AQGenericCancelWarLog" text="Your clan is now at war with the {ISSUE_GIVER.LINK}'s lord. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
         <string id="AQGenericCancelRaidLog" text="{SETTLEMENT_NAME} was raided by someone else. Your agreement with {ISSUE_GIVER.LINK} was canceled." />
 
-
-
-
         <!--
             Militia Spears Quest
         -->
@@ -62,7 +59,6 @@
         <string id="AQSTGaveFoodMeat" text="You gave {FOOD_AMOUNT} meat. In return you got {GOLD_AMOUNT}{GOLD_ICON}." />
         <string id="AQSTGaveFoodFish" text="You gave {FOOD_AMOUNT} fish. In return you got {GOLD_AMOUNT}{GOLD_ICON}." />
         <string id="AQSTGaveFoodGrain" text="You gave {FOOD_AMOUNT} grain. In return you got {GOLD_AMOUNT}{GOLD_ICON}." />
-
 
         <!--
             Town Uprising Quest
@@ -121,7 +117,6 @@
         <string id="AQBADirection" text="Direction to Bandits" />
         <string id="AQBABanditHideoutMarked" text="{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village" />
         <string id="AQBABanditArmyName" text="{BANDIT_CULTURE} Army" />
-
 
     </strings>
 </base>
