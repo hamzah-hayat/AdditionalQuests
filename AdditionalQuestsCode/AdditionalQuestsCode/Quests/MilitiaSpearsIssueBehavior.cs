@@ -11,7 +11,7 @@ using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
 {
-    public class HeadmanNeedsMilitiaWeaponsIssueBehavior : CampaignBehaviorBase
+    public class MilitiaSpearsIssueBehavior : CampaignBehaviorBase
     {
         // Needs to be village notable with less then 20 militia
         private bool ConditionsHold(Hero issueGiver)
@@ -24,15 +24,15 @@ namespace AdditionalQuestsCode.Quests
         {
             if (this.ConditionsHold(hero))
             {
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
                 return;
             }
-            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
-            return new HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsIssue(issueOwner);
+            return new MilitiaSpearsIssueBehavior.HeadmanNeedsMilitiaWeaponsIssue(issueOwner);
         }
 
         // Now the Issue
@@ -158,7 +158,7 @@ namespace AdditionalQuestsCode.Quests
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
-                return new HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold, NeededSpearsNum);
+                return new MilitiaSpearsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest(questId, base.IssueOwner, CampaignTime.DaysFromNow(14f), this.RewardGold, NeededSpearsNum);
             }
 
             protected override void OnGameLoad()
@@ -454,8 +454,8 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsIssue), 1);
-                base.AddClassDefinition(typeof(HeadmanNeedsMilitiaWeaponsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest), 2);
+                base.AddClassDefinition(typeof(MilitiaSpearsIssueBehavior.HeadmanNeedsMilitiaWeaponsIssue), 1);
+                base.AddClassDefinition(typeof(MilitiaSpearsIssueBehavior.HeadmanNeedsMilitiaWeaponsQuest), 2);
             }
         }
 

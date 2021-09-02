@@ -11,7 +11,7 @@ using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
 {
-    public class StarvingTownNeedsFoodIssueBehavior : CampaignBehaviorBase
+    public class StarvingTownIssueBehavior : CampaignBehaviorBase
     {
         // Needs to be starving town, also merchant notable
         private bool ConditionsHold(Hero issueGiver)
@@ -24,15 +24,15 @@ namespace AdditionalQuestsCode.Quests
         {
             if (this.ConditionsHold(hero))
             {
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
                 return;
             }
-            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.VeryCommon));
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
-            return new StarvingTownNeedsFoodIssueBehavior.StarvingTownNeedsFoodIssue(issueOwner);
+            return new StarvingTownIssueBehavior.StarvingTownNeedsFoodIssue(issueOwner);
         }
 
         // Now the Issue
@@ -474,8 +474,8 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(StarvingTownNeedsFoodIssueBehavior.StarvingTownNeedsFoodIssue), 1);
-                base.AddClassDefinition(typeof(StarvingTownNeedsFoodIssueBehavior.StarvingTownNeedsFoodQuest), 2);
+                base.AddClassDefinition(typeof(StarvingTownIssueBehavior.StarvingTownNeedsFoodIssue), 1);
+                base.AddClassDefinition(typeof(StarvingTownIssueBehavior.StarvingTownNeedsFoodQuest), 2);
             }
         }
 

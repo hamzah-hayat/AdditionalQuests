@@ -14,7 +14,7 @@ using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
 {
-    public class NobleWantsTrainingBattleIssueBehavior : CampaignBehaviorBase
+    public class TrainingBattleIssueBehavior : CampaignBehaviorBase
     {
         // Needs to be a noble commander with at least 20% of their army being tier one/tier two units
         private bool ConditionsHold(Hero issueGiver)
@@ -47,15 +47,15 @@ namespace AdditionalQuestsCode.Quests
         {
             if (this.ConditionsHold(hero))
             {
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
                 return;
             }
-            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
-            return new NobleWantsTrainingBattleIssueBehavior.NobleWantsTrainingBattleIssue(issueOwner);
+            return new TrainingBattleIssueBehavior.NobleWantsTrainingBattleIssue(issueOwner);
         }
 
         // Now the Issue
@@ -689,8 +689,8 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(NobleWantsTrainingBattleIssueBehavior.NobleWantsTrainingBattleIssue), 1);
-                base.AddClassDefinition(typeof(NobleWantsTrainingBattleIssueBehavior.NobleWantsTrainingBattleQuest), 2);
+                base.AddClassDefinition(typeof(TrainingBattleIssueBehavior.NobleWantsTrainingBattleIssue), 1);
+                base.AddClassDefinition(typeof(TrainingBattleIssueBehavior.NobleWantsTrainingBattleQuest), 2);
             }
         }
 

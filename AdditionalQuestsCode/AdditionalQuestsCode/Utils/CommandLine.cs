@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static AdditionalQuestsCode.Quests.HeadmanNeedsMilitiaWeaponsIssueBehavior;
+using static AdditionalQuestsCode.Quests.MilitiaSpearsIssueBehavior;
 
 namespace AdditionalQuestsCode.Utils
 {
@@ -23,9 +23,9 @@ namespace AdditionalQuestsCode.Utils
 
             // Remove the Addidtional Quests Campaign Behaviours
             // Also remove all current Issues as well
-            Campaign.Current.CampaignBehaviorManager.RemoveBehavior<HeadmanNeedsMilitiaWeaponsIssueBehavior>();
-            Campaign.Current.CampaignBehaviorManager.RemoveBehavior<VillageBanditArmyRaidIssueBehavior>();
-            Campaign.Current.CampaignBehaviorManager.RemoveBehavior<StarvingTownNeedsFoodIssueBehavior>();
+            Campaign.Current.CampaignBehaviorManager.RemoveBehavior<MilitiaSpearsIssueBehavior>();
+            Campaign.Current.CampaignBehaviorManager.RemoveBehavior<BanditArmyIssueBehavior>();
+            Campaign.Current.CampaignBehaviorManager.RemoveBehavior<StarvingTownIssueBehavior>();
             Campaign.Current.CampaignBehaviorManager.RemoveBehavior<TownUprisingIssueBehavior>();
 
             foreach (var issue in Campaign.Current.IssueManager.Issues.ToList())

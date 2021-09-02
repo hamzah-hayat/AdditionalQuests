@@ -16,7 +16,7 @@ using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
 {
-    public class VillageBanditArmyRaidIssueBehavior : CampaignBehaviorBase
+    public class BanditArmyIssueBehavior : CampaignBehaviorBase
     {
         // Needs to be village notable with a bandit base in range of 1225
         private bool ConditionsHold(Hero issueGiver)
@@ -32,17 +32,17 @@ namespace AdditionalQuestsCode.Quests
                 Settlement settlement = AdditionalQuestsHelperMethods.FindSuitableHideout(hero);
                 if (this.ConditionsHold(hero) && settlement != null)
                 {
-                    Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common, settlement));
+                    Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common, settlement));
                     return;
                 }
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
             }
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
             PotentialIssueData potentialIssueData = pid;
-            return new VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue(issueOwner, potentialIssueData.RelatedObject as Settlement);
+            return new BanditArmyIssueBehavior.VillageBanditArmyRaidIssue(issueOwner, potentialIssueData.RelatedObject as Settlement);
         }
 
         // Now the Issue
@@ -608,8 +608,8 @@ namespace AdditionalQuestsCode.Quests
 
             protected override void DefineClassTypes()
             {
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidIssue), 1);
-                base.AddClassDefinition(typeof(VillageBanditArmyRaidIssueBehavior.VillageBanditArmyRaidQuest), 2);
+                base.AddClassDefinition(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), 1);
+                base.AddClassDefinition(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidQuest), 2);
             }
         }
 

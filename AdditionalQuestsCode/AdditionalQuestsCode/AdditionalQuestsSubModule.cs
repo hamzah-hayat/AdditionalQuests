@@ -30,9 +30,9 @@ namespace AdditionalQuestsCode
             }
 
             // Not using MCM atm, so load all Issue Behaviours
-            gameStarter.AddBehavior(new HeadmanNeedsMilitiaWeaponsIssueBehavior());
-            gameStarter.AddBehavior(new StarvingTownNeedsFoodIssueBehavior());
-            gameStarter.AddBehavior(new VillageBanditArmyRaidIssueBehavior());
+            gameStarter.AddBehavior(new MilitiaSpearsIssueBehavior());
+            gameStarter.AddBehavior(new StarvingTownIssueBehavior());
+            gameStarter.AddBehavior(new BanditArmyIssueBehavior());
             gameStarter.AddBehavior(new TownUprisingIssueBehavior());
             Logging.MessageDebug("AdditionalQuests loaded sucessfully!");
         }
