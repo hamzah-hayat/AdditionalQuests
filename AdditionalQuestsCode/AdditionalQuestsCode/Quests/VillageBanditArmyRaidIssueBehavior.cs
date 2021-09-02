@@ -62,7 +62,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Bandit Army Heading to {ISSUE_SETTLEMENT}!", null);
+                    TextObject textObject = new TextObject("{=AQBATitle}Bandit Army Heading to {ISSUE_SETTLEMENT}!", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -72,7 +72,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("A Bandit army is heading to {ISSUE_SETTLEMENT} for a raid. The people of {ISSUE_SETTLEMENT} need help defending themselves.", null);
+                    TextObject textObject = new TextObject("{=AQBADescription}A Bandit army is heading to {ISSUE_SETTLEMENT} for a raid. The people of {ISSUE_SETTLEMENT} need help defending themselves.", null);
                     textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
                     return textObject;
                 }
@@ -82,7 +82,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("Dire news has reached me, my scouts say that an army of rabble led by a self-proclaimed bandit \"king\" are making their way to our village right now, intent on taking everything we have. I've sent word to our nobles for help but I fear it may be to late by the time they get here.", null);
+                    return new TextObject("{=AQBAIssueBrief}Dire news has reached me, my scouts say that an army of rabble led by a self-proclaimed bandit \"king\" are making their way to our village right now, intent on taking everything we have. I've sent word to our nobles for help but I fear it may be to late by the time they get here.", null);
                 }
             }
 
@@ -90,7 +90,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("That is troubling news, how will you defend yourselves?", null);
+                    return new TextObject("{=AQBAIssueAccept}That is troubling news, how will you defend yourselves?", null);
                 }
             }
 
@@ -98,7 +98,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("Our militia will fight for our homes, but the more people we have the better. The enemy will be mostly comprised of rabble, just looters looking for easy money but they will have some better trained bandits as well. Will you help us defend the village?", null);
+                    TextObject textObject = new TextObject("{=AQBAIssueSolution}Our militia will fight for our homes, but the more people we have the better. The enemy will be mostly comprised of rabble, just looters looking for easy money but they will have some better trained bandits as well. Will you help us defend the village?", null);
                     return textObject;
                 }
             }
@@ -107,7 +107,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("Yes, I will help defend the village.", null);
+                    return new TextObject("{=AQBAIssueSolutionAccept}Yes, I will help defend the village.", null);
                 }
             }
 
@@ -115,7 +115,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("I heard that an army of bandits are heading their way here right now! We need to run, or hide or-or anything but stay here! Please, you must help us!", null);
+                    TextObject textObject = new TextObject("{=AQBARumor}I heard that an army of bandits are heading their way here right now! We need to run, or hide or-or anything but stay here! Please, you must help us!", null);
                     return textObject;
                 }
             }
