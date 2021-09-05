@@ -118,5 +118,20 @@
         <string id="AQBABanditHideoutMarked" text="{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village" />
         <string id="AQBABanditArmyName" text="{BANDIT_CULTURE} Army" />
 
+        <!--
+            Assassinate Noble Quest
+        -->
+        <string id="AQANTitle" text="{NOBLE_NAME} wants {TARGET_NAME} Assassinated!" />
+        <string id="AQANDescription" text="{NOBLE_NAME} wants to use the current war to get their enemy, {TARGET_NAME} killed." />
+        <string id="AQANIssueBrief" text="You may know that I have had a long running fued with {TARGET.LINK}, their crimes are to long to list, yet I have not had an oppurtunity to deal with them myself. The current war however, is a perfect time to have them \"dealt\" with permanently, I trust you can do this for me?" />
+        <string id="AQANIssueAccept" text="How do you want them dealt with?" />
+        <string id="AQANIssueSolution" text="Find them and kill them, preferably during a battle. If killing prisoners is beneath you, deliver {TARGET_NAME} to me and I will finish them myself." />
+        <string id="AQANIssueSolutionAccept" text="I will see what I can do." />
+        <string id="AQANRumor" text="I heard {QUEST_GIVER} was recently heard shouting \"Will no one rid me of {TARGET_NAME}?!\" to their soliders. I hear a fued between the two has claimed the lives of many, I wonder what they plan on doing next?" />
+
+
+
+
+
     </strings>
 </base>

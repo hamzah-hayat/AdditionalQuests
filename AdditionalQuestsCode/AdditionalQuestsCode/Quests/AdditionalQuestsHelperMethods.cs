@@ -25,6 +25,32 @@ namespace AdditionalQuestsCode.Quests
             return null;
         }
 
+        // FindSuitableAssassinationTarget returns a random "target" hero that is considered to be an "Enemy" of the questGiver
+        // If it returns null, this Quest Giver has no Enemies!
+        // The minRelationForTarget is used to compare, for example a -20 value would mean that the quest giver and target have -20 relation with each other
+        // Also we need to make sure the target is not in same faction as Quest giver, and that the two factions are at war with each other
+        public static Hero? FindSuitableAssassinationTarget(Hero questGiver, int minRelationForTarget)
+        {
+            List<Hero> targets = new List<Hero>();
+
+            foreach (Hero target in Hero.AllAliveHeroes)
+            {
+                if (questGiver.GetRelation(target) <= minRelationForTarget && questGiver.MapFaction != target.MapFaction && questGiver.MapFaction.IsAtWarWith(target.MapFaction))
+                {
+                    targets.Add(target);
+                }
+            }
+
+            if (targets.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return targets.GetRandomElement();
+            }
+        }
+
         // FindSuitableHideout finds a hideout that is near to the issueOwner, default of 1225 distance
         public static Settlement? FindSuitableHideout(Hero issueOwner)
         {

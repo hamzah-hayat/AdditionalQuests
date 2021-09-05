@@ -11,22 +11,13 @@ using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
 {
-    class BeastHunterDuelIssueBehavior : CampaignBehaviorBase
+    class AssassinateNobleIssueBehavior : CampaignBehaviorBase
     {
-        // Needs to be a town notable with low loyalty and security rating
-        // Also make sure it is not the same faction as the player
+        // Needs to be a noble with one "enemy" character
+        // Also during a war between the two factions
         private bool ConditionsHold(Hero issueGiver)
         {
-            if (issueGiver.CurrentSettlement != null && issueGiver.IsRuralNotable)
-            {
-                Settlement currentSettlement = issueGiver.CurrentSettlement;
-                if (currentSettlement.IsVillage && currentSettlement.Town != null)
-                {
-                    Town town = currentSettlement.Town;
-                    return town.Security <= 50f;
-                }
-            }
-            return false;
+            return issueGiver.IsNoble;
         }
 
         // If the conditions hold, start this quest, otherwise just add it as a possible quest
@@ -34,22 +25,32 @@ namespace AdditionalQuestsCode.Quests
         {
             if (this.ConditionsHold(hero))
             {
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
-                return;
+                Hero target = AdditionalQuestsHelperMethods.FindSuitableAssassinationTarget(hero, -30);
+                if (target != null)
+                {
+                    Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(AssassinateNobleIssueBehavior.AssassinateNobleIssue), IssueBase.IssueFrequency.Rare, target));
+                    return;
+                }
             }
-            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(AssassinateNobleIssueBehavior.AssassinateNobleIssue), IssueBase.IssueFrequency.Rare));
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
-            return new TownUprisingIssueBehavior.TownUprisingIssue(issueOwner);
+            PotentialIssueData potentialIssueData = pid;
+            return new AssassinateNobleIssueBehavior.AssassinateNobleIssue(issueOwner, potentialIssueData.RelatedObject as Hero);
         }
 
-        internal class BeastHunterDuelIssue : IssueBase
+        internal class AssassinateNobleIssue : IssueBase
         {
-            public BeastHunterDuelIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(20f))
+            // Issue Vars and constructor
+            [SaveableField(1)]
+            Hero targetHero;
+
+            public AssassinateNobleIssue(Hero issueOwner, Hero target) : base(issueOwner, CampaignTime.DaysFromNow(30f))
             {
                 IssueOwner = issueOwner;
+                targetHero = target;
             }
 
             // Here we Store the TextObjects that are used by the Issue
@@ -57,8 +58,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQBDTitle}Beasthunter has kidnapped {NOTABLE_NAME}s Son!", null);
-                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
+                    TextObject textObject = new TextObject("{=AQANTitle}{QUEST_GIVER} wants {TARGET} Assassinated!", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", IssueOwner.CharacterObject, textObject);
+                    StringHelpers.SetCharacterProperties("TARGET", targetHero.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -67,8 +69,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQBDDescription}A Beasthunter has kidnapped the son of {NOTABLE_NAME}, demanding a ransom for services he gave in the past.", null);
-                    textObject.SetTextVariable("ISSUE_SETTLEMENT", base.IssueSettlement.Name);
+                    TextObject textObject = new TextObject("{=AQANDescription}{QUEST_GIVER} wants to use the current war to get their enemy, {TARGET} killed.", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", IssueOwner.CharacterObject, textObject);
+                    StringHelpers.SetCharacterProperties("TARGET", targetHero.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -77,7 +80,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=AQBDIssueBrief}Woe is me, my son has been kidnapped! A Beasthunter who saved my life many years ago has come demanding payment. He took my son and says he will take him for good if I do not scrounge together enough money to pay him. You must help me stop him!", null);
+                    TextObject textObject = new TextObject("{=AQANIssueBrief}You may know that I have had a long running fued with {TARGET}, their crimes are to long to list, yet I have not had an oppurtunity to deal with them myself. The current war however, is a perfect time to have them \"dealt\" with permanently, I trust you can do this for me?", null);
+                    StringHelpers.SetCharacterProperties("TARGET", targetHero.CharacterObject, textObject);
+                    return textObject;
                 }
             }
 
@@ -85,7 +90,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=AQBDIssueAccept}How much is the ransom?", null);
+                    return new TextObject("{=AQANIssueAccept}How do you want them dealt with?", null);
                 }
             }
 
@@ -93,8 +98,8 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQBDIssueSolution}He is demanding 2500{GOLD_ICON}, yet all I have is 500. You must help me provide the gold or beat him in a duel and take my son back by force!", null);
-                    textObject.SetTextVariable("REWARD_AMOUNT", RewardGold);
+                    TextObject textObject = new TextObject("{=AQANIssueSolution}Find them and kill them, either in battle or afterwards, if they survive. If killing prisoners is beneath you, deliver {TARGET} to me and I will finish them myself.", null);
+                    StringHelpers.SetCharacterProperties("TARGET", targetHero.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -103,7 +108,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return new TextObject("{=AQBDIssueSolutionAccept}I will see what I can do.", null);
+                    return new TextObject("{=AQANIssueSolutionAccept}I will see what I can do.", null);
                 }
             }
 
@@ -111,8 +116,9 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    TextObject textObject = new TextObject("{=AQBDRumor}There was a massive argument over at {QUEST_GIVER.NAME}s house! I didn't hear the specifics but I saw a strangly dressed man leave afteward, demanding payment in \"gold or blood\". I hope nothing bad has befallen {QUEST_GIVER.NAME}!", null);
-                    StringHelpers.SetCharacterProperties("QUEST_GIVER", base.IssueOwner.CharacterObject, textObject);
+                    TextObject textObject = new TextObject("{=AQANRumor}I heard {QUEST_GIVER} was recently heard shouting \"Will no one rid me of {TARGET}?!\" to their soliders. I hear a fued between the two has claimed the lives of many, I wonder what they plan on doing next?", null);
+                    StringHelpers.SetCharacterProperties("QUEST_GIVER", IssueOwner.CharacterObject, textObject);
+                    StringHelpers.SetCharacterProperties("TARGET", targetHero.CharacterObject, textObject);
                     return textObject;
                 }
             }
@@ -135,12 +141,12 @@ namespace AdditionalQuestsCode.Quests
 
             public override IssueFrequency GetFrequency()
             {
-                return IssueBase.IssueFrequency.Common;
+                return IssueBase.IssueFrequency.Rare;
             }
 
             public override bool IssueStayAliveConditions()
             {
-                return IssueSettlement.Town.Security <= 50f;
+                return targetHero.IsAlive;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -178,7 +184,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return 1000;
+                    return 500;
                 }
             }
         }
@@ -189,7 +195,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class BeastHunterDuelIssueTypeDefiner : SaveableTypeDefiner
         {
-            public BeastHunterDuelIssueTypeDefiner() : base(585930)
+            public BeastHunterDuelIssueTypeDefiner() : base(585920)
             {
             }
 
