@@ -40,7 +40,7 @@ Nexus Mods Link: https://www.nexusmods.com/mountandblade2bannerlord/mods/3066?ta
 
 ### Village Quests:
     - Beasthunter demands payment!
-        - Beasthunter has taken payment from village notable in first bon son as payment for saving life time ago
+        - Beasthunter has taken payment from village notable in first bon son as payment for saving life / work etc
           Can convince beasthunter to give back child or fight him in duel
           Can also use army, but this causes fight if army is small (<50 troops)
           Or he runs away if army is big (>=50 troops), but less reward and minus honour and renown
@@ -79,6 +79,7 @@ Nexus Mods Link: https://www.nexusmods.com/mountandblade2bannerlord/mods/3066?ta
     - {NobleName} needs Assassin!
         - Noble wants enemy to be assassianted
           Can either capture + behead noble yourself to complete quest or capture and bring back to noble for them to kill
+          Basically deadly version of capture lord quest
           Sneak into town and fight to caputure them? maybe Keep Battle?
 
 

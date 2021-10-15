@@ -129,8 +129,60 @@
         <string id="AQANIssueSolutionAccept" text="I will see what I can do." />
         <string id="AQANRumor" text="I heard {QUEST_GIVER} was recently heard shouting \"Will no one rid me of {TARGET_NAME}?!\" to their soliders. I hear a fued between the two has claimed the lives of many, I wonder what they plan on doing next?" />
 
+        <!--
+            Beasthunter Duel Quest
+        -->
+        <string id="AQBDTitle" text="" />
+        <string id="AQBDDescription" text="" />
+        <string id="AQBDIssueBrief" text="" />
+        <string id="AQBDIssueAccept" text="" />
+        <string id="AQBDIssueSolution" text="." />
+        <string id="AQBDIssueSolutionAccept" text="" />
+        <string id="AQBDRumor" text="" />
 
+        <!--
+            Supply Materials Quest
+        -->
+        <string id="AQSMTitle" text="{NOTABLE} needs materials for {WORKSHOP}" />
+        <string id="AQSMDescription" text="{NOTABLE} requires a shipment of raw materials for their {WORKSHOP} as their regular suppliers have fallen short." />
+        <string id="AQSMIssueBrief" text="Ah, I'm in a bind here, my {WORKSHOP} has had to halt production, we simply do not have enough {MATERIAL}, owing to a merchant backing out of a deal at the last moment." />
+        <string id="AQSMIssueAccept" text="Perhaps I could find {MATERIAL} for you?" />
+        <string id="AQSMIssueSolution" text="Thank you, If you could provide {MATERIAL_QUANTITY} {MATERIAL} to me, I can restart the workshops and continue production. I would be willing to give you {PRODUCT_QUANTITY} {PRODUCT} as payment." />
+        <string id="AQSMIssueSolutionAccept" text="I will find the materials you need." />
+        <string id="AQSMRumor" text="" />
 
+        <!--
+            Escort Diplomat Quest
+        -->
+        <string id="AQEDTitle" text="{NOBLE} needs diplomat escorted to {SETTLMENT} to end war" />
+        <string id="AQEDDescription" text="I require the services of a trusted party to escort my diplomat to {SETTLMENT}, so that they may end the war between {FACTION_QUEST_GIVER} and {FACTION_WAR_TARGET}." />
+        <string id="AQEDIssueBrief" text="I require the services of a trusted party to escort my diplomat to {SETTLMENT}, so that they may end the war between {FACTION_QUEST_GIVER} and {FACTION_WAR_TARGET}." />
+        <string id="AQEDIssueAccept" text="I would be able to escort them." />
+        <string id="AQEDIssueSolution" text="Thank you, your task is simple. Take {DIPLOMAT} to {SETTLEMENT}, you will have immunity from harm from {FACTION_WAR_TARGET}, so be on your best behiavour, ensure their safety and once their business concludes bring them back to me." />
+        <string id="AQEDIssueSolutionAccept" text="Understood, I will bring them back safely." />
+        <string id="AQEDRumor" text="" />
+
+        <!--
+            Establish Clan Quest
+        -->
+        <string id="AQECTitle" text="{NOBLE} wants help establishing new Clan" />
+        <string id="AQECDescription" text="{NOBLE} wants help establishing a new Clan for the {FACTION}, to strengthen it in the years to come. They require soliders to garrison {SETTLEMENT}, which will be the clans new home." />
+        <string id="AQECIssueBrief" text="It is time for a new clan to be instated in our nation. I have decided that {SETTLEMENT} will be their new home, but I require more manpower before I can select the leaders of the Clan." />
+        <string id="AQECIssueAccept" text="How can I help?" />
+        <string id="AQECIssueSolution" text="I require soliders, {SOLIDER_NUM} recruits will do but the better trained and equipped soliders you can find the better. The more you provide, the greater the clan that will be created. Your efforts will be greatly rewarded, and I'm sure the new leaders of the Clan will appreciate your efforts." />
+        <string id="AQECIssueSolutionAccept" text="I will bring soliders to you." />
+        <string id="AQECRumor" text="" />
+
+        <!--
+            Runaway Villagers Quest
+        -->
+        <string id="AQRVTitle" text="{NOBLE} wants runaway villagers captured" />
+        <string id="AQRVDescription" text="Several villagers from the surrounding villages are protesting their treament from the clan of {NOBLE}. They have decided to run away to {SETTLEMENT_GOAL} to start a new life. {NOBLE} wants them bought back to {SETTLEMENT_START}." />
+        <string id="AQRVIssueBrief" text="Argh, these damn peasents! There is a mob in the town that say I have \"mistreated\" them for to long, that they will refuse to work if their demands are not met. Well, I refused their insolent requests and now they are planning to run to {SETTLEMENT_GOAL}!" />
+        <string id="AQRVIssueAccept" text="What will you do?" />
+        <string id="AQRVIssueSolution" text="I will punish them for their disobdience... but I first need them bought back here quickly, before they make it to the town of {SETTLEMENT_GOAL} as it will be become much harder to catch them, lest it cause a diplomatic incident. Find the villagers and bring them back here quickly!" />
+        <string id="AQRVIssueSolutionAccept" text="Understood, I will bring them back here as fast as I can." />
+        <string id="AQRVRumor" text="Many villagers from the countryside have come into the town today, they have made a list of demands for {NOBLE} or they will refuse to work. Last I heard though, {NOBLE} refused their demands, I wonder what the villagers will do now?" />
 
 
     </strings>

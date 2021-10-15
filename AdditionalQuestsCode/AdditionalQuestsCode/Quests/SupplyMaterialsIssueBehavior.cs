@@ -13,20 +13,10 @@ namespace AdditionalQuestsCode.Quests
 {
     class SupplyMaterialsIssueBehavior : CampaignBehaviorBase
     {
-        // Needs to be a town notable with low loyalty and security rating
-        // Also make sure it is not the same faction as the player
+        // Needs to be a town notable that owns a workshop of some kind
         private bool ConditionsHold(Hero issueGiver)
         {
-            if (issueGiver.CurrentSettlement != null && issueGiver.IsRuralNotable)
-            {
-                Settlement currentSettlement = issueGiver.CurrentSettlement;
-                if (currentSettlement.IsVillage && currentSettlement.Town != null)
-                {
-                    Town town = currentSettlement.Town;
-                    return town.Security <= 50f;
-                }
-            }
-            return false;
+            return issueGiver.IsNotable && issueGiver.OwnedWorkshops.Count > 0;
         }
 
         // If the conditions hold, start this quest, otherwise just add it as a possible quest
@@ -34,22 +24,29 @@ namespace AdditionalQuestsCode.Quests
         {
             if (this.ConditionsHold(hero))
             {
-                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+                Workshop workshop = hero.OwnedWorkshops[0];
+                Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(new PotentialIssueData.StartIssueDelegate(this.OnIssueSelected), typeof(SupplyMaterialsIssueBehavior.SupplyMaterialsIssue), IssueBase.IssueFrequency.Common, workshop));
                 return;
             }
-            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(BanditArmyIssueBehavior.VillageBanditArmyRaidIssue), IssueBase.IssueFrequency.Common));
+            Campaign.Current.IssueManager.AddPotentialIssueData(hero, new PotentialIssueData(typeof(SupplyMaterialsIssueBehavior.SupplyMaterialsIssue), IssueBase.IssueFrequency.Common));
         }
 
         private IssueBase OnIssueSelected(in PotentialIssueData pid, Hero issueOwner)
         {
-            return new TownUprisingIssueBehavior.TownUprisingIssue(issueOwner);
+            PotentialIssueData potentialIssueData = pid;
+            return new SupplyMaterialsIssueBehavior.SupplyMaterialsIssue(issueOwner, potentialIssueData.RelatedObject as Workshop);
         }
 
-        internal class BeastHunterDuelIssue : IssueBase
+        internal class SupplyMaterialsIssue : IssueBase
         {
-            public BeastHunterDuelIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(20f))
+            // Issue Vars and constructor
+            [SaveableField(1)]
+            Workshop questWorkshop;
+
+            public SupplyMaterialsIssue(Hero issueOwner, Workshop workshop) : base(issueOwner, CampaignTime.DaysFromNow(20f))
             {
                 IssueOwner = issueOwner;
+                questWorkshop = workshop;
             }
 
             // Here we Store the TextObjects that are used by the Issue
@@ -140,7 +137,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                return IssueSettlement.Town.Security <= 50f;
+                return IssueOwner.OwnedWorkshops.Contains(questWorkshop);
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -187,7 +184,7 @@ namespace AdditionalQuestsCode.Quests
 
 
         // Save data goes into this class
-        public class BeastHunterDuelIssueTypeDefiner : SaveableTypeDefiner
+        public class SupplyMaterialsIssueTypeDefiner : SaveableTypeDefiner
         {
             public BeastHunterDuelIssueTypeDefiner() : base(585910)
             {
