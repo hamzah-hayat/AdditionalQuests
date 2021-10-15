@@ -11,7 +11,7 @@ using TaleWorlds.SaveSystem;
 
 namespace AdditionalQuestsCode.Quests
 {
-    class BeastHunterDuelIssueBehavior : CampaignBehaviorBase
+    class EscortDiplomatIssueBehavior : CampaignBehaviorBase
     {
         // Needs to be a town notable with low loyalty and security rating
         // Also make sure it is not the same faction as the player
@@ -178,7 +178,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 get
                 {
-                    return 1000;
+                    return 500;
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class BeastHunterDuelIssueTypeDefiner : SaveableTypeDefiner
         {
-            public BeastHunterDuelIssueTypeDefiner() : base(585930)
+            public BeastHunterDuelIssueTypeDefiner() : base(585880)
             {
             }
 
