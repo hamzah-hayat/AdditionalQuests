@@ -186,7 +186,7 @@ namespace AdditionalQuestsCode.Quests
         // Save data goes into this class
         public class SupplyMaterialsIssueTypeDefiner : SaveableTypeDefiner
         {
-            public BeastHunterDuelIssueTypeDefiner() : base(585910)
+            public SupplyMaterialsIssueTypeDefiner() : base(585910)
             {
             }
 
