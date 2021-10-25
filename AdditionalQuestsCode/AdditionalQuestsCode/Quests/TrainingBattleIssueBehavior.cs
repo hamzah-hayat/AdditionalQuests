@@ -497,7 +497,7 @@ namespace AdditionalQuestsCode.Quests
 
                 // Player party consists of 5 milita and 4 of players best troops + hero
                 PartyTemplateObject militiaPartyTemplate = QuestGiver.CurrentSettlement.Culture.MilitiaPartyTemplate;
-                FlattenedTroopRoster bestTroops = MobilePartyHelper.GetStrongestAndPriorTroops(PartyBase.MainParty.MobileParty, 4, false);
+                TroopRoster bestTroops = MobilePartyHelper.GetStrongestAndPriorTroops(PartyBase.MainParty.MobileParty, 4, false);
 
 
                 // Store our existing troops in _playerTroops

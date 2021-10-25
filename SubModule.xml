@@ -6,16 +6,16 @@ Adds new quests for notables to give out to the player
 <Module>
     <Name value="Additional Quests" />
     <Id value="AdditionalQuests" />
-    <Version value="v1.0.13" />
+    <Version value="v1.0.14" />
     <SingleplayerModule value="true" />
     <MultiplayerModule value="false" />
     <Official value="false" />
     <DependedModules>
-        <DependedModule Id="Native" DependentVersion="e1.6.4"/>
-        <DependedModule Id="SandBoxCore" DependentVersion="e1.6.4"/>
-        <DependedModule Id="Sandbox" DependentVersion="e1.6.4"/>
-        <DependedModule Id="CustomBattle" DependentVersion="e1.6.4"/>
-        <DependedModule Id="StoryMode" DependentVersion="e1.6.4"/>
+        <DependedModule Id="Native" DependentVersion="e1.6.5"/>
+        <DependedModule Id="SandBoxCore" DependentVersion="e1.6.5"/>
+        <DependedModule Id="Sandbox" DependentVersion="e1.6.5"/>
+        <DependedModule Id="CustomBattle" DependentVersion="e1.6.5"/>
+        <DependedModule Id="StoryMode" DependentVersion="e1.6.5"/>
     </DependedModules>
     <SubModules>
         <SubModule>
