@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-16"?>
-<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
-  <tags>
-    <tag language="Türkçe" />
-  </tags>
-  <strings>
-<!--
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+    <tags>
+        <tag language="한국어" />
+    </tags>
+    <strings>
+        <!--
             Generic Strings that can be reused for multiple quests
         -->
         <string id="AQGenericCancelWarLog" text="당신의 가문은 이제 {ISSUE_GIVER.LINK}의 영주와 전쟁 중입니다. {ISSUE_GIVER.LINK}와(과) 맺은 합의가 취소되었습니다." />
@@ -185,5 +186,5 @@
         <string id="AQRVRumor" text="오늘 시골에서 많은 주민들이 왔고, {NOBLE}에 대한 요구사항을 적어와서는 그것이 받아들여지지 않으면 일하지 않겠다고 했습니다. 마지막으로 듣기로는 {NOBLE}이(가) 그들의 요구를 거절했다고 하던데, 이제 마을 사람들이 어떻게 나올지 궁금하군요?" />
 
 
-  </strings>
+    </strings>
 </base>
