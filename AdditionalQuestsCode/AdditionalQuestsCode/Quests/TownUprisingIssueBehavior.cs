@@ -386,9 +386,9 @@ namespace AdditionalQuestsCode.Quests
             public void AddGameMenus()
             {
                 TextObject textObject = new TextObject("{=AQTUStartFightMenu}A milita soldier walks up to you and quietly informs you that the men are in position.", null);
-                base.AddGameMenu("town_uprising_quest_before_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_before_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
-                base.AddGameMenu("town_uprising_quest_after_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_after_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.none);
-                base.AddGameMenu("town_uprising_quest_wait_duration_is_over", textObject, new OnInitDelegate(town_uprising_wait_duration_is_over_menu_on_init), GameOverlays.MenuOverlayType.None, GameMenu.MenuFlags.none);
+                base.AddGameMenu("town_uprising_quest_before_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_before_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.None);
+                base.AddGameMenu("town_uprising_quest_after_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_after_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.None);
+                base.AddGameMenu("town_uprising_quest_wait_duration_is_over", textObject, new OnInitDelegate(town_uprising_wait_duration_is_over_menu_on_init), GameOverlays.MenuOverlayType.None, GameMenu.MenuFlags.None);
                 base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_yes", new TextObject("{=AQTUStartFightOption}Follow the soldier", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_yes_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_yes_consequence), false, -1, null);
                 base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_no", new TextObject("{=AQTULeaveFightOption}Leave", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_no_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_no_consequence), false, -1, null);
             }
@@ -462,8 +462,8 @@ namespace AdditionalQuestsCode.Quests
                 PartyTemplateObject cultureGarrisonTemplate = QuestGiver.CurrentSettlement.Culture.DefaultPartyTemplate;
                 this.HostileGarrisonParty = MobileParty.CreateParty("garrison_party", null, null);
                 TextObject textObject = new TextObject("Garrison", null);
-                this.HostileGarrisonParty.InitializeMobileParty(new TroopRoster(this.HostileGarrisonParty.Party), new TroopRoster(this.HostileGarrisonParty.Party), base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f);
-                HostileGarrisonParty.InitializeMobileParty(cultureGarrisonTemplate, base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f, 10);
+                this.HostileGarrisonParty.InitializeMobilePartyAroundPosition(new TroopRoster(this.HostileGarrisonParty.Party), new TroopRoster(this.HostileGarrisonParty.Party), base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f);
+                HostileGarrisonParty.InitializeMobilePartyAroundPosition(cultureGarrisonTemplate, base.QuestGiver.CurrentSettlement.GatePosition, 1f, 0.5f, 10);
                 this.HostileGarrisonParty.SetCustomName(textObject);
                 EnterSettlementAction.ApplyForParty(this.HostileGarrisonParty, base.QuestGiver.CurrentSettlement);
                 this.HostileGarrisonParty.SetPartyUsedByQuest(true);
