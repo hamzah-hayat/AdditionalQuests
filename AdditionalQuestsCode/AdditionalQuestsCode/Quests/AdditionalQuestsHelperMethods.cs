@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.Issues;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace AdditionalQuestsCode.Quests
 {

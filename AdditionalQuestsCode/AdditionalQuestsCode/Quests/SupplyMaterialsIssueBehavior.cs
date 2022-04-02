@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Issues;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
