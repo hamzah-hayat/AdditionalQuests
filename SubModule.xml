@@ -29,6 +29,13 @@ Adds new quests for notables to give out to the player
         </SubModule>
     </SubModules>
     <Xmls>
+        <XmlNode>
+			<XmlName id="GameText" path="Languages/std_module_strings_xml"/>
+			<IncludedGameTypes>
+				<GameType value = "Campaign"/>
+				<GameType value = "CampaignStoryMode"/>
+			</IncludedGameTypes>
+		</XmlNode>
     </Xmls>
 </Module>
 
