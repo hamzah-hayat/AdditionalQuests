@@ -39,30 +39,40 @@
       <HintPath>%(Identity)</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="TaleWorlds.CampaignSystem">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.Core">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.DotNet">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.DotNet.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.Library">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Library.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.Localization">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Localization.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.MountAndBlade">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.ObjectSystem">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.ObjectSystem.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.SaveSystem">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.SaveSystem.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
 
@@ -71,4 +81,16 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <BaseOutputPath>..\..\bin\Win64_Shipping_Client</BaseOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Update="System">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Core">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
 </Project>
