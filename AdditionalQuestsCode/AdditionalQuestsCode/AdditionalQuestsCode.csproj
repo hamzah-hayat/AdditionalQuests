@@ -69,5 +69,6 @@
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <BaseOutputPath>..\..\bin\Win64_Shipping_Client</BaseOutputPath>
   </PropertyGroup>
 </Project>
