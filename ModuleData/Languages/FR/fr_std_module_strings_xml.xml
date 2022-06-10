@@ -1,124 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
-    <tags>
-        <tag language="Français" />
-    </tags>
-    <strings>
-        <!--
-            Chaînes génériques pouvant être réutilisées pour plusieurs quêtes 
-        -->
-        <string id="AQGenericCancelWarLog" text="Votre clan est maintenant en guerre avec le seigneur de {ISSUE_GIVER.LINK}. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
-        <string id="AQGenericCancelRaidLog" text="{SETTLEMENT_NAME} a été perquisitionné par quelqu'un d'autre. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
+<strings>
+    <!--
+        Chaînes génériques pouvant être réutilisées pour plusieurs quêtes 
+    -->
+    <string id="AQGenericCancelWarLog" text="Votre clan est maintenant en guerre avec le seigneur de {ISSUE_GIVER.LINK}. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
+    <string id="AQGenericCancelRaidLog" text="{SETTLEMENT_NAME} a été perquisitionné par quelqu'un d'autre. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
 
-        <!--
-            Quête des lances de la milice 
-        -->
-        <string id="AQ_MS_Title" text="{ISSUE_SETTLEMENT} a besoin de lances pour la milice" />
-        <string id="AQ_MS_Description" text="Le chef de {ISSUE_SETTLEMENT} a besoin de lances pour la milice." />
-        <string id="AQ_MS_IssueBrief" text="J'organise actuellement la milice du village, mais nous manquons d'armes pour nous entraîner et nous battre. En particulier, nous avons très peu de lances dans l'armurerie." />
-        <string id="AQ_MS_IssueAccept" text="Comment puis-je aider?" />
-        <string id="AQ_MS_IssueSolution" text="Je peux gérer la formation de mon peuple en combattants de la milice, mais j'ai besoin de quelqu'un pour trouver des lances avec lesquelles me battre. Vous pouvez les acheter dans les villes environnantes. Vous pouvez même en fabriquer vous-même, si vous êtes un bon forgeron. Nous aurons besoin de {SPEARS_AMOUNT} lances au total. Je vous paierai {REWARD_AMOUNT}{GOLD_ICON} pour les lances." />
-        <string id="AQ_MS_IssueSolutionAccept" text="Je vais trouver les lances dont vous avez besoin." />
-        <string id="AQ_MS_Rumor" text="Les jeunes du village se sont tous enrôlés dans la milice nouvellement formée. Mais j'ai entendu dire que {QUEST_GIVER.NAME} n'avait pas assez de lances pour même la moitié d'entre eux avec lesquels s'entraîner, alors ils ont utilisé des bâtons en bois pour s'entraîner. J'espère qu'ils n'auront pas à utiliser ces mêmes bâtons dans un vrai combat !." />
-        <string id="AQ_MS_QuestAcceptLog" text="{QUEST_GIVER.LINK}, une {?QUEST_GIVER.GENDER}chefs{?}chef{\\?} de {QUEST_SETTLEMENT} vous a demandé de lui remettre {SPEARS_AMOUNT} lances {?QUEST_GIVER.GENDER}elle{?}lui{\\ ?} pour la milice villageoise. Cela contribuera à augmenter le nombre de miliciens capables dans le village. \n \n Vous avez accepté de leur apporter {SPEARS_AMOUNT} lances dès que possible. Vous serez payé {REWARD_AMOUNT}{GOLD_ICON} pour les lances. \n \n Les lances doivent être des armes d'hast à une main." />
-        <string id="AQ_MS_HasSpearsLog" text="Vous avez maintenant assez de lances pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre." />
-        <string id="AQ_MS_TimeoutLog" text="Vous n'avez pas réussi à livrer {SPEARS_AMOUNT} lances aux villageois. Ils ne pourront pas correctement entraîner leur milice. Le chef est déçu." />
-        <string id="AQ_MS_SuccessLog" text="Vous avez livré {SPEARS_AMOUNT} lances aux villageois. Leur milice est prête à s'entraîner et à défendre le village. Le chef et les villageois sont reconnaissants." />
-        <string id="AQ_MS_CancelWarLog" text="Votre clan est maintenant en guerre contre le seigneur de {ISSUE_GIVER.LINK}. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
-        <string id="AQ_MS_CancelRaidLog" text="{SETTLEMENT_NAME} a été perquisitionné par quelqu'un d'autre. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
-        <string id="AQ_MS_ThankYouDialog" text="Merci {?PLAYER.GENDER}milady{?}monsieur{\\?} ! Nous ferons bon usage de ces lances." />
-        <string id="AQ_MS_WaitingDialog" text="Nous attendons ces lances, {?PLAYER.GENDER}milady{?}monsieur{\\?}." />
-        <string id="AQ_MS_DiscussDialog" text="Avez-vous apporté {SPEARS_AMOUNT} lances ?" />
-        <string id="AQ_MS_HandOverDialog" text="Oui. Les voici." />
-        <string id="AQ_MS_NotYetDialog" text="J'y travaille." />
-        <string id="AQ_MS_NotEnoughSpears" text="Vous n'avez pas assez de lances." />
-        <string id="AQ_MS_QuestObjective" text="Collectionnez les armes d'hast à une main" />
-        <string id="AQ_MS_HaveSpearsLog" text="Vous avez assez de lances pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre. " />
+    <!--
+        Quête des lances de la milice 
+    -->
+    <string id="AQ_MS_Title" text="{ISSUE_SETTLEMENT} a besoin de lances pour la milice" />
+    <string id="AQ_MS_Description" text="Le chef de {ISSUE_SETTLEMENT} a besoin de lances pour la milice." />
+    <string id="AQ_MS_IssueBrief" text="J'organise actuellement la milice du village, mais nous manquons d'armes pour nous entraîner et nous battre. En particulier, nous avons très peu de lances dans l'armurerie." />
+    <string id="AQ_MS_IssueAccept" text="Comment puis-je aider?" />
+    <string id="AQ_MS_IssueSolution" text="Je peux gérer la formation de mon peuple en combattants de la milice, mais j'ai besoin de quelqu'un pour trouver des lances avec lesquelles me battre. Vous pouvez les acheter dans les villes environnantes. Vous pouvez même en fabriquer vous-même, si vous êtes un bon forgeron. Nous aurons besoin de {SPEARS_AMOUNT} lances au total. Je vous paierai {REWARD_AMOUNT}{GOLD_ICON} pour les lances." />
+    <string id="AQ_MS_IssueSolutionAccept" text="Je vais trouver les lances dont vous avez besoin." />
+    <string id="AQ_MS_Rumor" text="Les jeunes du village se sont tous enrôlés dans la milice nouvellement formée. Mais j'ai entendu dire que {QUEST_GIVER.NAME} n'avait pas assez de lances pour même la moitié d'entre eux avec lesquels s'entraîner, alors ils ont utilisé des bâtons en bois pour s'entraîner. J'espère qu'ils n'auront pas à utiliser ces mêmes bâtons dans un vrai combat !." />
+    <string id="AQ_MS_QuestAcceptLog" text="{QUEST_GIVER.LINK}, une {?QUEST_GIVER.GENDER}chefs{?}chef{\\?} de {QUEST_SETTLEMENT} vous a demandé de lui remettre {SPEARS_AMOUNT} lances {?QUEST_GIVER.GENDER}elle{?}lui{\\ ?} pour la milice villageoise. Cela contribuera à augmenter le nombre de miliciens capables dans le village. \n \n Vous avez accepté de leur apporter {SPEARS_AMOUNT} lances dès que possible. Vous serez payé {REWARD_AMOUNT}{GOLD_ICON} pour les lances. \n \n Les lances doivent être des armes d'hast à une main." />
+    <string id="AQ_MS_HasSpearsLog" text="Vous avez maintenant assez de lances pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre." />
+    <string id="AQ_MS_TimeoutLog" text="Vous n'avez pas réussi à livrer {SPEARS_AMOUNT} lances aux villageois. Ils ne pourront pas correctement entraîner leur milice. Le chef est déçu." />
+    <string id="AQ_MS_SuccessLog" text="Vous avez livré {SPEARS_AMOUNT} lances aux villageois. Leur milice est prête à s'entraîner et à défendre le village. Le chef et les villageois sont reconnaissants." />
+    <string id="AQ_MS_CancelWarLog" text="Votre clan est maintenant en guerre contre le seigneur de {ISSUE_GIVER.LINK}. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
+    <string id="AQ_MS_CancelRaidLog" text="{SETTLEMENT_NAME} a été perquisitionné par quelqu'un d'autre. Votre accord avec {ISSUE_GIVER.LINK} a été annulé." />
+    <string id="AQ_MS_ThankYouDialog" text="Merci {?PLAYER.GENDER}milady{?}monsieur{\\?} ! Nous ferons bon usage de ces lances." />
+    <string id="AQ_MS_WaitingDialog" text="Nous attendons ces lances, {?PLAYER.GENDER}milady{?}monsieur{\\?}." />
+    <string id="AQ_MS_DiscussDialog" text="Avez-vous apporté {SPEARS_AMOUNT} lances ?" />
+    <string id="AQ_MS_HandOverDialog" text="Oui. Les voici." />
+    <string id="AQ_MS_NotYetDialog" text="J'y travaille." />
+    <string id="AQ_MS_NotEnoughSpears" text="Vous n'avez pas assez de lances." />
+    <string id="AQ_MS_QuestObjective" text="Collectionnez les armes d'hast à une main" />
+    <string id="AQ_MS_HaveSpearsLog" text="Vous avez assez de lances pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre. " />
 
-        <!--
-            Quête de la ville affamée 
-        -->
-        <string id="AQSTitle" text="Crise alimentaire dans {ISSUE_SETTLEMENT}" />
-        <string id="AQSTDescription" text="La ville de {SETTLEMENT} est affamée, {MERCHANT_NAME} a besoin d'aide pour réapprovisionner la ville en nourriture." />
-        <string id="AQSTIssueBrief" text="La situation alimentaire est mauvaise, la ville meurt de faim. Nous avons dû rationner toute la nourriture entrant dans la ville mais il devient de plus en plus difficile chaque jour de mettre des repas devant les gens . Si cela continue plus longtemps, soit nous mourrons tous de faim, soit les gens se révolteront." />
-        <string id="AQSTIssueAccept" text="Puis-je aider ? J'ai de la nourriture à revendre." />
-        <string id="AQSTIssueSolution" text="Je vous remercie de votre gentillesse, mais nous aurons besoin d'une plus grande quantité de nourriture pour réapprovisionner la ville, assez pour nous permettre de continuer pendant que nous trions la source de notre pénurie alimentaire. Si vous le pouvez fournir des céréales, de la viande et du poisson, je vous paierai le triple du prix moyen pour chacun. Nous aurons besoin d'au moins 300 unités de nourriture au total pour approvisionner la ville." />
-        <string id="AQSTIssueSolutionAccept" text="Je vais chercher de la nourriture pour la ville." />
-        <string id="AQSTRumor" text="J'ai tellement faim... oh, désolé, est-ce que je suis tombé sur toi ? C'était si dur ces derniers temps... Je n'ai pas mangé depuis si longtemps... Si seulement quelqu'un pourrait aider {QUEST_GIVER.NAME} à apporter plus de nourriture en ville..." />
-        <string id="AQSTQuestAcceptLog" text="{QUEST_GIVER.LINK}, un commerçant de la ville de {QUEST_SETTLEMENT} vous a demandé de livrer {FOOD_AMOUNT} de la nourriture à la ville, pour aider à faire face à la crise alimentaire actuelle. La nourriture peut être soit Céréales, viandes ou poissons. \n \n Vous serez payé le triple du prix moyen de chaque marchandise à la livraison." />
-        <string id="AQSTHasFoodLog" text="Vous avez maintenant assez de nourriture pour terminer la quête. Retournez voir {QUEST_SETTLEMENT} pour la remettre." />
-        <string id="AQSTTimeoutLog" text="Vous n'avez pas livré {FOOD_AMOUNT} de nourriture à {QUEST_SETTLEMENT}. Les gens continuent de mourir de faim et {QUEST_GIVER.LINK} est déçu." />
-        <string id="AQSTSuccessLog" text="Vous avez livré {FOOD_AMOUNT} nourriture à {QUEST_SETTLEMENT}. Les gens se réjouissent de la livraison de nourriture. Vous avez sauvé les gens de la famine." />
-        <string id="AQSTthankYouDialog" text="Merci, {?PLAYER.GENDER}milady{?}monsieur{\\?}! Cette nourriture nous aidera tous." />
-        <string id="AQSTWaitingDialog" text="Nous attendons les vivres, {?PLAYER.GENDER}milady{?}monsieur{\\?}." />
-        <string id="AQSTDiscussDialog" text="Avez-vous apporté {FOOD_AMOUNT} nourriture ?" />
-        <string id="AQSTHandOverDialog" text="Oui. Voici." />
-        <string id="AQSTNotYetDialog" text="J'y travaille." />
-        <string id="AQSTNotEnoughFood" text="Vous n'avez pas assez de nourriture." />
-        <string id="AQSTQuestObjective" text="Collecter du grain/du poisson/de la viande." />
-        <string id="AQSTHaveFoodLog" text="Vous avez assez de nourriture pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre." />
-        <string id="AQSTGaveFoodMeat" text="Vous avez donné {FOOD_AMOUNT} viande. En retour, vous avez reçu {GOLD_AMOUNT}{GOLD_ICON}." />
-        <string id="AQSTGaveFoodFish" text="Vous avez donné {FOOD_AMOUNT} poisson. En retour, vous avez reçu {GOLD_AMOUNT}{GOLD_ICON}." />
-        <string id="AQSTGaveFoodGrain" text="Vous avez donné {FOOD_AMOUNT} céréales. En retour, vous avez reçu {GOLD_AMOUNT}{GOLD_ICON}." />
+    <!--
+        Quête de la ville affamée 
+    -->
+    <string id="AQSTitle" text="Crise alimentaire dans {ISSUE_SETTLEMENT}" />
+    <string id="AQSTDescription" text="La ville de {SETTLEMENT} est affamée, {MERCHANT_NAME} a besoin d'aide pour réapprovisionner la ville en nourriture." />
+    <string id="AQSTIssueBrief" text="La situation alimentaire est mauvaise, la ville meurt de faim. Nous avons dû rationner toute la nourriture entrant dans la ville mais il devient de plus en plus difficile chaque jour de mettre des repas devant les gens . Si cela continue plus longtemps, soit nous mourrons tous de faim, soit les gens se révolteront." />
+    <string id="AQSTIssueAccept" text="Puis-je aider ? J'ai de la nourriture à revendre." />
+    <string id="AQSTIssueSolution" text="Je vous remercie de votre gentillesse, mais nous aurons besoin d'une plus grande quantité de nourriture pour réapprovisionner la ville, assez pour nous permettre de continuer pendant que nous trions la source de notre pénurie alimentaire. Si vous le pouvez fournir des céréales, de la viande et du poisson, je vous paierai le triple du prix moyen pour chacun. Nous aurons besoin d'au moins 300 unités de nourriture au total pour approvisionner la ville." />
+    <string id="AQSTIssueSolutionAccept" text="Je vais chercher de la nourriture pour la ville." />
+    <string id="AQSTRumor" text="J'ai tellement faim... oh, désolé, est-ce que je suis tombé sur toi ? C'était si dur ces derniers temps... Je n'ai pas mangé depuis si longtemps... Si seulement quelqu'un pourrait aider {QUEST_GIVER.NAME} à apporter plus de nourriture en ville..." />
+    <string id="AQSTQuestAcceptLog" text="{QUEST_GIVER.LINK}, un commerçant de la ville de {QUEST_SETTLEMENT} vous a demandé de livrer {FOOD_AMOUNT} de la nourriture à la ville, pour aider à faire face à la crise alimentaire actuelle. La nourriture peut être soit Céréales, viandes ou poissons. \n \n Vous serez payé le triple du prix moyen de chaque marchandise à la livraison." />
+    <string id="AQSTHasFoodLog" text="Vous avez maintenant assez de nourriture pour terminer la quête. Retournez voir {QUEST_SETTLEMENT} pour la remettre." />
+    <string id="AQSTTimeoutLog" text="Vous n'avez pas livré {FOOD_AMOUNT} de nourriture à {QUEST_SETTLEMENT}. Les gens continuent de mourir de faim et {QUEST_GIVER.LINK} est déçu." />
+    <string id="AQSTSuccessLog" text="Vous avez livré {FOOD_AMOUNT} nourriture à {QUEST_SETTLEMENT}. Les gens se réjouissent de la livraison de nourriture. Vous avez sauvé les gens de la famine." />
+    <string id="AQSTthankYouDialog" text="Merci, {?PLAYER.GENDER}milady{?}monsieur{\\?}! Cette nourriture nous aidera tous." />
+    <string id="AQSTWaitingDialog" text="Nous attendons les vivres, {?PLAYER.GENDER}milady{?}monsieur{\\?}." />
+    <string id="AQSTDiscussDialog" text="Avez-vous apporté {FOOD_AMOUNT} nourriture ?" />
+    <string id="AQSTHandOverDialog" text="Oui. Voici." />
+    <string id="AQSTNotYetDialog" text="J'y travaille." />
+    <string id="AQSTNotEnoughFood" text="Vous n'avez pas assez de nourriture." />
+    <string id="AQSTQuestObjective" text="Collecter du grain/du poisson/de la viande." />
+    <string id="AQSTHaveFoodLog" text="Vous avez assez de nourriture pour terminer la quête. Retournez à {QUEST_SETTLEMENT} pour les remettre." />
+    <string id="AQSTGaveFoodMeat" text="Vous avez donné {FOOD_AMOUNT} viande. En retour, vous avez reçu {GOLD_AMOUNT}{GOLD_ICON}." />
+    <string id="AQSTGaveFoodFish" text="Vous avez donné {FOOD_AMOUNT} poisson. En retour, vous avez reçu {GOLD_AMOUNT}{GOLD_ICON}." />
+    <string id="AQSTGaveFoodGrain" text="Vous avez donné {FOOD_AMOUNT} céréales. En retour, vous avez reçu {GOLD_AMOUNT}{GOLD_ICON}." />
 
-        <!--
-            Quête du soulèvement de la ville 
-        -->
-        <string id="AQTUTitle" text="Rébellion dans {ISSUE_SETTLEMENT}!" />
-        <string id="AQTUDescription" text="Les gens {ISSUE_SETTLEMENT} sont en colère contre les mauvais traitements infligés par leur noblesse. Ils planifient une rébellion !" />
-        <string id="AQTUIssueBrief" text="Je vous fais confiance, alors écoutez attentivement. Les habitants de {ISSUE_SETTLEMENT} ont été maltraités pendant trop longtemps, j'ai donc organisé un \"remplacement\" du clan qui dirige cette ville . La plupart des miliciens sont avec moi, et j'ai plusieurs capitaines prêts à diriger en tant que chefs. Nous avons juste besoin d'aide pour convaincre la garnison qui est toujours fidèle à nos dirigeants actuels." />
-        <string id="AQTUIssueAccept" text="Je peux aider avec cette rébellion, de quoi avez-vous besoin de moi ?" />
-        <string id="AQTUIssueSolution" text="Nous voulons prendre le contrôle avec le moins de sang possible, mais nous aurons toujours besoin de combattre la garnison loyaliste restante ici dans la ville. Retrouvez-moi ici avec vos hommes à minuit, et nous le ferons commencer le coup d'État. J'amènerai aussi mes hommes." />
-        <string id="AQTUIssueSolutionAccept" text="Entendu, je vous rencontrerai bientôt." />
-        <string id="AQTURumor" text="On dit que {QUEST_GIVER.NAME} a convaincu la milice de la ville de renverser le clan au pouvoir. Ils ont tout nié, mais je ne suis pas si sûr..." />
-        <string id="AQTUQuestAcceptLog" text="{QUEST_GIVER.LINK}, un artisan de la ville de {QUEST_SETTLEMENT} vous a demandé d'aider la milice de la ville à renverser la garnison de la ville. Il vous a demandé d'attendre minuit, ce qui c'est quand le combat commencera. \n \n Attendez {QUEST_SETTLEMENT} jusqu'à minuit." />
-        <string id="AQTUFightReady" text="Les soldats fidèles de {QUEST_GIVER.LINK} sont prêts pour l'embuscade à {SETTLEMENT}." />
-        <string id="AQTUTimeoutLog" text="Vous n'avez pas réussi à rejoindre les rebelles à {QUEST_SETTLEMENT}. Le plan de rébellion a été annulé pour le moment, {QUEST_GIVER.LINK} est déçu de votre manque d'engagement." />
-        <string id="AQTUSuccessLog" text="Vous avez aidé les rebelles de {QUEST_SETTLEMENT} à prendre le contrôle de la ville. Un nouveau royaume a été formé !" />
-        <string id="AQTURejectionLog" text="Vous avez décidé de rester en dehors du combat. {QUEST_GIVER.LINK} a annulé l'embuscade et est déçu de votre refus de combattre." />
-        <string id="AQTUFailure" text="Vous n'avez pas réussi à vaincre les soldats loyalistes de {QUEST_SETTLEMENT}, la rébellion a été un échec !" />
-        <string id="AQTUCancelWarLog" text="Votre clan est maintenant en guerre avec les dirigeants de {QUEST_SETTLEMENT}. Il sera trop difficile d'aider les rebelles maintenant." />
-        <string id="AQTUCancelSiegeLog" text="{QUEST_GIVER.LINK} annule vos plans en raison du siège de {SETTLEMENT}. Les plans de la rébellion doivent maintenant être mis en attente." />
-        <string id="AQTUPreparationComplete" text="{QUEST_GIVER.LINK} a finalement envoyé un messager vous disant qu'il est temps de le rencontrer {?QUEST_GIVER.GENDER}son{?}lui{\\?} et de rejoindre le combat." />
-        <string id="AQTUOfferDialog" text="Attendez jusqu'à minuit, je vous enverrai quelqu'un quand nous serons prêts. Essayez de ne pas attirer l'attention sur vous avant." />
-        <string id="AQTUDiscussDialog" text="Ce n'est pas encore l'heure. Je vous enverrai un coureur le moment venu." />
-        <string id="AQTUWaitingForRunner" text="Très bien. J'attends votre coureur." />
-        <string id="AQTUPrepNotFinished" text="Vous le saurez tout de suite une fois les préparatifs terminés. Ne quittez pas la ville." />
-        <string id="AQTUWaitingImpatient" text="Je ne peux pas rester ici pour toujours. Soyez rapide." />
-        <string id="AQTUPrepImpatient" text="Je prépare ça aussi vite que possible." />
-        <string id="AQTUReadyDialog" text="Etes-vous prêt pour le combat ?" />
-        <string id="AQTUNotReady" text="J'ai besoin de plus de temps." />
-        <string id="AQTUNotReadyWounded" text="Mes blessures sont encore fraîches. J'ai besoin de temps pour récupérer." />
-        <string id="AQTUStartFightMenu" text="Un soldat de la milice s'approche de vous et vous informe discrètement que les hommes sont en position." />
-        <string id="AQTUStartFightOption" text="Suivez le soldat" />
-        <string id="AQTULeaveFightOption" text="Leave" />
-        <string id="AQTUSuccessDialog" text="C'est fait ! Les troupes restantes fidèles aux nobles ont été rassemblées et faites prisonnières. C'est le début d'un nouveau départ pour le peuple." />
+    <!--
+        Quête du soulèvement de la ville 
+    -->
+    <string id="AQTUTitle" text="Rébellion dans {ISSUE_SETTLEMENT}!" />
+    <string id="AQTUDescription" text="Les gens {ISSUE_SETTLEMENT} sont en colère contre les mauvais traitements infligés par leur noblesse. Ils planifient une rébellion !" />
+    <string id="AQTUIssueBrief" text="Je vous fais confiance, alors écoutez attentivement. Les habitants de {ISSUE_SETTLEMENT} ont été maltraités pendant trop longtemps, j'ai donc organisé un \"remplacement\" du clan qui dirige cette ville . La plupart des miliciens sont avec moi, et j'ai plusieurs capitaines prêts à diriger en tant que chefs. Nous avons juste besoin d'aide pour convaincre la garnison qui est toujours fidèle à nos dirigeants actuels." />
+    <string id="AQTUIssueAccept" text="Je peux aider avec cette rébellion, de quoi avez-vous besoin de moi ?" />
+    <string id="AQTUIssueSolution" text="Nous voulons prendre le contrôle avec le moins de sang possible, mais nous aurons toujours besoin de combattre la garnison loyaliste restante ici dans la ville. Retrouvez-moi ici avec vos hommes à minuit, et nous le ferons commencer le coup d'État. J'amènerai aussi mes hommes." />
+    <string id="AQTUIssueSolutionAccept" text="Entendu, je vous rencontrerai bientôt." />
+    <string id="AQTURumor" text="On dit que {QUEST_GIVER.NAME} a convaincu la milice de la ville de renverser le clan au pouvoir. Ils ont tout nié, mais je ne suis pas si sûr..." />
+    <string id="AQTUQuestAcceptLog" text="{QUEST_GIVER.LINK}, un artisan de la ville de {QUEST_SETTLEMENT} vous a demandé d'aider la milice de la ville à renverser la garnison de la ville. Il vous a demandé d'attendre minuit, ce qui c'est quand le combat commencera. \n \n Attendez {QUEST_SETTLEMENT} jusqu'à minuit." />
+    <string id="AQTUFightReady" text="Les soldats fidèles de {QUEST_GIVER.LINK} sont prêts pour l'embuscade à {SETTLEMENT}." />
+    <string id="AQTUTimeoutLog" text="Vous n'avez pas réussi à rejoindre les rebelles à {QUEST_SETTLEMENT}. Le plan de rébellion a été annulé pour le moment, {QUEST_GIVER.LINK} est déçu de votre manque d'engagement." />
+    <string id="AQTUSuccessLog" text="Vous avez aidé les rebelles de {QUEST_SETTLEMENT} à prendre le contrôle de la ville. Un nouveau royaume a été formé !" />
+    <string id="AQTURejectionLog" text="Vous avez décidé de rester en dehors du combat. {QUEST_GIVER.LINK} a annulé l'embuscade et est déçu de votre refus de combattre." />
+    <string id="AQTUFailure" text="Vous n'avez pas réussi à vaincre les soldats loyalistes de {QUEST_SETTLEMENT}, la rébellion a été un échec !" />
+    <string id="AQTUCancelWarLog" text="Votre clan est maintenant en guerre avec les dirigeants de {QUEST_SETTLEMENT}. Il sera trop difficile d'aider les rebelles maintenant." />
+    <string id="AQTUCancelSiegeLog" text="{QUEST_GIVER.LINK} annule vos plans en raison du siège de {SETTLEMENT}. Les plans de la rébellion doivent maintenant être mis en attente." />
+    <string id="AQTUPreparationComplete" text="{QUEST_GIVER.LINK} a finalement envoyé un messager vous disant qu'il est temps de le rencontrer {?QUEST_GIVER.GENDER}son{?}lui{\\?} et de rejoindre le combat." />
+    <string id="AQTUOfferDialog" text="Attendez jusqu'à minuit, je vous enverrai quelqu'un quand nous serons prêts. Essayez de ne pas attirer l'attention sur vous avant." />
+    <string id="AQTUDiscussDialog" text="Ce n'est pas encore l'heure. Je vous enverrai un coureur le moment venu." />
+    <string id="AQTUWaitingForRunner" text="Très bien. J'attends votre coureur." />
+    <string id="AQTUPrepNotFinished" text="Vous le saurez tout de suite une fois les préparatifs terminés. Ne quittez pas la ville." />
+    <string id="AQTUWaitingImpatient" text="Je ne peux pas rester ici pour toujours. Soyez rapide." />
+    <string id="AQTUPrepImpatient" text="Je prépare ça aussi vite que possible." />
+    <string id="AQTUReadyDialog" text="Etes-vous prêt pour le combat ?" />
+    <string id="AQTUNotReady" text="J'ai besoin de plus de temps." />
+    <string id="AQTUNotReadyWounded" text="Mes blessures sont encore fraîches. J'ai besoin de temps pour récupérer." />
+    <string id="AQTUStartFightMenu" text="Un soldat de la milice s'approche de vous et vous informe discrètement que les hommes sont en position." />
+    <string id="AQTUStartFightOption" text="Suivez le soldat" />
+    <string id="AQTULeaveFightOption" text="Leave" />
+    <string id="AQTUSuccessDialog" text="C'est fait ! Les troupes restantes fidèles aux nobles ont été rassemblées et faites prisonnières. C'est le début d'un nouveau départ pour le peuple." />
 
-        <!--
-            Quête de l'armée des bandits 
-        -->
-        <string id="AQBATitle" text="L'armée de bandits se dirige vers {ISSUE_SETTLEMENT} !" />
-        <string id="AQBADescription" text="Une armée de bandits se dirige vers {ISSUE_SETTLEMENT} pour un raid. Les habitants de {ISSUE_SETTLEMENT} ont besoin d'aide pour se défendre." />
-        <string id="AQBAIssueBrief" text="Une nouvelle terrible m'est parvenue, mes éclaireurs disent qu'une armée de canaille menée par un bandit autoproclamé \"roi\" se dirige vers notre village en ce moment, avec l'intention de tout prendre J'ai envoyé un message à nos nobles pour demander de l'aide, mais je crains qu'il ne soit trop tard au moment où ils arrivent ici. " />
-        <string id="AQBAIssueAccept" text="C'est une nouvelle troublante, comment allez-vous vous défendre ?" />
-        <string id="AQBAIssueSolution" text="Notre milice se battra pour nos maisons, mais plus nous aurons de personnes, mieux ce sera. L'ennemi sera principalement composé de racaille, juste des pillards à la recherche d'argent facile mais ils auront des bandits mieux entraînés aussi. Voulez-vous nous aider à défendre le village ?" />
-        <string id="AQBAIssueSolutionAccept" text="Oui, je vais aider à défendre le village." />
-        <string id="AQBARumor" text="J'ai entendu dire qu'une armée de bandits se dirigeait vers nous en ce moment ! Nous devons fuir, ou nous cacher ou-ou n'importe quoi mais rester ici ! S'il vous plaît, vous devez nous aider !" />
-        <string id="AQBAQuestAcceptLog" text="Le village de {QUEST_SETTLEMENT} est sur le point d'être attaqué par une armée de bandits depuis une cachette voisine ! {QUEST_GIVER.LINK} vous a demandé d'empêcher les bandits de dévaster le village. \n \ n Empêchez les bandits d'atteindre {QUEST_SETTLEMENT}." />
-        <string id="AQBABanditRaidingLog" text="L'armée de bandits fait un raid sur {QUEST_SETTLEMENT} ! Protégez-les !." />
-        <string id="AQBATimeoutLog" text="Vous avez mis trop de temps à vaincre l'armée de bandits, heureusement, cela signifie que les nobles au pouvoir {QUEST_SETTLEMENT} ont pu répondre à temps, votre accord a été annulé." />
-        <string id="AQBASuccessLog" text="Vous avez vaincu l'armée de bandits qui allait attaquer {QUEST_SETTLEMENT}. Les villageois vous en sont très reconnaissants. La faction qui dirige le village vous a accordé une prime pour avoir défendu le village." />
-        <string id="AQBAFailureLog" text="Vous n'avez pas réussi à arrêter l'armée de bandits. Les bandits ont ravagé {QUEST_SETTLEMENT} et sont partis." />
-        <string id="AQBAOfferDialog" text="Merci. Les bandits sont en route depuis une cachette à proximité. Mes éclaireurs vous montreront où elle se trouve. Nous prierons pour votre succès." />
-        <string id="AQBADiscussDialogStart" text="Je ne pense pas qu'ils seront longs maintenant. J'espère que vous pourrez les arrêter à temps." />
-        <string id="AQBADiscussDialogTalk" text="Ne vous inquiétez pas, nous allons écraser leur \"armée\"." />
-        <string id="AQBADiscussDialogFinish" text="Bien, bien. Merci encore." />
-        <string id="AQBABanditConfront" text="Qui êtes-vous ? C'est une armée, nous sommes en route pour un village pour collecter des \"taxes\". Si vous savez ce qui est bon pour vous, vous resterons hors de notre chemin !" />
-        <string id="AQBABanditConfrontResponse" text="Vous ne ferez pas de raid ici de sitôt, nous sommes là pour vous arrêter !" />
-        <string id="AQBADirection" text="Direction vers les bandits" />
-        <string id="AQBABanditHideoutMarked" text="{QUEST_GIVER.NAME} a marqué la cachette des bandits. L'armée des bandits se dirigera de là vers le village" />
-        <string id="AQBABanditArmyName" text="{BANDIT_CULTURE} Armée" />
+    <!--
+        Quête de l'armée des bandits 
+    -->
+    <string id="AQBATitle" text="L'armée de bandits se dirige vers {ISSUE_SETTLEMENT} !" />
+    <string id="AQBADescription" text="Une armée de bandits se dirige vers {ISSUE_SETTLEMENT} pour un raid. Les habitants de {ISSUE_SETTLEMENT} ont besoin d'aide pour se défendre." />
+    <string id="AQBAIssueBrief" text="Une nouvelle terrible m'est parvenue, mes éclaireurs disent qu'une armée de canaille menée par un bandit autoproclamé \"roi\" se dirige vers notre village en ce moment, avec l'intention de tout prendre J'ai envoyé un message à nos nobles pour demander de l'aide, mais je crains qu'il ne soit trop tard au moment où ils arrivent ici. " />
+    <string id="AQBAIssueAccept" text="C'est une nouvelle troublante, comment allez-vous vous défendre ?" />
+    <string id="AQBAIssueSolution" text="Notre milice se battra pour nos maisons, mais plus nous aurons de personnes, mieux ce sera. L'ennemi sera principalement composé de racaille, juste des pillards à la recherche d'argent facile mais ils auront des bandits mieux entraînés aussi. Voulez-vous nous aider à défendre le village ?" />
+    <string id="AQBAIssueSolutionAccept" text="Oui, je vais aider à défendre le village." />
+    <string id="AQBARumor" text="J'ai entendu dire qu'une armée de bandits se dirigeait vers nous en ce moment ! Nous devons fuir, ou nous cacher ou-ou n'importe quoi mais rester ici ! S'il vous plaît, vous devez nous aider !" />
+    <string id="AQBAQuestAcceptLog" text="Le village de {QUEST_SETTLEMENT} est sur le point d'être attaqué par une armée de bandits depuis une cachette voisine ! {QUEST_GIVER.LINK} vous a demandé d'empêcher les bandits de dévaster le village. \n \ n Empêchez les bandits d'atteindre {QUEST_SETTLEMENT}." />
+    <string id="AQBABanditRaidingLog" text="L'armée de bandits fait un raid sur {QUEST_SETTLEMENT} ! Protégez-les !." />
+    <string id="AQBATimeoutLog" text="Vous avez mis trop de temps à vaincre l'armée de bandits, heureusement, cela signifie que les nobles au pouvoir {QUEST_SETTLEMENT} ont pu répondre à temps, votre accord a été annulé." />
+    <string id="AQBASuccessLog" text="Vous avez vaincu l'armée de bandits qui allait attaquer {QUEST_SETTLEMENT}. Les villageois vous en sont très reconnaissants. La faction qui dirige le village vous a accordé une prime pour avoir défendu le village." />
+    <string id="AQBAFailureLog" text="Vous n'avez pas réussi à arrêter l'armée de bandits. Les bandits ont ravagé {QUEST_SETTLEMENT} et sont partis." />
+    <string id="AQBAOfferDialog" text="Merci. Les bandits sont en route depuis une cachette à proximité. Mes éclaireurs vous montreront où elle se trouve. Nous prierons pour votre succès." />
+    <string id="AQBADiscussDialogStart" text="Je ne pense pas qu'ils seront longs maintenant. J'espère que vous pourrez les arrêter à temps." />
+    <string id="AQBADiscussDialogTalk" text="Ne vous inquiétez pas, nous allons écraser leur \"armée\"." />
+    <string id="AQBADiscussDialogFinish" text="Bien, bien. Merci encore." />
+    <string id="AQBABanditConfront" text="Qui êtes-vous ? C'est une armée, nous sommes en route pour un village pour collecter des \"taxes\". Si vous savez ce qui est bon pour vous, vous resterons hors de notre chemin !" />
+    <string id="AQBABanditConfrontResponse" text="Vous ne ferez pas de raid ici de sitôt, nous sommes là pour vous arrêter !" />
+    <string id="AQBADirection" text="Direction vers les bandits" />
+    <string id="AQBABanditHideoutMarked" text="{QUEST_GIVER.NAME} a marqué la cachette des bandits. L'armée des bandits se dirigera de là vers le village" />
+    <string id="AQBABanditArmyName" text="{BANDIT_CULTURE} Armée" />
 
-    </strings>
-</base>
+</strings>
