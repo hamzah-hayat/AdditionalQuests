@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -390,7 +391,7 @@ namespace AdditionalQuestsCode.Quests
                 {
                     TextObject textObject = new TextObject("{=AQMSHaveSpearsLog}You have enough spears to complete the quest. Return to {QUEST_SETTLEMENT} to hand them over.", null);
                     textObject.SetTextVariable("QUEST_SETTLEMENT", base.QuestGiver.CurrentSettlement.Name);
-                    InformationManager.AddQuickInformation(textObject, 0, null, "");
+                    MBInformationManager.AddQuickInformation(textObject, 0, null, "");
                 }
                 return itemNumber;
             }

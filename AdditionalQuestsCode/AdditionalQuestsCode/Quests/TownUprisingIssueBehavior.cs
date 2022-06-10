@@ -326,7 +326,7 @@ namespace AdditionalQuestsCode.Quests
                 TextObject textObject = new TextObject("{=AQTUPreparationComplete}{QUEST_GIVER.LINK} has finally sent a messenger telling you it's time to meet {?QUEST_GIVER.GENDER}her{?}him{\\?} and join the fight.", null);
                 StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                 base.AddLog(StageTwoFightIsReadyLogText, false);
-                InformationManager.AddQuickInformation(textObject, 0, null, "");
+                MBInformationManager.AddQuickInformation(textObject, 0, null, "");
             }
 
             private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)

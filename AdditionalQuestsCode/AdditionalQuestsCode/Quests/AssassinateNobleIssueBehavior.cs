@@ -18,7 +18,7 @@ namespace AdditionalQuestsCode.Quests
         // Also during a war between the two factions
         private bool ConditionsHold(Hero issueGiver)
         {
-            return issueGiver.IsNoble;
+            return issueGiver.IsLord;
         }
 
         // If the conditions hold, start this quest, otherwise just add it as a possible quest

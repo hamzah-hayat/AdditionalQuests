@@ -445,7 +445,7 @@ namespace AdditionalQuestsCode.Quests
                 QuestHelper.AddMapArrowFromPointToTarget(new TextObject("{=AQBADirection}Direction to Bandits", null), QuestGiver.CurrentSettlement.Position2D, BanditSettlement.Position2D, 5f, 0.1f, 1056732);
                 TextObject textObject = new TextObject("{=AQBABanditHideoutMarked}{QUEST_GIVER.NAME} has marked the bandit hideout. The bandit army will head from there to the village", null);
                 StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
-                InformationManager.AddQuickInformation(textObject, 0, null, "");
+                MBInformationManager.AddQuickInformation(textObject, 0, null, "");
             }
 
             private void FinishQuest(BanditArmyRaidQuestFinish finishState)

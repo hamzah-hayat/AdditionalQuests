@@ -26,7 +26,7 @@ namespace AdditionalQuestsCode.Quests
         // Needs to be a noble commander with at least 20% of their army being tier one/tier two units
         private bool ConditionsHold(Hero issueGiver)
         {
-            if (issueGiver.IsNoble && issueGiver.IsPartyLeader)
+            if (issueGiver.IsLord && issueGiver.IsPartyLeader)
             {
                 double lowTierTroops = 0;
                 double totalTroops = 0;
@@ -158,7 +158,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                if (IssueOwner.IsNoble && IssueOwner.IsPartyLeader)
+                if (IssueOwner.IsLord && IssueOwner.IsPartyLeader)
                 {
                     double lowTierTroops = 0;
                     double totalTroops = 0;
@@ -352,7 +352,7 @@ namespace AdditionalQuestsCode.Quests
                 TextObject textObject = new TextObject("{=DUKbtlNb}{QUEST_GIVER.LINK} has finally sent a messenger telling you it's time to meet {?QUEST_GIVER.GENDER}her{?}him{\\?} and join the fight.", null);
                 StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject);
                 base.AddLog(StageTwoFightIsReadyLogText, false);
-                InformationManager.AddQuickInformation(textObject, 0, null, "");
+                MBInformationManager.AddQuickInformation(textObject, 0, null, "");
             }
 
             private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)

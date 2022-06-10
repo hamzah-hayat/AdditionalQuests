@@ -64,7 +64,7 @@ namespace AdditionalQuestsCode.Utils
 
         public static void QuickInformationMessage(string message)
         {
-            InformationManager.AddQuickInformation(new TextObject(message, null), 0, null, "");
+            MBInformationManager.AddQuickInformation(new TextObject(message, null), 0, null, "");
         }
 
         [Conditional("DEBUG")]
