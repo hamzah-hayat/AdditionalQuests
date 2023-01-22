@@ -303,7 +303,7 @@ namespace AdditionalQuestsCode.Quests
             protected override void RegisterEvents()
             {
                 CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, new Action(this.HourlyTick));
-                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction, DeclareWarAction.DeclareWarDetail>(this.OnWarDeclared));
                 CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(this.OnSiegeEventStarted));
                 CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
             }
@@ -334,7 +334,7 @@ namespace AdditionalQuestsCode.Quests
                 this.CheckWarDeclaration();
             }
 
-            private void OnWarDeclared(IFaction faction1, IFaction faction2)
+            private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
             {
                 this.CheckWarDeclaration();
             }
@@ -497,9 +497,10 @@ namespace AdditionalQuestsCode.Quests
                 PlayerEncounter.RestartPlayerEncounter(this.HostileGarrisonParty.Party, PartyBase.MainParty, false);
                 GameMenu.ActivateGameMenu("town_uprising_quest_after_fight");
                 this._isReadyToBeFinalized = true;
-                PlayerEncounter.Current.ForceAlleyFight = true;
                 PlayerEncounter.StartBattle();
-                PlayerEncounter.StartAlleyFightMission();
+
+                int upgradeLevel = base.QuestGiver.CurrentSettlement.IsTown ? base.QuestGiver.CurrentSettlement.Town.GetWallLevel() : 1;
+                CampaignMission.OpenBattleMissionWhileEnteringSettlement(base.QuestGiver.CurrentSettlement.LocationComplex.GetLocationWithId("center").GetSceneName(upgradeLevel), upgradeLevel, 10, 10);
             }
 
             private bool town_uprising_quest_wait_duration_is_over_yes_condition(MenuCallbackArgs args)

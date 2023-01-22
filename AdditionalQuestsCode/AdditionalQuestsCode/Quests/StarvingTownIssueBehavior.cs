@@ -250,7 +250,7 @@ namespace AdditionalQuestsCode.Quests
             protected override void RegisterEvents()
             {
                 CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
-                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction>(this.OnWarDeclared));
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction, DeclareWarAction.DeclareWarDetail>(this.OnWarDeclared));
                 CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
@@ -271,7 +271,7 @@ namespace AdditionalQuestsCode.Quests
                 this.CheckWarDeclaration();
             }
 
-            private void OnWarDeclared(IFaction faction1, IFaction faction2)
+            private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
             {
                 this.CheckWarDeclaration();
             }
@@ -286,7 +286,10 @@ namespace AdditionalQuestsCode.Quests
 
             private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
             {
-                QuestHelper.CheckMinorMajorCoercionAndFailQuest(this, mapEvent, attackerParty);
+                if (QuestHelper.CheckMinorMajorCoercion(this, mapEvent, attackerParty))
+                {
+                    QuestHelper.ApplyGenericMinorMajorCoercionConsequences(this, mapEvent);
+                }
             }
 
 
