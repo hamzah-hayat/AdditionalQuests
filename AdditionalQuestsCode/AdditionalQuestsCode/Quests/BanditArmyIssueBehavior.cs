@@ -187,6 +187,10 @@ namespace AdditionalQuestsCode.Quests
             protected override void OnGameLoad()
             {
             }
+
+            protected override void HourlyTick()
+            {
+            }
         }
 
         internal class VillageBanditArmyRaidQuest : QuestBase
@@ -292,7 +296,7 @@ namespace AdditionalQuestsCode.Quests
                 CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, new Action(this.OnHourlyTickEvent));
                 CampaignEvents.MapEventEnded.AddNonSerializedListener(this, new Action<MapEvent>(this.MapEventEnded));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction, DeclareWarAction.DeclareWarDetail>(this.OnWarDeclared));
-                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.SettlementEntered));
                 CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, new Action<Village>(this.OnVillageBeingRaided));
                 CampaignEvents.VillageLooted.AddNonSerializedListener(this, new Action<Village>(this.OnVillageLooted));
@@ -303,7 +307,10 @@ namespace AdditionalQuestsCode.Quests
             {
                 QuestHelper.CheckMinorMajorCoercion(this, mapEvent, attackerParty);
             }
+            protected override void HourlyTick()
+            {
 
+            }
             private void OnHourlyTickEvent()
             {
                 if (BanditArmyMobileParty == null || BanditArmyMobileParty.MapEvent == null)
@@ -471,7 +478,7 @@ namespace AdditionalQuestsCode.Quests
                             }
                             ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
                         }
-                        QuestGiver.CurrentSettlement.Prosperity += 100f;
+                        QuestGiver.CurrentSettlement.Town.Prosperity += 100f;
                         CompleteQuestWithSuccess();
                         break;
                     case BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer:
@@ -552,7 +559,7 @@ namespace AdditionalQuestsCode.Quests
                 BanditArmyMobileParty.IgnoreByOtherPartiesTill(QuestDueTime);
                 BanditArmyMobileParty.Aggressiveness = 0f;
                 BanditArmyMobileParty.Ai.SetDoNotMakeNewDecisions(true);
-                BanditArmyMobileParty.Party.Visuals.SetMapIconAsDirty();
+                BanditArmyMobileParty.Party.SetVisualAsDirty();
                 SetPartyAiAction.GetActionForRaidingSettlement(BanditArmyMobileParty, QuestGiver.CurrentSettlement);
             }
 

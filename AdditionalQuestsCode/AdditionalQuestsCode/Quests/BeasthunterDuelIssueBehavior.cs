@@ -183,6 +183,10 @@ namespace AdditionalQuestsCode.Quests
                     return 1000;
                 }
             }
+
+            protected override void HourlyTick()
+            {
+            }
         }
 
         //internal class BeastHunterDuelQuest : QuestBase { }

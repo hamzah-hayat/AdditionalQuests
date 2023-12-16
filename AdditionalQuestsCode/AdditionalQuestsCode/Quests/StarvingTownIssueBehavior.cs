@@ -166,6 +166,10 @@ namespace AdditionalQuestsCode.Quests
             protected override void OnGameLoad()
             {
             }
+
+            protected override void HourlyTick()
+            {
+            }
         }
 
         internal class StarvingTownNeedsFoodQuest : QuestBase
@@ -251,7 +255,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction, DeclareWarAction.DeclareWarDetail>(this.OnWarDeclared));
-                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
 
@@ -450,17 +454,20 @@ namespace AdditionalQuestsCode.Quests
                 }
 
                 // also increase settlement prosperity
-                Settlement.CurrentSettlement.Prosperity += 100f;
+                Settlement.CurrentSettlement.Town.Prosperity += 100f;
             }
 
             private void Fail()
             {
                 base.QuestGiver.AddPower(-25f);
-                base.QuestGiver.CurrentSettlement.Prosperity += -50f;
+                base.QuestGiver.CurrentSettlement.Town.Prosperity += -50f;
                 this.RelationshipChangeWithQuestGiver = -10;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
             }
 
+            protected override void HourlyTick()
+            {
+            }
 
             // Saved vars/logs
             [SaveableField(1)]

@@ -186,6 +186,9 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
+            protected override void HourlyTick()
+            {
+            }
         }
 
         internal class HeadmanNeedsMilitiaWeaponsQuest : QuestBase
@@ -279,7 +282,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 CampaignEvents.PlayerInventoryExchangeEvent.AddNonSerializedListener(this, new Action<List<ValueTuple<ItemRosterElement, int>>, List<ValueTuple<ItemRosterElement, int>>, bool>(this.OnPlayerInventoryExchange));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction,DeclareWarAction.DeclareWarDetail>(this.OnWarDeclared));
-                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.VillageLooted.AddNonSerializedListener(this, new Action<Village>(this.OnRaidCompleted));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
@@ -426,7 +429,7 @@ namespace AdditionalQuestsCode.Quests
                 // Remove spears
                 AdditionalQuestsHelperMethods.RemoveWeaponsWithTypeFromPlayer(WeaponClass.OneHandedPolearm, NeededSpears);
                 base.QuestGiver.AddPower(25f);
-                Settlement.CurrentSettlement.Prosperity += 50f;
+                Settlement.CurrentSettlement.Town.Prosperity += 50f;
                 Settlement.CurrentSettlement.Militia += 20f;
                 this.RelationshipChangeWithQuestGiver = 10;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
@@ -436,9 +439,13 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.CompleteQuestWithFail();
                 base.QuestGiver.AddPower(-15f);
-                base.QuestGiver.CurrentSettlement.Prosperity += -25f;
+                base.QuestGiver.CurrentSettlement.Town.Prosperity += -25f;
                 this.RelationshipChangeWithQuestGiver = -5;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);
+            }
+
+            protected override void HourlyTick()
+            {
             }
 
 

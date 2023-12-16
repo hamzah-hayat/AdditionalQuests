@@ -192,6 +192,10 @@ namespace AdditionalQuestsCode.Quests
             protected override void OnGameLoad()
             {
             }
+
+            protected override void HourlyTick()
+            {
+            }
         }
 
         internal class TownUprisingQuest : QuestBase
@@ -305,10 +309,10 @@ namespace AdditionalQuestsCode.Quests
                 CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, new Action(this.HourlyTick));
                 CampaignEvents.WarDeclared.AddNonSerializedListener(this, new Action<IFaction, IFaction, DeclareWarAction.DeclareWarDetail>(this.OnWarDeclared));
                 CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(this.OnSiegeEventStarted));
-                CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
+                CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
             }
 
-            private void HourlyTick()
+            protected override void HourlyTick()
             {
                 if (PlayerEncounter.Current != null && PlayerEncounter.Current.IsPlayerWaiting && PlayerEncounter.EncounterSettlement == QuestGiver.CurrentSettlement && CampaignTime.Now.IsNightTime && !this._isReadyToBeFinalized)
                 {
@@ -396,8 +400,8 @@ namespace AdditionalQuestsCode.Quests
                 base.AddGameMenu("town_uprising_quest_before_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_before_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.None);
                 base.AddGameMenu("town_uprising_quest_after_fight", TextObject.Empty, new OnInitDelegate(town_uprising_quest_after_fight_init), GameOverlays.MenuOverlayType.SettlementWithBoth, GameMenu.MenuFlags.None);
                 base.AddGameMenu("town_uprising_quest_wait_duration_is_over", textObject, new OnInitDelegate(town_uprising_wait_duration_is_over_menu_on_init), GameOverlays.MenuOverlayType.None, GameMenu.MenuFlags.None);
-                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_yes", new TextObject("{=AQTUStartFightOption}Follow the soldier", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_yes_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_yes_consequence), false, -1, null);
-                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_no", new TextObject("{=AQTULeaveFightOption}Leave", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_no_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_no_consequence), false, -1, null);
+                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_yes", new TextObject("{=AQTUStartFightOption}Follow the soldier", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_yes_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_yes_consequence), false, -1);
+                base.AddGameMenuOption("town_uprising_quest_wait_duration_is_over", "town_uprising_quest_wait_duration_is_over_no", new TextObject("{=AQTULeaveFightOption}Leave", null), new GameMenuOption.OnConditionDelegate(this.town_uprising_quest_wait_duration_is_over_no_condition), new GameMenuOption.OnConsequenceDelegate(this.rival_gang_quest_wait_duration_is_over_no_consequence), false, -1);
             }
 
             public override bool IsRemainingTimeHidden
