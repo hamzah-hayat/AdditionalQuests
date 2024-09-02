@@ -525,23 +525,25 @@ namespace AdditionalQuestsCode.Quests
                 }
 
                 // Build the Bandit Party
-                // Start with random number between 40 - 60
-                // Then add another random number between 40 - 60 based on player clan tier
+                int minBandits = 30;
+                int maxBandits = 75;
+                // Start with random number between minBandits - maxBandits
+                // Then add another random number between minBandits - maxBandits based on player clan tier
                 // Multiply by Bandit size setting
-                int banditPartySize = MBRandom.RandomInt(40, 60);
+                int banditPartySize = MBRandom.RandomInt(minBandits, maxBandits);
                 for (int i = 0; i < Hero.MainHero.Clan.Tier; i++)
                 {
-                    banditPartySize += MBRandom.RandomInt(40, 60);
+                    banditPartySize += MBRandom.RandomInt(minBandits, maxBandits);
                 }
-                banditPartySize *= (int)MCMAQSettings.Instance.BanditArmy_SizeMultiplier;
+                banditPartySize = (int)(banditPartySize * MCMAQSettings.Instance.BanditArmy_SizeMultiplier);
 
                 // 50% looters, 50% bandit culture specific, with 30% being tier one, 20% being tier two bandit then one leader
                 PartyTemplateObject defaultPartyTemplate = new();
                 defaultPartyTemplate.Stacks = new()
                 {
                     new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 4), 1, 1),
-                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 3), ((banditPartySize * 20) / 100), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2)),
-                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3))
+                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 3), (banditPartySize * (20 - MBRandom.RandomInt(0, 10)) / 100), (banditPartySize * (20 + MBRandom.RandomInt(0, 10)) / 100)),
+                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 2), (banditPartySize * (30 - MBRandom.RandomInt(0, 10)) / 100), (banditPartySize * (30 + MBRandom.RandomInt(0, 10)) / 100))
                 };
 
                 BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
@@ -553,7 +555,7 @@ namespace AdditionalQuestsCode.Quests
 
                 // Add looters now
                 // We do this because of how InitializeMobileParty works, for bandits it only allows three troop types, and ignores any others, so we need to add the looters after
-                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId.Equals("looter")), ((banditPartySize * 50) / 100) + MBRandom.RandomInt(-5, 5));
+                BanditArmyMobileParty.AddElementToMemberRoster(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.StringId.Equals("looter")), ((banditPartySize * (50 - MBRandom.RandomInt(-10, 10))) / 100));
 
                 // Add some food to party
                 float foodChange = MathF.Abs(this.BanditArmyMobileParty.FoodChange);
