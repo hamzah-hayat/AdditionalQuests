@@ -28,6 +28,12 @@ namespace AdditionalQuestsCode.Quests
             return null;
         }
 
+        // FindSuitableHideout finds a hideout that is near to the issueOwner, default of 1225 distance
+        public static Settlement? FindSuitableHideout(Hero issueOwner)
+        {
+            return FindSuitableHideout(issueOwner, 1225f);
+        }
+
         // FindSuitableAssassinationTarget returns a random "target" hero that is considered to be an "Enemy" of the questGiver
         // If it returns null, this Quest Giver has no Enemies!
         // The minRelationForTarget is used to compare, for example a -20 value would mean that the quest giver and target have -20 relation with each other
@@ -52,20 +58,6 @@ namespace AdditionalQuestsCode.Quests
             {
                 return targets.GetRandomElement();
             }
-        }
-
-        // FindSuitableHideout finds a hideout that is near to the issueOwner, default of 1225 distance
-        public static Settlement? FindSuitableHideout(Hero issueOwner)
-        {
-            foreach (Settlement settlement in from t in Settlement.All where t.IsHideout && t.Hideout.IsInfested select t)
-            {
-                float distancetoHideout = settlement.GatePosition.DistanceSquared(issueOwner.GetMapPoint().Position2D);
-                if (distancetoHideout <= 1225f)
-                {
-                    return settlement;
-                }
-            }
-            return null;
         }
 
         public static int GetRequiredWeaponWithTypeCountOnPlayer(WeaponClass weaponType)

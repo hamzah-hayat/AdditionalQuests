@@ -29,11 +29,29 @@ namespace AdditionalQuestsCode
                 return;
             }
 
-            // Not using MCM atm, so load all Issue Behaviours
-            gameStarter.AddBehavior(new MilitiaSpearsIssueBehavior());
-            gameStarter.AddBehavior(new StarvingTownIssueBehavior());
-            gameStarter.AddBehavior(new BanditArmyIssueBehavior());
-            gameStarter.AddBehavior(new TownUprisingIssueBehavior());
+            if (MCMAQSettings.Instance.BanditArmy_Enabled) {
+                gameStarter.AddBehavior(new BanditArmyIssueBehavior());
+                Logging.MessageDebug("Adding Bandit Army Quest");
+            }
+
+            if (MCMAQSettings.Instance.MilitiaSpears_Enabled)
+            {
+                gameStarter.AddBehavior(new MilitiaSpearsIssueBehavior());
+                Logging.MessageDebug("Adding Militia Spears Quest");
+            }
+
+            if (MCMAQSettings.Instance.StarvingTown_Enabled)
+            {
+                gameStarter.AddBehavior(new StarvingTownIssueBehavior());
+                Logging.MessageDebug("Adding Starving Town Quest");
+            }
+
+            if (MCMAQSettings.Instance.TownUprising_Enabled)
+            {
+                gameStarter.AddBehavior(new TownUprisingIssueBehavior());
+                Logging.MessageDebug("Adding Town Uprising Quest");
+            }
+
             Logging.MessageDebug("AdditionalQuests loaded sucessfully!");
         }
     }

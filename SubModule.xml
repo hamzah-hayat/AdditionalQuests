@@ -6,7 +6,7 @@ Adds new quests for notables to give out to the player
 <Module>
     <Name value="Additional Quests" />
     <Id value="AdditionalQuests" />
-    <Version value="v1.1.7" />
+    <Version value="v1.2.0" />
     <SingleplayerModule value="true" />
     <MultiplayerModule value="false" />
     <Official value="false" />
@@ -16,6 +16,7 @@ Adds new quests for notables to give out to the player
         <DependedModule Id="Sandbox" DependentVersion="v1.1.0" Optional="false"/>
         <DependedModule Id="CustomBattle" DependentVersion="v1.1.0" Optional="false"/>
         <DependedModule Id="StoryMode" DependentVersion="v1.1.0" Optional="false"/>
+        <DependedModule Id="Bannerlord.MBOptionScreen"/>
     </DependedModules>
     <SubModules>
         <SubModule>

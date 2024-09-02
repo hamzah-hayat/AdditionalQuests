@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.14</Version>
+    <Version>1.2.0</Version>
     <TargetFramework>net472</TargetFramework>
     <Platforms>x64</Platforms>
     <LangVersion>9.0</LangVersion>
@@ -17,6 +17,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutputPath>C:\Users\Hamzah\Documents\GitHub\AdditionalQuests\bin\Win64_Shipping_Client</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bannerlord.MCM" Version="5.0.0" IncludeAssets="compile" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.*.dll">

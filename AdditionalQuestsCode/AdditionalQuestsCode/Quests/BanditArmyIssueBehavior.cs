@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AdditionalQuestsCode.Utils;
 using Helpers;
@@ -147,7 +148,7 @@ namespace AdditionalQuestsCode.Quests
 
             public override bool IssueStayAliveConditions()
             {
-                return BanditSettlement.Hideout.IsInfested;
+                return BanditSettlement.Hideout.IsInfested && BanditSettlement.IsActive;
             }
 
             protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
@@ -167,7 +168,7 @@ namespace AdditionalQuestsCode.Quests
                 {
                     flag |= IssueBase.PreconditionFlags.ClanTier;
                 }
-                if (MobileParty.MainParty.MemberRoster.TotalHealthyCount < 50)
+                if (MobileParty.MainParty.MemberRoster.TotalHealthyCount < 50 & !MCMAQSettings.Instance.BanditArmy_MinTroopReqDisabled)
                 {
                     flag |= IssueBase.PreconditionFlags.NotEnoughTroops;
                 }
@@ -299,7 +300,7 @@ namespace AdditionalQuestsCode.Quests
                 CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomAction.ChangeKingdomActionDetail, bool>(this.OnClanChangedKingdom));
                 CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.SettlementEntered));
                 CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, new Action<Village>(this.OnVillageBeingRaided));
-                CampaignEvents.VillageLooted.AddNonSerializedListener(this, new Action<Village>(this.OnVillageLooted));
+                CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, new Action<BattleSideEnum,RaidEventComponent>(this.OnRaidCompleted));
                 CampaignEvents.MapEventStarted.AddNonSerializedListener(this, new Action<MapEvent, PartyBase, PartyBase>(this.OnMapEventStarted));
             }
 
@@ -392,9 +393,9 @@ namespace AdditionalQuestsCode.Quests
                 }
             }
 
-            private void OnVillageLooted(Village village)
+            private void OnRaidCompleted(BattleSideEnum battleSide, RaidEventComponent raidEvent)
             {
-                if (village.Settlement == QuestGiver.CurrentSettlement && village.Settlement.LastAttackerParty == BanditArmyMobileParty)
+                if(raidEvent.MapEventSettlement == QuestGiver.CurrentSettlement & raidEvent.AttackerSide.LeaderParty.MobileParty == BanditArmyMobileParty)
                 {
                     base.CompleteQuestWithFail();
                     FinishQuest(BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer);
@@ -461,24 +462,25 @@ namespace AdditionalQuestsCode.Quests
                 {
                     case BanditArmyRaidQuestFinish.PlayerDefeatBanditArmy:
                         AddLog(StageSuccessLogText, false);
-                        // Now do player effects eg add reknown
+                        // Now do player effects eg add renown
                         Clan.PlayerClan.AddRenown(5f, false);
                         GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, this.RewardGold, false);
-                        // Now add power to notable and give relationship bonus
+                        // Now add power to QuestGiver
                         base.QuestGiver.AddPower(25f);
-                        this.RelationshipChangeWithQuestGiver = 20;
-                        ChangeRelationAction.ApplyPlayerRelation(QuestGiver, this.RelationshipChangeWithQuestGiver, false, true);
-                        // also increase settlement prosperity
+                        // Add relationship to QuestGiver
                         // bonus to relationship with other notables as well
+                        this.RelationshipChangeWithQuestGiver = 20;
                         foreach (var hero in QuestGiver.CurrentSettlement.Notables)
                         {
                             if (hero == QuestGiver)
                             {
-                                continue;
+                                ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver, false, true);
+                            } else {
+                                ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
                             }
-                            ChangeRelationAction.ApplyPlayerRelation(hero, this.RelationshipChangeWithQuestGiver / 2, false, false);
                         }
-                        QuestGiver.CurrentSettlement.Town.Prosperity += 100f;
+                        // also increase village Hearths
+                        base.QuestGiver.CurrentSettlement.Village.Hearth += 100f;
                         CompleteQuestWithSuccess();
                         break;
                     case BanditArmyRaidQuestFinish.BanditArmyDefeatPlayer:
@@ -512,28 +514,35 @@ namespace AdditionalQuestsCode.Quests
             private void CreateBanditArmyParty()
             {
                 // Get our Bandit Settlement Culture
+                // We assume the bandit settlement exists as it has to for the issue to be valid
+                // TODO: add some sort of sanity check so this works even without a bandit hideout?
                 Clan clan = null;
-                if (BanditSettlement != null)
-                {
-                    CultureObject banditCulture = BanditSettlement.Culture;
-                    clan = Clan.BanditFactions.FirstOrDefault((Clan x) => x.Culture == banditCulture);
-                }
+                CultureObject banditCulture = BanditSettlement.Culture;
+                clan = Clan.BanditFactions.FirstOrDefault((Clan x) => x.Culture == banditCulture);
                 if (clan == null)
                 {
                     clan = Clan.All.GetRandomElementWithPredicate((Clan x) => x.IsBanditFaction);
                 }
 
                 // Build the Bandit Party
-                // 50% looters, 50% bandit culture specific, with 30% being tier one, 20% being tier two bandit then one leader
-                // Party size is 50 at player clan tier one, plus 50 per player clan tier
-                //this._banditParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"), this.BanditPartyTroopCount / 4);
-                int banditPartySize = 50 + Hero.MainHero.Clan.Tier * 50;
+                // Start with random number between 40 - 60
+                // Then add another random number between 40 - 60 based on player clan tier
+                // Multiply by Bandit size setting
+                int banditPartySize = MBRandom.RandomInt(40, 60);
+                for (int i = 0; i < Hero.MainHero.Clan.Tier; i++)
+                {
+                    banditPartySize += MBRandom.RandomInt(40, 60);
+                }
+                banditPartySize *= (int)MCMAQSettings.Instance.BanditArmy_SizeMultiplier;
 
+                // 50% looters, 50% bandit culture specific, with 30% being tier one, 20% being tier two bandit then one leader
                 PartyTemplateObject defaultPartyTemplate = new();
-                defaultPartyTemplate.Stacks = new();
-                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 4), 1, 1));
-                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 3), ((banditPartySize * 20) / 100), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2)));
-                defaultPartyTemplate.Stacks.Add(new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == BanditSettlement.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3)));
+                defaultPartyTemplate.Stacks = new()
+                {
+                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 4), 1, 1),
+                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 3), ((banditPartySize * 20) / 100), ((banditPartySize * 20) / 100) + MBRandom.RandomInt(-2, 2)),
+                    new PartyTemplateStack(CharacterObject.All.FirstOrDefault((CharacterObject t) => t.Culture == clan.Culture && t.Tier == 2), ((banditPartySize * 30) / 100), ((banditPartySize * 30) / 100) + MBRandom.RandomInt(-3, 3))
+                };
 
                 BanditArmyMobileParty = BanditPartyComponent.CreateBanditParty("bandit_army_party_1", clan, BanditSettlement.Hideout, false);
                 TextObject customName = new TextObject("{=AQBABanditArmyName}{BANDIT_CULTURE} Army", null);
