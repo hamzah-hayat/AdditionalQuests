@@ -44,8 +44,8 @@ namespace AdditionalQuestsCode.Utils
         public bool StarvingTown_Enabled { get; set; } = true;
 
         // Town Uprising
-        [SettingPropertyBool("Quest Enabled", Order = 0, RequireRestart = false, HintText = "Enables the Town Uprising quest.")]
-        [SettingPropertyGroup("Quests/Town Uprising")]
-        public bool TownUprising_Enabled { get; set; } = true;
+        //[SettingPropertyBool("Quest Enabled", Order = 0, RequireRestart = false, HintText = "Enables the Town Uprising quest.")]
+        //[SettingPropertyGroup("Quests/Town Uprising")]
+        //public bool TownUprising_Enabled { get; set; } = true;
     }
 }

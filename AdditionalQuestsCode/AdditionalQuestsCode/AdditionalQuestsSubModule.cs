@@ -46,11 +46,11 @@ namespace AdditionalQuestsCode
                 Logging.MessageDebug("Adding Starving Town Quest");
             }
 
-            if (MCMAQSettings.Instance.TownUprising_Enabled)
-            {
-                gameStarter.AddBehavior(new TownUprisingIssueBehavior());
-                Logging.MessageDebug("Adding Town Uprising Quest");
-            }
+            //if (MCMAQSettings.Instance.TownUprising_Enabled)
+            //{
+            //    gameStarter.AddBehavior(new TownUprisingIssueBehavior());
+            //    Logging.MessageDebug("Adding Town Uprising Quest");
+            //}
 
             Logging.MessageDebug("AdditionalQuests loaded sucessfully!");
         }

@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
@@ -350,9 +351,9 @@ namespace AdditionalQuestsCode.Quests
             protected override void SetDialogs()
             {
                 TextObject thankYouText = new TextObject("{=AQMSThankYouDialog}Thank you, {?PLAYER.GENDER}milady{?}sir{\\?}! We will make good use of these spears.", null);
-                StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, thankYouText);
+                thankYouText.SetCharacterProperties("PLAYER", CharacterObject.PlayerCharacter, false);
                 TextObject waitingText = new TextObject("{=AQMSWaitingDialog}We await those spears, {?PLAYER.GENDER}milady{?}sir{\\?}.", null);
-                StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, waitingText);
+                waitingText.SetCharacterProperties("PLAYER", CharacterObject.PlayerCharacter, false);
 
 
                 this.OfferDialogFlow = DialogFlow.CreateDialogFlow("issue_classic_quest_start", 100).NpcLine(thankYouText, null, null).Condition(() => CharacterObject.OneToOneConversationCharacter == base.QuestGiver.CharacterObject).Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
@@ -420,7 +421,7 @@ namespace AdditionalQuestsCode.Quests
             {
                 base.CompleteQuestWithSuccess();
                 base.AddLog(this.StageSuccessLogText, false);
-                TraitLevelingHelper.OnIssueSolvedThroughQuest(base.QuestGiver, new Tuple<TraitObject, int>[]
+                TraitLevelingHelper.OnIssueSolvedThroughQuest(Hero.MainHero, new Tuple<TraitObject, int>[]
                 {
                     new Tuple<TraitObject, int>(DefaultTraits.Mercy, 50),
                     new Tuple<TraitObject, int>(DefaultTraits.Generosity, 30)
@@ -429,7 +430,7 @@ namespace AdditionalQuestsCode.Quests
                 // Remove spears
                 AdditionalQuestsHelperMethods.RemoveWeaponsWithTypeFromPlayer(WeaponClass.OneHandedPolearm, NeededSpears);
                 base.QuestGiver.AddPower(25f);
-                Settlement.CurrentSettlement.Town.Prosperity += 50f;
+                Settlement.CurrentSettlement.Village.Bound.Town.Prosperity += 50f;
                 Settlement.CurrentSettlement.Militia += 20f;
                 this.RelationshipChangeWithQuestGiver = 10;
                 ChangeRelationAction.ApplyPlayerRelation(base.QuestGiver, this.RelationshipChangeWithQuestGiver, true, true);

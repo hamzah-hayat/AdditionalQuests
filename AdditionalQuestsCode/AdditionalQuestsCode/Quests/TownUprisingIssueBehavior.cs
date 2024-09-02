@@ -499,12 +499,12 @@ namespace AdditionalQuestsCode.Quests
                 PartyBase.MainParty.MobileParty.AddElementToMemberRoster(militiaPartyTemplate.Stacks[0].Character, 5);
 
                 PlayerEncounter.RestartPlayerEncounter(this.HostileGarrisonParty.Party, PartyBase.MainParty, false);
-                GameMenu.ActivateGameMenu("town_uprising_quest_after_fight");
-                this._isReadyToBeFinalized = true;
                 PlayerEncounter.StartBattle();
+                GameMenu.ActivateGameMenu("town_uprising_quest_after_fight");
 
                 int upgradeLevel = base.QuestGiver.CurrentSettlement.IsTown ? base.QuestGiver.CurrentSettlement.Town.GetWallLevel() : 1;
                 CampaignMission.OpenBattleMissionWhileEnteringSettlement(base.QuestGiver.CurrentSettlement.LocationComplex.GetLocationWithId("center").GetSceneName(upgradeLevel), upgradeLevel, 10, 10);
+                this._isReadyToBeFinalized = true;
             }
 
             private bool town_uprising_quest_wait_duration_is_over_yes_condition(MenuCallbackArgs args)
