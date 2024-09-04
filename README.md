@@ -11,6 +11,7 @@ Nexus Mods Link: https://www.nexusmods.com/mountandblade2bannerlord/mods/3066?ta
           Mission is completed after 300 food given
           Adds 300 food to town upon quest completion (stops starvation), plus relationship bonus with all notables in town
 
+    - This quest is currently disabled as broken :cry:
     - Rebellion in {ISSUE_SETTLEMENT}!
         - In a low loyalty town (<50 ), the people are going to rise up!
           Fight a small battle against the garrison alongside the militia of the town, on success, force a rebellion in that town

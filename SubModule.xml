@@ -11,11 +11,11 @@ Adds new quests for notables to give out to the player
     <MultiplayerModule value="false" />
     <Official value="false" />
     <DependedModules>
-        <DependedModule Id="Native" DependentVersion="v1.1.0" Optional="false"/>
-        <DependedModule Id="SandBoxCore" DependentVersion="v1.1.0" Optional="false"/>
-        <DependedModule Id="Sandbox" DependentVersion="v1.1.0" Optional="false"/>
-        <DependedModule Id="CustomBattle" DependentVersion="v1.1.0" Optional="false"/>
-        <DependedModule Id="StoryMode" DependentVersion="v1.1.0" Optional="false"/>
+        <DependedModule Id="Native" DependentVersion="v1.2.11" Optional="false"/>
+        <DependedModule Id="SandBoxCore" DependentVersion="v1.2.11" Optional="false"/>
+        <DependedModule Id="Sandbox" DependentVersion="v1.2.11" Optional="false"/>
+        <DependedModule Id="CustomBattle" DependentVersion="v1.2.11" Optional="false"/>
+        <DependedModule Id="StoryMode" DependentVersion="v1.2.11" Optional="false"/>
         <DependedModule Id="Bannerlord.MBOptionScreen"/>
     </DependedModules>
     <SubModules>
